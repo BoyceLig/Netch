@@ -1,4 +1,4 @@
-# `In preparation for 2.0, this repository will be cleared of all 1.0 related releases and code`
+# 个人自用，随缘更新
 <p align="center"><img src="https://github.com/NetchX/Netch/blob/main/Netch/Resources/Netch.png?raw=true" width="128" /></p>
 
 <div align="center">
@@ -39,3 +39,4 @@ Some features may not be implemented in version 1
 
 ## License
 Netch is licensed under the [GPLv3](https://raw.githubusercontent.com/netchx/netch/main/LICENSE) license
+
