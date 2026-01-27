@@ -180,11 +180,6 @@ public partial class SettingForm : BindingForm
 
         BindTextBox(OtherDNSTextBox, _ => true, s => Global.Settings.AioDNS.OtherDNS = s, Global.Settings.AioDNS.OtherDNS);
 
-        BindTextBox(AioDNSListenPortTextBox,
-            s => ushort.TryParse(s, out _),
-            s => Global.Settings.AioDNS.ListenPort = ushort.Parse(s),
-            Global.Settings.AioDNS.ListenPort);
-
         #endregion
     }
 

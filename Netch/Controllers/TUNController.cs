@@ -1,14 +1,13 @@
-﻿using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using Netch.Interfaces;
+﻿using Netch.Interfaces;
 using Netch.Interops;
 using Netch.Models;
 using Netch.Models.Modes;
 using Netch.Models.Modes.TunMode;
 using Netch.Servers;
 using Netch.Utils;
-using static Netch.Interops.tun2socks;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace Netch.Controllers
 {
@@ -24,7 +23,7 @@ namespace Netch.Controllers
         private NetRoute _outbound;
 
         public string Name => "tun2socks";
-        public string interfaceName => "netch";
+        public string InterfaceName => "Netch";
 
         public ModeFeature Features => ModeFeature.SupportSocks5Auth;
 
@@ -36,83 +35,44 @@ namespace Netch.Controllers
             _mode = tunMode;
             _tunConfig = Global.Settings.TUNTAP;
 
-            if (server.RemoteHostname.ValueOrDefault() != null)
-                _serverRemoteAddress = await DnsUtils.LookupAsync(server.RemoteHostname!);
-            else
-                _serverRemoteAddress = await DnsUtils.LookupAsync(server.Hostname);
+            _serverRemoteAddress = server.RemoteHostname.ValueOrDefault() != null
+                ? await DnsUtils.LookupAsync(server.RemoteHostname!)
+                : await DnsUtils.LookupAsync(server.Hostname);
 
-            if (_serverRemoteAddress != null && IPAddress.IsLoopback(_serverRemoteAddress))
-                _serverRemoteAddress = null;
+            if (_serverRemoteAddress != null && IPAddress.IsLoopback(_serverRemoteAddress)) _serverRemoteAddress = null;
 
             _outbound = NetRoute.GetBestRouteTemplate();
             CheckDriver();
 
+            // 组装 tun2socks 参数
+            string proxyHost = await server.AutoResolveHostnameAsync();
+            int proxyPort = server.Port;
+            string? username = server.Auth() ? server.Username : null;
+            string? password = server.Auth() ? server.Password : null;
+            //string dns = _tunConfig.UseCustomDNS ? _tunConfig.DNS : $"127.0.0.1:{Global.Settings.AioDNS.ListenPort}";
+
+            if (!TUN2Socks.Init(InterfaceName, proxyHost, proxyPort, username, password)) throw new MessageException("tun2socks start failed.");
+
+            int tunIndex = -1;
+
             // Wait for adapter to be created
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 50; i++)
             {
-                await Task.Delay(300);
-                try
+                await Task.Delay(200);
+                var now = NetworkInterface.GetAllNetworkInterfaces();
+                var networkInterface = now.FirstOrDefault(x => x.Name.StartsWith(InterfaceName));
+                if (networkInterface == null)
                 {
-                    _tun.InterfaceIndex = NetworkInterfaceUtils.Get(ni => ni.Name.StartsWith(interfaceName)).GetIndex();
-                    break;
+                    continue;
                 }
-                catch
-                {
-                    // ignored
-                }
+                tunIndex = networkInterface.GetIndex();
+                break;
             }
+            if (tunIndex == -1) Log.Error("虚拟网卡不存在");
 
-            Dial(NameList.TYPE_ADAPMTU, "1500");
-            Dial(NameList.TYPE_BYPBIND, _outbound.Gateway);
-            Dial(NameList.TYPE_BYPLIST, "disabled");
-
-            #region Server
-
-            Dial(NameList.TYPE_TCPREST, "");
-            Dial(NameList.TYPE_TCPTYPE, "Socks5");
-
-            Dial(NameList.TYPE_UDPREST, "");
-            Dial(NameList.TYPE_UDPTYPE, "Socks5");
-
-            Dial(NameList.TYPE_TCPHOST, $"{await server.AutoResolveHostnameAsync()}:{server.Port}");
-
-            Dial(NameList.TYPE_UDPHOST, $"{await server.AutoResolveHostnameAsync()}:{server.Port}");
-
-            if (server.Auth())
-            {
-                Dial(NameList.TYPE_TCPUSER, server.Username!);
-                Dial(NameList.TYPE_TCPPASS, server.Password!);
-
-                Dial(NameList.TYPE_UDPUSER, server.Username!);
-                Dial(NameList.TYPE_UDPPASS, server.Password!);
-            }
-
-            #endregion
-
-            #region DNS
-
-            if (_tunConfig.UseCustomDNS)
-            {
-                Dial(NameList.TYPE_DNSADDR, DnsUtils.AppendPort(_tunConfig.DNS));
-            }
-            else
-            {
-                await _aioDnsController.StartAsync();
-                Dial(NameList.TYPE_DNSADDR, $"127.0.0.1:{Global.Settings.AioDNS.ListenPort}");
-            }
-
-            #endregion
-
-            if (!Init())
-                throw new MessageException("tun2socks start failed.");
-
-            var tunIndex = (int)RouteHelper.ConvertLuidToIndex(tun_luid());
             _tun = NetRoute.TemplateBuilder(_tunConfig.Gateway, tunIndex);
 
-            RouteHelper.CreateUnicastIP(AddressFamily.InterNetwork,
-                _tunConfig.Address,
-                (byte)Utils.Utils.SubnetToCidr(_tunConfig.Netmask),
-                (ulong)tunIndex);
+            RouteHelper.CreateUnicastIP(AddressFamily.InterNetwork, _tunConfig.Address, (byte)Utils.Utils.SubnetToCidr(_tunConfig.Netmask), (ulong)tunIndex);
 
             SetupRouteTable();
         }
@@ -121,7 +81,9 @@ namespace Netch.Controllers
         {
             var tasks = new[]
             {
-                FreeAsync(),
+                //杀掉进程
+                TUN2Socks.FreeAsync(),
+                //清理路由
                 Task.Run(ClearRouteTable),
                 _aioDnsController.StopAsync()
             };
@@ -157,8 +119,9 @@ namespace Netch.Controllers
 
         private void SetupRouteTable()
         {
+            //UI 层显示状态：“正在设置路由规则”
             Global.MainForm.StatusText(i18N.Translate("Setup Route Table Rule"));
-
+            //获取当前 TUN 网卡对象，用于后续操作（比如设置 DNS）
             var tunNetworkInterface = NetworkInterfaceUtils.Get(_tun.InterfaceIndex);
             // Server Address
             if (_serverRemoteAddress != null)
@@ -182,6 +145,7 @@ namespace Netch.Controllers
                 }
 
                 tunNetworkInterface.SetDns(_tunConfig.DNS);
+
             }
             else
             {

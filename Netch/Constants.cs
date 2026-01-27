@@ -22,6 +22,7 @@ public static class Constants
         public const string ForceUpdate = "-forceUpdate";
     }
 
+    public const string TUN2SocksFile = "bin\\tun2socks-windows-amd64-v3.exe";
     public const string WintunDllFile = "bin\\wintun.dll";
     public const string DisableModeDirectoryFileName = "disabled";
 

@@ -49,6 +49,10 @@ public class Socks5Server : Server
         RemoteHostname = remoteHostname;
     }
 
+    /// <summary>
+    /// 是否有账号密码
+    /// </summary>
+    /// <returns></returns>
     public bool Auth()
     {
         return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);

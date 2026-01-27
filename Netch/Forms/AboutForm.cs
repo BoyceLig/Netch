@@ -19,12 +19,12 @@ public partial class AboutForm : Form
 
     private void NetchPictureBox_Click(object sender, EventArgs e)
     {
-        Utils.Utils.Open("https://github.com/NetchX/Netch");
+        Utils.Utils.Open("https://github.com/boycelig/Netch");
     }
 
     private void ChannelLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        Utils.Utils.Open("https://t.me/Netch");
+        Utils.Utils.Open("https://t.me/ClashR_for_Windows_Channel");
     }
 
     private void SponsorPictureBox_Click(object sender, EventArgs e)

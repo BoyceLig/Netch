@@ -73,7 +73,7 @@ public static class NetworkInterfaceExtension
         void VerifyDns(ref string s)
         {
             s = s.Trim();
-            if (primaryDns.IsNullOrEmpty())
+            if (s.IsNullOrEmpty())
                 throw new ArgumentException("DNS format invalid", nameof(primaryDns));
         }
 
