@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Text;
 
 namespace Netch.Interops
@@ -6,6 +7,9 @@ namespace Netch.Interops
     public static class TUN2Socks
     {
         private static Process? _process;
+
+        private const string ProfilesKeyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles";
+        private const string UnmanagedKeyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Signatures\Unmanaged";
 
         public static bool Init(string interfaceName, string proxyHost, int proxyPort, string? username = null, string? password = null)
         {
@@ -18,6 +22,8 @@ namespace Netch.Interops
 
             try
             {
+                CleanRegeditNetworkProfiles(ProfilesKeyPath);
+                CleanRegeditNetworkProfiles(UnmanagedKeyPath);
                 var args = BuildArgs(interfaceName, proxyHost, proxyPort, username, password);
                 Log.Verbose($"[tun2socks] Args: {args}");
                 var processPath = Path.Combine(Global.NetchDir, Constants.TUN2SocksFile);
@@ -69,6 +75,8 @@ namespace Netch.Interops
             }
 
         }
+
+
 
         /// <summary>
         /// 杀掉 tun2socks 进程
@@ -132,7 +140,7 @@ namespace Netch.Interops
                         while ((line = await reader.ReadLineAsync()) != null)
                         {
                             await _logStreamWriter.WriteLineAsync($"[{prefix}] {line}");
-                            logAction?.Invoke($"[{prefix}] {line}");
+                            //logAction?.Invoke($"[{prefix}] {line}");
                         }
                     }
                     catch (Exception ex)
@@ -143,7 +151,7 @@ namespace Netch.Interops
                 });
             }
             var stdoutTask = ReadStreamAsync(p.StandardOutput, Log.Verbose);
-            var stderrTask = ReadStreamAsync(p.StandardError, Log.Error);
+            var stderrTask = ReadStreamAsync(p.StandardError, Log.Verbose);
 
             await Task.WhenAll(stdoutTask, stderrTask);
 
@@ -151,6 +159,65 @@ namespace Netch.Interops
 
             await _logStreamWriter.DisposeAsync();
             await _logFileStream.DisposeAsync();
+        }
+
+        private static int CleanRegeditNetworkProfiles(string path)
+        {
+            int cleanedCount = 0;
+            try
+            {
+                Log.Verbose($"正在扫描注册表路径: {path}");
+                using (RegistryKey profilesKey = Registry.LocalMachine.OpenSubKey(path, true))
+                {
+                    if (profilesKey == null)
+                    {
+                        Log.Error("注册表路径不存在，可能系统版本不支持。");
+                        return 0;
+                    }
+
+                    // 获取所有配置的GUID（子键名称）
+                    string[] profileGuids = profilesKey.GetSubKeyNames();
+                    Log.Verbose($"找到 {profileGuids.Length} 个网络配置");
+
+                    foreach (string guid in profileGuids)
+                    {
+                        using (RegistryKey profileKey = profilesKey.OpenSubKey(guid, false))
+                        {
+                            if (profileKey == null) continue;
+
+                            // 读取配置名称
+                            string profileName = profileKey.GetValue("Description") as string;
+
+                            if (string.IsNullOrEmpty(profileName) || profileName.Contains("Netch"))
+                            {
+                                try
+                                {
+                                    // 关闭当前键，以便删除
+                                    profileKey.Close();
+
+                                    // 删除该配置
+                                    profilesKey.DeleteSubKeyTree(guid);
+                                    cleanedCount++;
+
+                                    Log.Verbose($"已删除网络配置: {profileName ?? "未知"} ({guid})");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Log.Error($"删除配置 {guid} 失败: {ex.Message}");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Log.Verbose($"清理完成，共删除 {cleanedCount} 个网络配置。");
+                return cleanedCount;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"清理网络配置时发生错误: {ex.Message}");
+                return cleanedCount;
+            }
         }
     }
 }
