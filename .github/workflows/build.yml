@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   build:
     name: Build
-    runs-on: windows-2025
+    runs-on: windows-2022
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,7 +73,7 @@ jobs:
           profile: minimal
 
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.3.1
+        uses: microsoft/setup-msbuild@v2
         with:
           vs-prerelease: true
 
@@ -87,6 +87,7 @@ jobs:
         with:
           name: release
           path: release
+
 
 
 
