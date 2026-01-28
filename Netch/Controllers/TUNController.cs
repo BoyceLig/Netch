@@ -68,7 +68,11 @@ namespace Netch.Controllers
                 tunIndex = networkInterface.GetIndex();
                 break;
             }
-            if (tunIndex == -1) Log.Error("虚拟网卡不存在");
+            if (tunIndex == -1)
+            {
+                Log.Error("虚拟网卡不存在");
+                throw new MessageException("tun2socks start failed.");
+            }
 
             _tun = NetRoute.TemplateBuilder(_tunConfig.Gateway, tunIndex);
 

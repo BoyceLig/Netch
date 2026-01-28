@@ -22,8 +22,6 @@ namespace Netch.Interops
 
             try
             {
-                CleanRegeditNetworkProfiles(ProfilesKeyPath);
-                CleanRegeditNetworkProfiles(UnmanagedKeyPath);
                 var args = BuildArgs(interfaceName, proxyHost, proxyPort, username, password);
                 Log.Verbose($"[tun2socks] Args: {args}");
                 var processPath = Path.Combine(Global.NetchDir, Constants.TUN2SocksFile);
@@ -38,14 +36,16 @@ namespace Netch.Interops
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         RedirectStandardOutput = true,
-                        RedirectStandardError = true
+                        RedirectStandardError = true,
+                        StandardOutputEncoding = Encoding.UTF8,
+                        StandardErrorEncoding = Encoding.UTF8
                     },
                     EnableRaisingEvents = true
                 };
 
                 _process.Exited += (_, _) =>
                 {
-                    Log.Warning("[tun2socks] Process exited unexpectedly.");
+                    Log.Warning("[tun2socks]已退出");
                     // 这里可以触发清理路由 / DNS
                 };
 
@@ -76,7 +76,7 @@ namespace Netch.Interops
 
         }
 
-
+        private const int CTRL_C_EVENT = 0;
 
         /// <summary>
         /// 杀掉 tun2socks 进程
@@ -84,30 +84,33 @@ namespace Netch.Interops
         /// <returns></returns>
         public static async Task<bool> FreeAsync()
         {
+            bool isSuccess;
             try
             {
                 if (_process != null && !_process.HasExited)
                 {
-                    _process.Kill(true); // 强制杀掉 tun2socks
-                    await _process.WaitForExitAsync();
-                    _process.Dispose();
-                    _process = null;
+                    _process.Close();                    
                 }
-
-                return true;
             }
             catch (Exception e)
             {
                 Log.Error(e, "[tun2socks] FreeAsync failed");
-                return false;
+                isSuccess = false;
             }
-        }
+            finally
+            {
+                // 释放进程资源
+                _process?.Dispose();
+                _process = null;
+                isSuccess = true;
+            }
+            return isSuccess;
+        }      
 
         private static string BuildArgs(string interfaceName, string host, int port, string? username, string? password)
         {
             var sb = new StringBuilder();
-
-            sb.Append($"-device tun://{interfaceName} ");
+            sb.Append($"-device tun://{interfaceName}?guid={{20214AD5-1D95-4CC1-9233-D850D2C9CF9C}} ");
             // SOCKS5
             sb.Append("-proxy socks5://");
             if (!string.IsNullOrEmpty(username))
@@ -127,7 +130,7 @@ namespace Netch.Interops
         {
             string logPath = Path.Combine(Global.NetchDir, "logging", "tun2socks.log");
             await using var _logFileStream = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.Read, 4096, true);
-            await using var _logStreamWriter = new StreamWriter(_logFileStream) { AutoFlush = true };
+            await using var _logStreamWriter = new StreamWriter(_logFileStream, Encoding.UTF8) { AutoFlush = true };
 
             Task ReadStreamAsync(StreamReader reader, Action<string> logAction)
             {
@@ -161,13 +164,44 @@ namespace Netch.Interops
             await _logFileStream.DisposeAsync();
         }
 
+        #region 注册表操作
+        private static string? CheckTunGUID(string interfaceName)
+        {
+            using (var profilesKey = Registry.LocalMachine.OpenSubKey(ProfilesKeyPath, false))
+            {
+                if (profilesKey == null)
+                {
+                    Log.Error("注册表路径不存在。");
+                    return null;
+                }
+
+                var profileGuids = profilesKey.GetSubKeyNames();
+
+                foreach (var guid in profileGuids)
+                {
+                    using (var profileKey = profilesKey.OpenSubKey(guid, false))
+                    {
+                        if (profileKey == null) continue;
+                        // 读取配置名称
+                        var profileName = profileKey.GetValue("ProfileName") as string;
+                        if (profileName == interfaceName)
+                        {
+                            Log.Verbose($"GUID 为{guid}");
+                            return guid;
+                        }
+                    }
+                }
+            }
+            Log.Verbose("没有 GUID");
+            return null;
+        }
         private static int CleanRegeditNetworkProfiles(string path)
         {
             int cleanedCount = 0;
             try
             {
                 Log.Verbose($"正在扫描注册表路径: {path}");
-                using (RegistryKey profilesKey = Registry.LocalMachine.OpenSubKey(path, true))
+                using (var profilesKey = Registry.LocalMachine.OpenSubKey(path, true))
                 {
                     if (profilesKey == null)
                     {
@@ -181,12 +215,12 @@ namespace Netch.Interops
 
                     foreach (string guid in profileGuids)
                     {
-                        using (RegistryKey profileKey = profilesKey.OpenSubKey(guid, false))
+                        using (var profileKey = profilesKey.OpenSubKey(guid, false))
                         {
                             if (profileKey == null) continue;
 
                             // 读取配置名称
-                            string profileName = profileKey.GetValue("Description") as string;
+                            var profileName = profileKey.GetValue("Description") as string;
 
                             if (string.IsNullOrEmpty(profileName) || profileName.Contains("Netch"))
                             {
@@ -219,5 +253,6 @@ namespace Netch.Interops
                 return cleanedCount;
             }
         }
+        #endregion
     }
 }

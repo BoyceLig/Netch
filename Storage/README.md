@@ -15,6 +15,8 @@ https://github.com/cbeuw/Cloak
 
 ## GeoLite2
 https://www.maxmind.com
+https://github.com/wp-statistics/GeoLite2-Country
+https://github.com/Loyalsoldier/geoip
 
 ## xray-core
 https://github.com/xtls/xray-core
