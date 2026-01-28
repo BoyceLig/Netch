@@ -10,7 +10,7 @@ $repoOwner = "XTLS"
 $repoName = "Xray-core"
 $assetName = "Xray-windows-64.zip" # 要下载的文件名（固定）
 $tempZipFile = ".\$assetName"
-$targetExePath = '..\release\bin\xray.exe'
+$targetExePath = '..\release\xray.exe'
 $tempUnzipDir = ".\.temp_xray_unzip" # 临时解压目录（仅存放解压的压缩包内容）
 $cpFileName = "xray.exe" # 要拷贝的文件
 
