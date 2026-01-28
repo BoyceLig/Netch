@@ -76,6 +76,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
         with:
           vs-prerelease: true
+          vs-version: 18.2.11415.280
 
       - name: Build
         shell: pwsh
@@ -87,6 +88,7 @@ jobs:
         with:
           name: release
           path: release
+
 
 
 
