@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   build:
     name: Build
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -87,5 +87,6 @@ jobs:
         with:
           name: release
           path: release
+
 
 
