@@ -18,6 +18,7 @@ public static unsafe class RouteHelper
     [DllImport("RouteHelper.bin", CallingConvention = CallingConvention.Cdecl)]
     public static extern bool CreateUnicastIP(AddressFamily inet, string address, byte cidr, ulong index);
 
+
     public static bool CreateUnicastIPCS(AddressFamily inet, string address, byte cidr, ulong index)
     {
         MIB_UNICASTIPADDRESS_ROW addr;
@@ -25,12 +26,14 @@ public static unsafe class RouteHelper
 
         addr.InterfaceIndex = (uint)index;
         addr.OnLinkPrefixLength = cidr;
-
+#pragma warning disable CA1416
         if (inet == AddressFamily.InterNetwork)
         {
             addr.Address.Ipv4.sin_family = ADDRESS_FAMILY.AF_INET;
+
             if (PInvoke.inet_pton((int)inet, address, &addr.Address.Ipv4.sin_addr) == 0)
                 return false;
+
         }
         else if (inet == AddressFamily.InterNetworkV6)
         {
@@ -42,7 +45,7 @@ public static unsafe class RouteHelper
         {
             return false;
         }
-
+#pragma warning restore CA1416
         // https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-createunicastipaddressentry#remarks
 
         HANDLE handle = default;

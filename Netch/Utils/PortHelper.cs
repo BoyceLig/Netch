@@ -66,7 +66,7 @@ public static class PortHelper
 
                                     if (row.dwOwningPid is 0 or 4)
                                         continue;
-
+#pragma warning disable CA1416
                                     if (PInvoke.ntohs((ushort)row.dwLocalPort) == port)
                                     {
                                         try
@@ -78,6 +78,7 @@ public static class PortHelper
                                             // 进程可能已经退出
                                         }
                                     }
+#pragma warning restore CA1416
                                 }
                             }
                         }
