@@ -23,6 +23,9 @@
     <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
     <StartupObject></StartupObject>
     <FileVersion>1.9.8</FileVersion>
+	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	<SelfContained>true</SelfContained>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -84,9 +87,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Forms\SyncGlobalCheckBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Update="Forms\SyncGlobalCheckBox.cs" />
   </ItemGroup>
 
   <ItemGroup>
