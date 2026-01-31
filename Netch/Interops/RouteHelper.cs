@@ -1,5 +1,6 @@
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Networking.WinSock;
@@ -18,7 +19,7 @@ public static unsafe class RouteHelper
     [DllImport("RouteHelper.bin", CallingConvention = CallingConvention.Cdecl)]
     public static extern bool CreateUnicastIP(AddressFamily inet, string address, byte cidr, ulong index);
 
-
+    [SupportedOSPlatform("windows8.1")]
     public static bool CreateUnicastIPCS(AddressFamily inet, string address, byte cidr, ulong index)
     {
         MIB_UNICASTIPADDRESS_ROW addr;
@@ -26,7 +27,6 @@ public static unsafe class RouteHelper
 
         addr.InterfaceIndex = (uint)index;
         addr.OnLinkPrefixLength = cidr;
-#pragma warning disable CA1416
         if (inet == AddressFamily.InterNetwork)
         {
             addr.Address.Ipv4.sin_family = ADDRESS_FAMILY.AF_INET;
@@ -45,7 +45,6 @@ public static unsafe class RouteHelper
         {
             return false;
         }
-#pragma warning restore CA1416
         // https://docs.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-createunicastipaddressentry#remarks
 
         HANDLE handle = default;

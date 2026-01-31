@@ -29,9 +29,11 @@ public class Outbound
 
     public OutboundConfiguration settings { get; set; }
 
+#nullable enable
     public StreamSettings? streamSettings { get; set; }
 
     public Mux? mux { get; set; }
+#nullable disable
 }
 
 public class OutboundConfiguration
@@ -83,7 +85,7 @@ public class VnextItem
 public class ShadowsocksServerItem
 {
     public string address { get; set; }
-    
+
     public ushort port { get; set; }
 
     public string method { get; set; }
@@ -91,7 +93,7 @@ public class ShadowsocksServerItem
     public string password { get; set; }
 
     public string flow { get; set; }
- }
+}
 
 public class Mux
 {

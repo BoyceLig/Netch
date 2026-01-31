@@ -1,9 +1,3 @@
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using Windows.Win32;
-using Windows.Win32.Foundation;
-using Windows.Win32.UI.WindowsAndMessaging;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.Win32;
 using Netch.Controllers;
@@ -13,8 +7,16 @@ using Netch.Interfaces;
 using Netch.Models;
 using Netch.Models.Modes;
 using Netch.Properties;
+using Netch.Servers;
 using Netch.Services;
 using Netch.Utils;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Versioning;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Netch.Forms;
 
@@ -38,6 +40,8 @@ public partial class MainForm : Form
 
         if (Flags.NoSupport)
             _mainFormText.Add(Name, new[] { "{0} ({1})", "Netch", "No Support" });
+
+        ArgumentException.ThrowIfNullOrEmpty(UninstallServiceToolStripMenuItem.Name);
 
         _mainFormText.Add(UninstallServiceToolStripMenuItem.Name, new[] { "Uninstall {0}", "NF Service" });
 
@@ -129,7 +133,7 @@ public partial class MainForm : Form
                         case ListControl:
                             break;
                         case Control c:
-                            if (string.IsNullOrWhiteSpace(c.Name) || _mainFormText.ContainsKey(c.Name))
+                            if (string.IsNullOrWhiteSpace(c.Name) || _mainFormText.ContainsKey(c.Name) || string.IsNullOrWhiteSpace(c.Text))
                             {
                                 //Log.Warning(c.Name + "    " + c.Text + "重复");
                                 break;
@@ -138,12 +142,11 @@ public partial class MainForm : Form
                             break;
                         case ToolStripItem c:
                             //Log.Verbose(c.Name);
-                            if (string.IsNullOrWhiteSpace(c.Name) || _mainFormText.ContainsKey(c.Name))
+                            if (string.IsNullOrWhiteSpace(c.Name) || _mainFormText.ContainsKey(c.Name) || string.IsNullOrWhiteSpace(c.Text))
                             {
                                 //Log.Warning(c.Name + "    " + c.Text + "重复");
                                 break;
                             }
-
                             _mainFormText.Add(c.Name, c.Text);
                             break;
                     }
@@ -176,7 +179,7 @@ public partial class MainForm : Form
 
                     break;
                 case ToolStripItem c:
-                    if (_mainFormText.ContainsKey(c.Name))
+                    if (!string.IsNullOrWhiteSpace(c.Name) && _mainFormText.ContainsKey(c.Name))
                         c.Text = ControlText(c.Name);
 
                     break;
@@ -235,10 +238,13 @@ public partial class MainForm : Form
         if (sender == null)
             throw new ArgumentNullException(nameof(sender));
 
-        var util = (IServerUtil)((ToolStripMenuItem)sender).Tag;
+        var util = (IServerUtil?)((ToolStripMenuItem)sender).Tag;
+
 
         Hide();
+        ArgumentNullException.ThrowIfNull(util);
         util.Create();
+
 
         LoadServers();
         await Configuration.SaveAsync();
@@ -288,12 +294,26 @@ public partial class MainForm : Form
         Show();
     }
 
-    private async void UpdateServersFromSubscriptionLinksToolStripMenuItem_Click(object sender, EventArgs e)
+    private async void UpdateServersFromSubscriptionLinksToolStripMenuItem_NoProxy_Click(object sender, EventArgs e)
     {
         await UpdateServersFromSubscriptionAsync();
     }
 
-    private async Task UpdateServersFromSubscriptionAsync()
+    [SupportedOSPlatform("windows8.1")]
+    private async void UpdateServersToolStripMenuItem_UseProxy_Click(object sender, EventArgs e)
+    {
+        if (ServerComboBox.SelectedItem is not Server server)
+        {
+            MessageBoxX.Show(i18N.Translate("Please select a server first"));
+            return;
+        }
+        await MainController.StartAsync(server);
+        await UpdateServersFromSubscriptionAsync($"127.0.0.1:{Global.Settings.Socks5LocalPort}");
+        //await UpdateServersFromSubscriptionAsync($"127.0.0.1:10808");
+        await StopCoreAsync();
+    }
+
+    private async Task UpdateServersFromSubscriptionAsync(string? serverProxy = null)
     {
         void DisableItems(bool v)
         {
@@ -311,7 +331,7 @@ public partial class MainForm : Form
 
         try
         {
-            await SubscriptionUtil.UpdateServersAsync();
+            await SubscriptionUtil.UpdateServersAsync(serverProxy);
 
             LoadServers();
             await Configuration.SaveAsync();
@@ -431,9 +451,9 @@ public partial class MainForm : Form
 
     private async void NewVersionLabel_Click(object sender, EventArgs e)
     {
-        if (ModifierKeys == Keys.Control || !UpdateChecker.LatestRelease!.assets.Any())
+        if (ModifierKeys == Keys.Control || !UpdateChecker.LatestRelease.assets.Any())
         {
-            Utils.Utils.Open(UpdateChecker.LatestVersionUrl!);
+            Utils.Utils.Open(UpdateChecker.LatestVersionUrl);
             return;
         }
 
@@ -453,7 +473,7 @@ public partial class MainForm : Form
             string downloadDirectory = Path.Combine(Global.NetchDir, "data");
 
             var (updateFileName, sha256) = UpdateChecker.GetLatestUpdateFileNameAndHash();
-            var updateFileUrl = UpdateChecker.LatestRelease.assets[0].browser_download_url!;
+            var updateFileUrl = UpdateChecker.LatestRelease.assets[0].browser_download_url;
 
             var updateFileFullName = Path.Combine(downloadDirectory, updateFileName);
             var updater = new Updater(updateFileFullName, Global.NetchDir);
@@ -527,7 +547,7 @@ public partial class MainForm : Form
     #endregion
 
     #region ControlButton
-
+    [SupportedOSPlatform("windows8.1")]
     private async void ControlButton_Click(object? sender, EventArgs? e)
     {
         if (!IsWaiting())
@@ -765,7 +785,10 @@ public partial class MainForm : Form
     {
         try
         {
-            Global.Settings.ModeComboBoxSelectedIndex = Global.Modes.IndexOf((Mode)ModeComboBox.SelectedItem);
+            if (ModeComboBox.SelectedItem as Mode != null)
+            {
+                Global.Settings.ModeComboBoxSelectedIndex = Global.Modes.IndexOf((Mode)ModeComboBox.SelectedItem);
+            }
         }
         catch
         {
@@ -782,7 +805,8 @@ public partial class MainForm : Form
             return;
         }
 
-        var mode = (Mode)ModeComboBox.SelectedItem;
+        var mode = (Mode?)ModeComboBox.SelectedItem;
+        ArgumentNullException.ThrowIfNull(mode);
         if (ModifierKeys == Keys.Control)
         {
             Utils.Utils.Open(mode.FullName);
@@ -818,7 +842,10 @@ public partial class MainForm : Form
             return;
         }
 
+        ArgumentNullException.ThrowIfNull(ModeComboBox.SelectedItem as Mode);
+
         ModeService.Delete((Mode)ModeComboBox.SelectedItem);
+
         SelectLastMode();
     }
 
@@ -1056,8 +1083,8 @@ public partial class MainForm : Form
     private async Task StopCoreAsync()
     {
         State = State.Stopping;
-        _discoveryNatCts?.Cancel();
-        _httpConnectCts?.Cancel();
+        _discoveryNatCts?.CancelAsync();
+        _httpConnectCts?.CancelAsync();
         await MainController.StopAsync();
         State = State.Stopped;
     }
@@ -1343,7 +1370,7 @@ public partial class MainForm : Form
             UpdateChecker.NewVersionFound += OnUpdateCheckerOnNewVersionFound;
             await UpdateChecker.CheckAsync(Global.Settings.CheckBetaUpdate);
             if (Flags.AlwaysShowNewVersionFound)
-                OnUpdateCheckerOnNewVersionFound(null!, null!);
+                OnUpdateCheckerOnNewVersionFound(null, null);
         }
         finally
         {
@@ -1445,8 +1472,11 @@ public partial class MainForm : Form
         if (e.Index < 0)
             return;
 
+
+        var cbxItem = cbx.Items[e.Index];
+        ArgumentNullException.ThrowIfNull(cbxItem);
         // 绘制 备注/名称 字符串
-        TextRenderer.DrawText(e.Graphics, cbx.Items[e.Index].ToString(), cbx.Font, e.Bounds, Color.Black, TextFormatFlags.Left);
+        TextRenderer.DrawText(e.Graphics, cbxItem.ToString(), cbx.Font, e.Bounds, Color.Black, TextFormatFlags.Left);
 
         switch (cbx.Items[e.Index])
         {

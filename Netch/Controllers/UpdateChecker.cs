@@ -20,7 +20,7 @@ public static class UpdateChecker
 
     public static readonly string Version = $"{AssemblyVersion}{(string.IsNullOrEmpty(Suffix) ? "" : $"-{Suffix}")}";
 
-    public static Release LatestRelease = null!;
+    public static Release LatestRelease = new();
 
     public static string LatestVersionNumber => LatestRelease.tag_name;
 
@@ -41,7 +41,8 @@ public static class UpdateChecker
 
             var (_, json) = await WebUtil.DownloadStringAsync(url);
 
-            var releases = JsonSerializer.Deserialize<List<Release>>(json)!;
+            var releases = JsonSerializer.Deserialize<List<Release>>(json);
+            ArgumentNullException.ThrowIfNull(releases);
             LatestRelease = GetLatestRelease(releases, isPreRelease);
             Log.Information("Github latest release: {Version}", LatestRelease.tag_name);
             if (VersionUtil.CompareVersion(LatestRelease.tag_name, Version) > 0)

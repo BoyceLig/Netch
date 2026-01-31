@@ -1,5 +1,5 @@
-using System.Net;
 using Netch.Models;
+using System.Net;
 
 namespace Netch.Utils;
 

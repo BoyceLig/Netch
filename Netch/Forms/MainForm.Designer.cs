@@ -38,7 +38,9 @@
             ReloadModesToolStripMenuItem = new ToolStripMenuItem();
             SubscriptionToolStripMenuItem = new ToolStripMenuItem();
             ManageSubscriptionsToolStripMenuItem = new ToolStripMenuItem();
-            UpdateServersToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            UpdateServersToolStripMenuItem_NoProxy = new ToolStripMenuItem();
+            UpdateServersToolStripMenuItem_UseProxy = new ToolStripMenuItem();
             OptionsToolStripMenuItem = new ToolStripMenuItem();
             OpenDirectoryToolStripMenuItem = new ToolStripMenuItem();
             ShowHideConsoleToolStripMenuItem = new ToolStripMenuItem();
@@ -162,7 +164,7 @@
             // 
             // SubscriptionToolStripMenuItem
             // 
-            SubscriptionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ManageSubscriptionsToolStripMenuItem, UpdateServersToolStripMenuItem });
+            SubscriptionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ManageSubscriptionsToolStripMenuItem, toolStripSeparator1, UpdateServersToolStripMenuItem_NoProxy, UpdateServersToolStripMenuItem_UseProxy });
             SubscriptionToolStripMenuItem.Margin = new Padding(0, 0, 0, 1);
             SubscriptionToolStripMenuItem.Name = "SubscriptionToolStripMenuItem";
             SubscriptionToolStripMenuItem.Size = new Size(92, 21);
@@ -171,16 +173,28 @@
             // ManageSubscriptionsToolStripMenuItem
             // 
             ManageSubscriptionsToolStripMenuItem.Name = "ManageSubscriptionsToolStripMenuItem";
-            ManageSubscriptionsToolStripMenuItem.Size = new Size(206, 22);
+            ManageSubscriptionsToolStripMenuItem.Size = new Size(236, 22);
             ManageSubscriptionsToolStripMenuItem.Text = "Manage Subscriptions";
             ManageSubscriptionsToolStripMenuItem.Click += ManageSubscriptionLinksToolStripMenuItem_Click;
             // 
-            // UpdateServersToolStripMenuItem
+            // toolStripSeparator1
             // 
-            UpdateServersToolStripMenuItem.Name = "UpdateServersToolStripMenuItem";
-            UpdateServersToolStripMenuItem.Size = new Size(206, 22);
-            UpdateServersToolStripMenuItem.Text = "Update Servers";
-            UpdateServersToolStripMenuItem.Click += UpdateServersFromSubscriptionLinksToolStripMenuItem_Click;
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(233, 6);
+            // 
+            // UpdateServersToolStripMenuItem_NoProxy
+            // 
+            UpdateServersToolStripMenuItem_NoProxy.Name = "UpdateServersToolStripMenuItem_NoProxy";
+            UpdateServersToolStripMenuItem_NoProxy.Size = new Size(236, 22);
+            UpdateServersToolStripMenuItem_NoProxy.Text = "Update Servers (No Proxy)";
+            UpdateServersToolStripMenuItem_NoProxy.Click += UpdateServersFromSubscriptionLinksToolStripMenuItem_NoProxy_Click;
+            // 
+            // UpdateServersToolStripMenuItem_UseProxy
+            // 
+            UpdateServersToolStripMenuItem_UseProxy.Name = "UpdateServersToolStripMenuItem_UseProxy";
+            UpdateServersToolStripMenuItem_UseProxy.Size = new Size(236, 22);
+            UpdateServersToolStripMenuItem_UseProxy.Text = "Update Servers (Use Proxy)";
+            UpdateServersToolStripMenuItem_UseProxy.Click += UpdateServersToolStripMenuItem_UseProxy_Click;
             // 
             // OptionsToolStripMenuItem
             // 
@@ -766,7 +780,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.ToolStripMenuItem UninstallServiceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem UpdateServersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem UpdateServersToolStripMenuItem_NoProxy;
         private System.Windows.Forms.ToolStripStatusLabel UploadSpeedLabel;
         private System.Windows.Forms.ToolStripStatusLabel UsedBandwidthLabel;
         private System.Windows.Forms.ToolStripLabel NewVersionLabel;
@@ -782,5 +796,7 @@
         private System.Windows.Forms.ToolStripMenuItem ShowHideConsoleToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel HttpStatusLabel;
         private System.Windows.Forms.ToolStripMenuItem ReloadModesToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem UpdateServersToolStripMenuItem_UseProxy;
     }
 }

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.VisualStudio.Threading;
 using Netch.Interfaces;
 using Netch.Models;
@@ -6,6 +5,8 @@ using Netch.Models.Modes;
 using Netch.Servers;
 using Netch.Services;
 using Netch.Utils;
+using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace Netch.Controllers;
 
@@ -23,11 +24,12 @@ public static class MainController
 
     private static readonly AsyncSemaphore Lock = new(1);
 
-    public static async Task StartAsync(Server server, Mode mode)
+    [SupportedOSPlatform("windows8.1")]
+    public static async Task StartAsync(Server server, Mode? mode = null)
     {
         using var releaser = await Lock.EnterAsync();
 
-        Log.Information("Start MainController: {Server} {Mode}", $"{server.Type}", $"[{(int)mode.Type}]{mode.i18NRemark}");
+        Log.Information("Start MainController: {Server} {Mode}", $"{server.Type}", mode == null ? "Null" : $"[{(int)mode.Type}]{mode.i18NRemark}");
 
         if (await DnsUtils.LookupAsync(server.Hostname) == null)
             throw new MessageException(i18N.Translate("Lookup Server hostname failed"));
@@ -43,13 +45,20 @@ public static class MainController
 
         try
         {
-            ModeController = ModeService.GetModeControllerByType(mode.Type, out var modePort, out var portName);
-
-            if (modePort != null)
-                TryReleaseTcpPort((ushort)modePort, portName);
-
-            if (Server is Socks5Server socks5 && (!socks5.Auth() || ModeController.Features.HasFlag(ModeFeature.SupportSocks5Auth)))
+            if (mode != null)
             {
+                ModeController = ModeService.GetModeControllerByType(mode.Type, out var modePort, out var portName);
+
+
+                if (modePort != null)
+                    TryReleaseTcpPort((ushort)modePort, portName);
+            }
+
+            //如果是 Socks5 服务器且没有密码
+            //或者如果是 Socks5 服务器，且模式控制器支持 Socks5 则直接使用该服务器
+            if (Server is Socks5Server socks5 && (ModeController == null ? socks5.Auth() : (!socks5.Auth() || ModeController.Features.HasFlag(ModeFeature.SupportSocks5Auth))))
+            {
+
                 Socks5Server = socks5;
             }
             else
@@ -68,9 +77,11 @@ public static class MainController
             }
 
             // Start Mode Controller
-            Global.MainForm.StatusText(i18N.TranslateFormat("Starting {0}", ModeController.Name));
-
-            await ModeController.StartAsync(Socks5Server, mode);
+            if (mode != null)
+            {
+                Global.MainForm.StatusText(i18N.TranslateFormat("Starting {0}", ModeController.Name));
+                await ModeController.StartAsync(Socks5Server, mode);
+            }
         }
         catch (Exception e)
         {
@@ -114,7 +125,7 @@ public static class MainController
 
         var tasks = new[]
         {
-            ServerController?.StopAsync() ?? Task.CompletedTask,
+            ServerController?.StopAsync() ?? Task.CompletedTask,            
             ModeController?.StopAsync() ?? Task.CompletedTask
         };
 
@@ -147,6 +158,7 @@ public static class MainController
         }
     }
 
+    [SupportedOSPlatform("windows8.1")]
     public static void TryReleaseTcpPort(ushort port, string portName)
     {
         foreach (var p in PortHelper.GetProcessByUsedTcpPort(port))

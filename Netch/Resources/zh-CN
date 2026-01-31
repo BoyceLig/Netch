@@ -78,7 +78,8 @@
 
   "Subscription": "订阅",
   "Manage Subscriptions": "管理订阅",
-  "Update Servers": "更新服务器",
+  "Update Servers (No Proxy)": "更新服务器（不使用代理）",
+  "Update Servers (Use Proxy)": "更新服务器（使用代理）",
   "No subscription link": "没有任何一条订阅链接",
   "Updating {0}": "正在更新 {0}",
   "Update {1} server(s) from {0}": "从 {0} 更新了 {1} 个服务器",
@@ -191,7 +192,7 @@
   "TCP FastOpen": "TCP 快速打开",
   "Disable Support Warning": "停用支持警告",
   "China DNS": "中国 DNS",
-  "Other DNS":  "其他 DNS",
+  "Other DNS": "其他 DNS",
 
   "Profile": "配置名",
   "Profiles": "配置",

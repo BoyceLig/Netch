@@ -15,9 +15,9 @@ namespace Netch.Controllers
     {
         private readonly DNSController _aioDnsController = new();
 
-        private TunMode _mode = null!;
+        private TunMode _mode = new();
         private IPAddress? _serverRemoteAddress;
-        private TUNConfig _tunConfig = null!;
+        private TUNConfig _tunConfig = new();
 
         private NetRoute _tun;
         private NetRoute _outbound;
@@ -35,8 +35,10 @@ namespace Netch.Controllers
             _mode = tunMode;
             _tunConfig = Global.Settings.TUNTAP;
 
+            ArgumentException.ThrowIfNullOrEmpty(server.RemoteHostname);
+
             _serverRemoteAddress = server.RemoteHostname.ValueOrDefault() != null
-                ? await DnsUtils.LookupAsync(server.RemoteHostname!)
+                ? await DnsUtils.LookupAsync(server.RemoteHostname)
                 : await DnsUtils.LookupAsync(server.Hostname);
 
             if (_serverRemoteAddress != null && IPAddress.IsLoopback(_serverRemoteAddress)) _serverRemoteAddress = null;
@@ -56,7 +58,7 @@ namespace Netch.Controllers
             int tunIndex = -1;
 
             // Wait for adapter to be created
-            for (var i = 0; i < 50; i++)
+            for (var i = 0; i < 30; i++)
             {
                 await Task.Delay(200);
                 var now = NetworkInterface.GetAllNetworkInterfaces();
@@ -95,13 +97,13 @@ namespace Netch.Controllers
             await Task.WhenAll(tasks);
         }
 
-        private void CheckDriver()
+        private async void CheckDriver()
         {
             string binDriver = Path.Combine(Global.NetchDir, Constants.WintunDllFile);
             string sysDriver = $@"{Environment.SystemDirectory}\wintun.dll";
 
-            var binHash = Utils.Utils.Sha256CheckSumAsync(binDriver).Result;
-            var sysHash = Utils.Utils.Sha256CheckSumAsync(sysDriver).Result;
+            var binHash = await Utils.Utils.Sha256CheckSumAsync(binDriver);
+            var sysHash = await Utils.Utils.Sha256CheckSumAsync(sysDriver);
             Log.Information("Built-in  wintun.dll Hash: {Hash}", binHash);
             Log.Information("Installed wintun.dll Hash: {Hash}", sysHash);
             if (binHash == sysHash)
