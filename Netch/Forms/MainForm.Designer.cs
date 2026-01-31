@@ -49,6 +49,11 @@
             RemoveNetchFirewallRulesToolStripMenuItem = new ToolStripMenuItem();
             HelpToolStripMenuItem = new ToolStripMenuItem();
             CheckForUpdateToolStripMenuItem = new ToolStripMenuItem();
+            V2RayCoreToolStripMenuItem = new ToolStripMenuItem();
+            XRayCireWebsiteToolStripMenuItem = new ToolStripMenuItem();
+            TUN2SocksWebsiteToolStripMenuItem = new ToolStripMenuItem();
+            WinTUNWebSiteToolStripMenuItem = new ToolStripMenuItem();
+            pcap2socksWebsiteToolStripMenuItem = new ToolStripMenuItem();
             FAQToolStripMenuItem = new ToolStripMenuItem();
             ForceExitToolStripMenuItem = new ToolStripMenuItem();
             AboutToolStripButton = new ToolStripButton();
@@ -241,7 +246,7 @@
             // 
             // HelpToolStripMenuItem
             // 
-            HelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { CheckForUpdateToolStripMenuItem, FAQToolStripMenuItem });
+            HelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { CheckForUpdateToolStripMenuItem, V2RayCoreToolStripMenuItem, XRayCireWebsiteToolStripMenuItem, TUN2SocksWebsiteToolStripMenuItem, WinTUNWebSiteToolStripMenuItem, pcap2socksWebsiteToolStripMenuItem, FAQToolStripMenuItem });
             HelpToolStripMenuItem.Margin = new Padding(0, 0, 0, 1);
             HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
             HelpToolStripMenuItem.Size = new Size(47, 21);
@@ -250,14 +255,49 @@
             // CheckForUpdateToolStripMenuItem
             // 
             CheckForUpdateToolStripMenuItem.Name = "CheckForUpdateToolStripMenuItem";
-            CheckForUpdateToolStripMenuItem.Size = new Size(177, 22);
+            CheckForUpdateToolStripMenuItem.Size = new Size(196, 22);
             CheckForUpdateToolStripMenuItem.Text = "Check for update";
             CheckForUpdateToolStripMenuItem.Click += CheckForUpdatesToolStripMenuItem_Click;
+            // 
+            // V2RayCoreToolStripMenuItem
+            // 
+            V2RayCoreToolStripMenuItem.Name = "V2RayCoreToolStripMenuItem";
+            V2RayCoreToolStripMenuItem.Size = new Size(196, 22);
+            V2RayCoreToolStripMenuItem.Text = "V2Ray Core Website";
+            V2RayCoreToolStripMenuItem.Click += V2RayCoreToolStripMenuItem_Click;
+            // 
+            // XRayCireWebsiteToolStripMenuItem
+            // 
+            XRayCireWebsiteToolStripMenuItem.Name = "XRayCireWebsiteToolStripMenuItem";
+            XRayCireWebsiteToolStripMenuItem.Size = new Size(196, 22);
+            XRayCireWebsiteToolStripMenuItem.Text = "XRay Core Website";
+            XRayCireWebsiteToolStripMenuItem.Click += XRayCireWebsiteToolStripMenuItem_Click;
+            // 
+            // TUN2SocksWebsiteToolStripMenuItem
+            // 
+            TUN2SocksWebsiteToolStripMenuItem.Name = "TUN2SocksWebsiteToolStripMenuItem";
+            TUN2SocksWebsiteToolStripMenuItem.Size = new Size(196, 22);
+            TUN2SocksWebsiteToolStripMenuItem.Text = "TUN2Socks Website";
+            TUN2SocksWebsiteToolStripMenuItem.Click += TUN2SocksWebsiteToolStripMenuItem_Click;
+            // 
+            // WinTUNWebSiteToolStripMenuItem
+            // 
+            WinTUNWebSiteToolStripMenuItem.Name = "WinTUNWebSiteToolStripMenuItem";
+            WinTUNWebSiteToolStripMenuItem.Size = new Size(196, 22);
+            WinTUNWebSiteToolStripMenuItem.Text = "WinTUN WebSite";
+            WinTUNWebSiteToolStripMenuItem.Click += WinTUNWebSiteToolStripMenuItem_Click;
+            // 
+            // pcap2socksWebsiteToolStripMenuItem
+            // 
+            pcap2socksWebsiteToolStripMenuItem.Name = "pcap2socksWebsiteToolStripMenuItem";
+            pcap2socksWebsiteToolStripMenuItem.Size = new Size(196, 22);
+            pcap2socksWebsiteToolStripMenuItem.Text = "pcap2socks Website";
+            pcap2socksWebsiteToolStripMenuItem.Click += pcap2socksWebsiteToolStripMenuItem_Click;
             // 
             // FAQToolStripMenuItem
             // 
             FAQToolStripMenuItem.Name = "FAQToolStripMenuItem";
-            FAQToolStripMenuItem.Size = new Size(177, 22);
+            FAQToolStripMenuItem.Size = new Size(196, 22);
             FAQToolStripMenuItem.Text = "FAQ";
             FAQToolStripMenuItem.Click += fAQToolStripMenuItem_Click;
             // 
@@ -798,5 +838,10 @@
         private System.Windows.Forms.ToolStripMenuItem ReloadModesToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem UpdateServersToolStripMenuItem_UseProxy;
+        private ToolStripMenuItem V2RayCoreToolStripMenuItem;
+        private ToolStripMenuItem XRayCireWebsiteToolStripMenuItem;
+        private ToolStripMenuItem TUN2SocksWebsiteToolStripMenuItem;
+        private ToolStripMenuItem WinTUNWebSiteToolStripMenuItem;
+        private ToolStripMenuItem pcap2socksWebsiteToolStripMenuItem;
     }
 }

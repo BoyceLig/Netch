@@ -377,6 +377,31 @@ public partial class MainForm : Form
         }
     }
 
+    private void V2RayCoreToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Utils.Utils.Open($"https://github.com/v2fly/v2ray-core");
+    }
+
+    private void XRayCireWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Utils.Utils.Open($"https://github.com/XTLS/Xray-core");
+    }
+
+    private void TUN2SocksWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Utils.Utils.Open($"https://github.com/xjasonlyu/tun2socks");
+    }
+
+    private void WinTUNWebSiteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Utils.Utils.Open($"https://www.wintun.net");
+    }
+
+    private void pcap2socksWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Utils.Utils.Open($"https://github.com/zhxie/pcap2socks");
+    }
+
     private void OpenDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Utils.Utils.Open(".\\");
