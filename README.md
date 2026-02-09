@@ -38,8 +38,10 @@ Some features may not be implemented in version 1
 
 ## Sponsor
 <a href="https://www.jetbrains.com/?from=Netch"><img src="jetbrains.svg" alt="JetBrains" width="200"/></a>
+<a href="https://visualstudio.microsoft.com/"><img src="visual-studio-26-icon.webp" alt="Visual Studio" width="100"/></a>
 
 ## License
 Netch is licensed under the [GPLv3](https://raw.githubusercontent.com/netchx/netch/main/LICENSE) license
+
 
 
