@@ -38,7 +38,7 @@ public class TrojanController : Guard, IServerController
             },
             ssl = new TrojanSSL
             {
-                sni = server.Host.ValueOrDefault() ?? server.Hostname
+                sni = server.Transport.Host ?? server.Hostname
             }
         };
 

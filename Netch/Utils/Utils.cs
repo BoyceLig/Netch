@@ -133,12 +133,7 @@ public static class Utils
             if (e.Index < 0)
                 return;
 
-            TextRenderer.DrawText(e.Graphics,
-                cbx.Items[e.Index].ToString(),
-                cbx.Font,
-                e.Bounds,
-                (e.State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.HighlightText : cbx.ForeColor,
-                TextFormatFlags.HorizontalCenter);
+            TextRenderer.DrawText(e.Graphics, cbx.Items[e.Index].ToString(), cbx.Font, e.Bounds, (e.State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.HighlightText : cbx.ForeColor, TextFormatFlags.HorizontalCenter);
         }
     }
 

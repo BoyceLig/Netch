@@ -129,7 +129,7 @@ public abstract class Guard
     }
 
     protected async Task StopGuardAsync()
-    {
+    {       
         try
         {
             if (Instance is { HasExited: false })

@@ -1,7 +1,7 @@
-using System.Text.RegularExpressions;
-using System.Web;
 using Netch.Models;
 using Netch.Utils;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Netch.Servers;
 
@@ -21,40 +21,55 @@ public static class V2rayUtils
         {
             var parameter = HttpUtility.ParseQueryString(text.Split('?')[1]);
             text = text.Substring(0, text.IndexOf("?", StringComparison.Ordinal));
-            server.TransferProtocol = parameter.Get("type") ?? "tcp";
+            server.Transport.TransferProtocol = parameter.Get("type") ?? "tcp";
             server.PacketEncoding = parameter.Get("packetEncoding") ?? "xudp";
             server.EncryptMethod = parameter.Get("encryption") ?? scheme switch { "vless" => "none", _ => "auto" };
-            switch (server.TransferProtocol)
+
+            if (server is VLESSServer vlessServer)
+            {
+                vlessServer.Flow = parameter.Get("flow") ?? "";
+            }
+
+            switch (server.Transport.TransferProtocol)
             {
                 case "tcp":
                     break;
                 case "kcp":
-                    server.FakeType = parameter.Get("headerType") ?? "none";
-                    server.Path = Uri.UnescapeDataString(parameter.Get("seed") ?? "");
+                    server.Transport.FakeType = parameter.Get("headerType") ?? "none";
+                    server.Transport.Path = Uri.UnescapeDataString(parameter.Get("seed") ?? "");
                     break;
                 case "ws":
-                    server.Path = Uri.UnescapeDataString(parameter.Get("path") ?? "/");
-                    server.Host = Uri.UnescapeDataString(parameter.Get("host") ?? "");
+                    server.Transport.Path = Uri.UnescapeDataString(parameter.Get("path") ?? "/");
+                    server.Transport.Host = Uri.UnescapeDataString(parameter.Get("host") ?? "");
                     break;
                 case "h2":
-                    server.Path = Uri.UnescapeDataString(parameter.Get("path") ?? "/");
-                    server.Host = Uri.UnescapeDataString(parameter.Get("host") ?? "");
+                case "xhttp":
+                    server.Transport.Path = Uri.UnescapeDataString(parameter.Get("path") ?? "/");
+                    server.Transport.Host = Uri.UnescapeDataString(parameter.Get("host") ?? "");
                     break;
                 case "quic":
-                    server.QUICSecure = parameter.Get("quicSecurity") ?? "none";
-                    server.QUICSecret = parameter.Get("key") ?? "";
-                    server.FakeType = parameter.Get("headerType") ?? "none";
+                    server.Transport.Host = parameter.Get("quicSecurity") ?? "none";
+                    server.Transport.Path = parameter.Get("key") ?? "";
+                    server.Transport.FakeType = parameter.Get("headerType") ?? "none";
                     break;
                 case "grpc":
-                    server.FakeType = parameter.Get("mode") ?? "gun";
-                    server.Path = parameter.Get("serviceName") ?? "";
+                    server.Transport.FakeType = parameter.Get("mode") ?? "gun";
+                    server.Transport.Path = parameter.Get("serviceName") ?? "";
                     break;
             }
 
-            server.TLSSecureType = parameter.Get("security") ?? "none";
-            if (server.TLSSecureType != "none")
+            server.tlsConfig.TLSSecureType = parameter.Get("security") ?? "none";
+            if (server.tlsConfig.TLSSecureType != "none")
             {
-                server.ServerName = parameter.Get("sni") ?? "";
+                server.tlsConfig.ServerName = parameter.Get("sni") ?? "";
+                server.tlsConfig.Alpn = parameter.Get("alpn") ?? "";
+                server.tlsConfig.EchConfigList = parameter.Get("ech") ?? "";
+                server.tlsConfig.XHttpObject = parameter.Get("xhttpobject") ?? "";
+                server.tlsConfig.Fingerprint = parameter.Get("fp") ?? "";
+                server.tlsConfig.PublicKey = parameter.Get("pbk") ?? "";
+                server.tlsConfig.ShortId = parameter.Get("sid") ?? "";
+                server.tlsConfig.SpiderX = parameter.Get("spx") ?? "";
+                server.tlsConfig.Mldsa65Verify = parameter.Get("pqv") ?? "";
             }
         }
 
@@ -76,66 +91,97 @@ public static class V2rayUtils
         var server = (VMessServer)s;
         var parameter = new Dictionary<string, string>();
         // protocol-specific fields
-        parameter.Add("type", server.TransferProtocol);
+        parameter.Add("type", server.Transport.TransferProtocol);
         parameter.Add("encryption", server.EncryptMethod);
         parameter.Add("packetEncoding", server.PacketEncoding);
 
         // transport-specific fields
-        switch (server.TransferProtocol)
+        switch (server.Transport.TransferProtocol)
         {
             case "tcp":
                 break;
             case "kcp":
-                if (server.FakeType != "none")
-                    parameter.Add("headerType", server.FakeType);
+                if (server.Transport.FakeType != "none")
+                    parameter.Add("headerType", server.Transport.FakeType);
 
-                if (!server.Path.IsNullOrWhiteSpace())
-                    parameter.Add("seed", Uri.EscapeDataString(server.Path!));
+                if (!server.Transport.Path.IsNullOrWhiteSpace())
+                    parameter.Add("seed", Uri.EscapeDataString(server.Transport.Path!));
 
                 break;
             case "ws":
-                parameter.Add("path", Uri.EscapeDataString(server.Path.ValueOrDefault() ?? "/"));
-                if (!server.Host.IsNullOrWhiteSpace())
-                    parameter.Add("host", Uri.EscapeDataString(server.Host!));
-
-                break;
+            case "httpupgrade":
             case "h2":
-                parameter.Add("path", Uri.EscapeDataString(server.Path.ValueOrDefault() ?? "/"));
-                if (!server.Host.IsNullOrWhiteSpace())
-                    parameter.Add("host", Uri.EscapeDataString(server.Host!));
+            case "xhttp":
+                parameter.Add("path", Uri.EscapeDataString(server.Transport.Path.ValueOrDefault() ?? "/"));
+                if (!server.Transport.Host.IsNullOrWhiteSpace())
+                    parameter.Add("host", Uri.EscapeDataString(server.Transport.Host!));
 
                 break;
             case "quic":
-                if (server.QUICSecure is not (null or "none"))
+                if (server.Transport.Host is not (null or "none"))
                 {
-                    parameter.Add("quicSecurity", server.QUICSecure);
-                    parameter.Add("key", server.QUICSecret!);
+                    parameter.Add("quicSecurity", server.Transport.Host);
+                    parameter.Add("key", server.Transport.Path!);
                 }
 
-                if (server.FakeType != "none")
-                    parameter.Add("headerType", server.FakeType);
+                if (server.Transport.FakeType != "none")
+                    parameter.Add("headerType", server.Transport.FakeType);
 
                 break;
             case "grpc":
-                if (!string.IsNullOrEmpty(server.Path))
-                    parameter.Add("serviceName", server.Path);
+                if (!string.IsNullOrEmpty(server.Transport.Path))
+                    parameter.Add("serviceName", server.Transport.Path);
 
-                if (server.FakeType is "gun" or "multi")
-                    parameter.Add("mode", server.FakeType);
+                if (server.Transport.FakeType is "gun" or "multi")
+                    parameter.Add("mode", server.Transport.FakeType);
 
                 break;
         }
 
-        if (server.TLSSecureType != "none")
+        if (server.tlsConfig.TLSSecureType != "none")
         {
-            parameter.Add("security", server.TLSSecureType);
+            parameter.Add("security", server.tlsConfig.TLSSecureType);
 
-            if (!server.Host.IsNullOrWhiteSpace())
-                parameter.Add("sni", server.Host!);
+            if (!server.Transport.Host.IsNullOrWhiteSpace())
+                parameter.Add("sni", server.Transport.Host!);
 
-            if (server.TLSSecureType == "xtls")
+            if (server.tlsConfig.TLSSecureType == "xtls")
             {
                 parameter.Add("flow", "xtls-rprx-direct");
+            }
+            if (server.tlsConfig.allowInsecure != null)
+            {
+                parameter.Add("allowInsecure", server.tlsConfig.allowInsecure.ToString()!);
+            }
+            if (!string.IsNullOrEmpty(server.tlsConfig.Fingerprint))
+            {
+                parameter.Add("fp", server.tlsConfig.Fingerprint);
+            }
+            if (!string.IsNullOrEmpty(server.tlsConfig.Alpn))
+            {
+                parameter.Add("alpn", server.tlsConfig.Alpn);
+            }
+            if (!string.IsNullOrEmpty(server.tlsConfig.EchConfigList))
+            {
+                parameter.Add("ech", server.tlsConfig.EchConfigList);
+            }
+            
+            //realitySettings
+            if (!string.IsNullOrEmpty(server.tlsConfig.PublicKey))
+            {
+                parameter.Add("pbk", server.tlsConfig.PublicKey);
+            }
+            if (!string.IsNullOrEmpty(server.tlsConfig.ShortId))
+            {
+                parameter.Add("sid", server.tlsConfig.ShortId);
+            }
+            if (!string.IsNullOrEmpty(server.tlsConfig.SpiderX))
+            {
+                parameter.Add("spx", server.tlsConfig.SpiderX);
+            }
+            if (!string.IsNullOrEmpty(server.tlsConfig.Mldsa65Verify))
+            {
+                parameter.Add("pqv", server.tlsConfig.Mldsa65Verify);
             }
         }
 

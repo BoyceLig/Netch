@@ -10,28 +10,21 @@ public class VLESSServer : VMessServer
     public override string EncryptMethod { get; set; } = "none";
 
     /// <summary>
-    ///     传输协议
+    /// 流控 Flow
     /// </summary>
-    public override string TransferProtocol { get; set; } = VLESSGlobal.TransferProtocols[0];
-
-    /// <summary>
-    ///     伪装类型
-    /// </summary>
-    public override string FakeType { get; set; } = VLESSGlobal.FakeTypes[0];
+    public string Flow { get; set; } = VLESSGlobal.Flow[0];
 }
 
 public class VLESSGlobal
 {
-    public static readonly List<string> TLSSecure = new()
+    /// <summary>
+    /// VLESS 流控（Flow）
+    /// </summary>
+    public static readonly List<string> Flow = new()
     {
-        "none",
-        "tls",
-        "xtls"
+        "",
+        "xtls-rprx-direct",
+        "xtls-rprx-vision",
+        "xtls-rprx-vision-udp443",
     };
-
-    public static List<string> FakeTypes => VMessGlobal.FakeTypes;
-
-    public static List<string> TransferProtocols => VMessGlobal.TransferProtocols;
-
-    public static List<string> QUIC => VMessGlobal.QUIC;
 }

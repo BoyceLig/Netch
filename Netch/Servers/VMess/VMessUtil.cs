@@ -38,21 +38,21 @@ public class VMessUtil : IServerUtil
             var server = (VMessServer)s;
 
             var vmessJson = JsonSerializer.Serialize(new V2rayNJObject
-                {
-                    v = 2,
-                    ps = server.Remark,
-                    add = server.Hostname,
-                    port = server.Port,
-                    scy = server.EncryptMethod,
-                    id = server.UserID,
-                    aid = server.AlterID,
-                    net = server.TransferProtocol,
-                    type = server.FakeType,
-                    host = server.Host ?? "",
-                    path = server.Path ?? "",
-                    tls = server.TLSSecureType,
-                    sni = server.ServerName ?? ""
-                },
+            {
+                v = 2,
+                ps = server.Remark,
+                add = server.Hostname,
+                port = server.Port,
+                scy = server.EncryptMethod,
+                id = server.UserID,
+                aid = server.AlterID,
+                net = server.Transport.TransferProtocol,
+                type = server.Transport.FakeType,
+                host = server.Transport.Host ?? "",
+                path = server.Transport.Path ?? "",
+                tls = server.tlsConfig.TLSSecureType,
+                sni = server.tlsConfig.ServerName ?? ""
+            },
                 new JsonSerializerOptions
                 {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
@@ -83,31 +83,23 @@ public class VMessUtil : IServerUtil
             return V2rayUtils.ParseVUri(text);
         }
 
-        V2rayNJObject vmess = JsonSerializer.Deserialize<V2rayNJObject>(s,
+        V2rayNJObject vmessJS = JsonSerializer.Deserialize<V2rayNJObject>(s,
             new JsonSerializerOptions { NumberHandling = JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString })!;
 
-        data.Remark = vmess.ps;
-        data.Hostname = vmess.add;
-        data.EncryptMethod = vmess.scy;
-        data.Port = vmess.port;
-        data.UserID = vmess.id;
-        data.AlterID = vmess.aid;
-        data.TransferProtocol = vmess.net;
-        data.FakeType = vmess.type;
-        data.ServerName = vmess.sni;
+        data.Remark = vmessJS.ps;
+        data.Hostname = vmessJS.add;
+        data.EncryptMethod = vmessJS.scy;
+        data.Port = vmessJS.port;
+        data.UserID = vmessJS.id;
+        data.AlterID = vmessJS.aid;
+        data.Transport.TransferProtocol = vmessJS.net;
+        data.Transport.FakeType = vmessJS.type;
+        data.tlsConfig.ServerName = vmessJS.sni;
 
-        if (data.TransferProtocol == "quic")
-        {
-            data.QUICSecure = vmess.host;
-            data.QUICSecret = vmess.path;
-        }
-        else
-        {
-            data.Host = vmess.host;
-            data.Path = vmess.path;
-        }
+        data.Transport.Host = vmessJS.host;
+        data.Transport.Path = vmessJS.path;
 
-        data.TLSSecureType = vmess.tls;
+        data.tlsConfig.TLSSecureType = vmessJS.tls;
 
         return new[] { data };
     }

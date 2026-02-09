@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Netch.Interfaces;
 using Netch.Models;
+using Netch.Utils;
 
 namespace Netch.Servers;
 
@@ -32,7 +33,7 @@ public class TrojanUtil : IServerUtil
     public string GetShareLink(Server s)
     {
         var server = (TrojanServer)s;
-        return $"trojan://{HttpUtility.UrlEncode(server.Password)}@{server.Hostname}:{server.Port}?sni={server.Host}#{server.Remark}";
+        return $"trojan://{HttpUtility.UrlEncode(server.Password)}@{server.Hostname}:{server.Port}?sni={server.Transport.Host}#{server.Remark}";
     }
 
     public IServerController GetController()
@@ -43,44 +44,38 @@ public class TrojanUtil : IServerUtil
     public IEnumerable<Server> ParseUri(string text)
     {
         var data = new TrojanServer();
-
-        text = text.Replace("/?", "?");
-        if (text.Contains("#"))
-        {
-            data.Remark = HttpUtility.UrlDecode(text.Split('#')[1]);
-            text = text.Split('#')[0];
-        }
+        var url = new Uri(text);
+        data.Password = url.UserInfo;
+        data.Hostname = url.Host;
+        data.Port = (ushort)url.Port;
+        data.Remark = HttpUtility.UrlDecode(url.Fragment.TrimStart('#'));
 
         if (text.Contains("?"))
         {
-            var reg = new Regex(@"^(?<data>.+?)\?(.+)$");
-            var regmatch = reg.Match(text);
+            var parameter = HttpUtility.ParseQueryString(url.Query);
 
-            if (!regmatch.Success)
-                throw new FormatException();
 
-            var peer = HttpUtility.UrlDecode(HttpUtility.ParseQueryString(new Uri(text).Query).Get("peer"));
+            var peer = HttpUtility.UrlDecode(parameter.Get("peer"));
 
-            if (peer != null) {
-                data.Host = peer;
-            } else {
-                peer = HttpUtility.UrlDecode(HttpUtility.ParseQueryString(new Uri(text).Query).Get("sni"));
-                if (peer != null)
-                    data.Host = peer;
+            if (!peer.IsNullOrWhiteSpace())
+            {
+                data.Transport.Host = peer;
             }
+            var sni = HttpUtility.UrlDecode(parameter.Get("sni"));
+            if (!sni.IsNullOrWhiteSpace())
+            {
+                data.tlsConfig.ServerName = sni;
+                data.tlsConfig.TLSSecureType = TLSGlobe.TLSSecure[1];
+            }
+            var allowInsecure = parameter.Get("allowInsecure");
+            data.tlsConfig.allowInsecure = allowInsecure switch
+            {
+                "0" => false,
+                "1" => true,
+                _ => null
+            };
 
-            text = regmatch.Groups["data"].Value;
         }
-
-        var finder = new Regex(@"^trojan://(?<psk>.+?)@(?<server>.+):(?<port>\d+)");
-        var match = finder.Match(text);
-        if (!match.Success)
-            throw new FormatException();
-
-        data.Password = HttpUtility.UrlDecode(match.Groups["psk"].Value);
-        data.Hostname = match.Groups["server"].Value;
-        data.Port = ushort.Parse(match.Groups["port"].Value);
-
         return new[] { data };
     }
 

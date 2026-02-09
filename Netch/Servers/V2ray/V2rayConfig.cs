@@ -1,6 +1,8 @@
 ﻿#nullable disable
 // ReSharper disable InconsistentNaming
 
+using System.Net.Http.Headers;
+
 namespace Netch.Servers;
 
 public struct V2rayConfig
@@ -42,7 +44,8 @@ public class OutboundConfiguration
 
     public object[] servers { get; set; }
 
-    public string version { get; set; }
+    //Sock里有个版本是4a，可sting 可int
+    public object version { get; set; }
 
     public string address { get; set; }
 
@@ -120,6 +123,8 @@ public class StreamSettings
 
     public HttpSettings httpSettings { get; set; }
 
+    public XhttpSettings xhttpSettings { get; set; }
+
     public QuicSettings quicSettings { get; set; }
 
     public TlsSettings xtlsSettings { get; set; }
@@ -127,15 +132,43 @@ public class StreamSettings
     public GrpcSettings grpcSettings { get; set; }
 
     public Sockopt sockopt { get; set; }
+    public RealitySettings realitySettings { get; set; }
+    public HysteriaSettings hysteriaSettings { get; set; }
 }
 
 #region Transport
+public class HysteriaSettings
+{
+    public int version { get; set; }
+    public string auth { get; set; }
+    public Udphop udphop { get; set; }
+}
+
+public class Udphop
+{
+    public string ports { get; set; }
+    public float interval { get; set; } = 30;
+}
+public class RealitySettings
+{
+    public string serverName { get; set; }
+    public string fingerprint { get; set; }
+    public bool show { get; set; } = false;
+    public string publicKey { get; set; }
+    public string shortId { get; set; }
+    public string spiderX { get; set; }
+    public string mldsa65Verify { get; set; }
+}
 
 public class TlsSettings
 {
     public bool allowInsecure { get; set; }
 
     public string serverName { get; set; }
+    public string[] alpn { get; set; }
+    public string fingerprint { get; set; }
+    public string echConfigList { get; set; }
+    public string echForceQuery { get; set; }
 }
 
 public class TcpSettings
@@ -146,6 +179,7 @@ public class TcpSettings
 public class WsSettings
 {
     public string path { get; set; }
+    public string host { get; set; }
 
     public object headers { get; set; }
 }
@@ -177,6 +211,16 @@ public class HttpSettings
 
     public string[] host { get; set; }
 }
+
+public class XhttpSettings
+{
+    public string path { get; set; }
+
+    public string host { get; set; }
+
+    public string xHttpObject { get; set; }
+}
+
 
 public class QuicSettings
 {
