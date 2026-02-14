@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.Threading;
+ï»¿using Microsoft.VisualStudio.Threading;
 using Netch.Interfaces;
 using Netch.Models;
 using Netch.Models.Modes;
@@ -52,8 +52,8 @@ public static class MainController
                     TryReleaseTcpPort((ushort)modePort, portName);
             }
 
-            //Èç¹ûÊÇ Socks5 ·şÎñÆ÷ÇÒÃ»ÓĞÃÜÂë
-            //»òÕßÈç¹ûÊÇ Socks5 ·şÎñÆ÷£¬ÇÒÄ£Ê½¿ØÖÆÆ÷Ö§³Ö Socks5 ÔòÖ±½ÓÊ¹ÓÃ¸Ã·şÎñÆ÷
+            //å¦‚æœæ˜¯ Socks5 æœåŠ¡å™¨ä¸”æ²¡æœ‰å¯†ç 
+            //æˆ–è€…å¦‚æœæ˜¯ Socks5 æœåŠ¡å™¨ï¼Œä¸”æ¨¡å¼æ§åˆ¶å™¨æ”¯æŒ Socks5 åˆ™ç›´æ¥ä½¿ç”¨è¯¥æœåŠ¡å™¨
             if (Server is SocksServer socks5 && (ModeController == null ? socks5.Auth() : (!socks5.Auth() || ModeController.Features.HasFlag(ModeFeature.SupportSocks5Auth))))
             {
 
