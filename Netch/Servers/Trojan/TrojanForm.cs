@@ -1,5 +1,5 @@
-﻿using Netch.Forms;
-using Netch.Models;
+﻿using Netch.Enums;
+using Netch.Forms;
 
 namespace Netch.Servers;
 
@@ -11,15 +11,15 @@ public class TrojanForm : ServerForm
         server ??= new TrojanServer();
         Server = server;
         CreateTextBox("Password", "Password", s => true, s => server.Password = s, server.Password);
-        CreateComboBox("Flow", "Flow", VLESSGlobal.Flow, s => server.Flow = s, server.Flow);
+        CreateComboBox("Flow", "Flow", Constants.Flow, s => server.ProtoExtra.Flow = s, server.ProtoExtra.Flow);
+        CreateCheckBox("UseMux", "Use Mux", s => server.MuxEnabled = s, server.MuxEnabled ?? false);
 
         //底层传输方式
-        CreateComboBox("TransferProtocol", "Transfer Protocol", TransportGlobal.TransferProtocols, s => server.Transport.TransferProtocol = s, server.Transport.TransferProtocol);
-        CreateComboBox("FakeType", "Fake Type", TransportGlobal.FakeTypes, s => server.Transport.FakeType = s, server.Transport.FakeType);
-        CreateTextBox("XHttpObject", "XHttpObject", s => true, s => server.Transport.XHttpObject = s, server.Transport.XHttpObject);
-        CreateTextBox("Host", "Host", s => true, s => server.Transport.Host = s, server.Transport.Host);
-        CreateTextBox("Path", "Path", s => true, s => server.Transport.Path = s, server.Transport.Path);
+        CreateComboBox("Network", "Network", Constants.Networks, s => server.Network = s, server.Network);
+        CreateComboBox("FakeType", "Fake Type", Constants.AllHeaderTypes, s => server.HeaderType = s, server.HeaderType);
+        CreateTextBox("Host", "Host", s => true, s => server.RequestHost = s, server.RequestHost);
+        CreateTextBox("Path", "Path", s => true, s => server.Path = s, server.Path);
     }
 
-    protected override string TypeName { get; } = "Trojan";
+    protected override EConfigType TypeName { get; } = EConfigType.Trojan;
 }

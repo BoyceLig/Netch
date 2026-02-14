@@ -1,12 +1,12 @@
-using System.Text.RegularExpressions;
-using System.Web;
+using Netch.Enums;
 using Netch.Interfaces;
 using Netch.Models;
+using Netch.Services;
 using Netch.Utils;
 
 namespace Netch.Servers;
 
-public class TrojanUtil : IServerUtil
+public class TrojanUtil : ServerUtilBase, IServerUtil
 {
     public ushort Priority { get; } = 3;
 
@@ -32,51 +32,54 @@ public class TrojanUtil : IServerUtil
 
     public string GetShareLink(Server s)
     {
-        var server = (TrojanServer)s;
-        return $"trojan://{HttpUtility.UrlEncode(server.Password)}@{server.Hostname}:{server.Port}?sni={server.Transport.Host}#{server.Remark}";
+        var item = (TrojanServer)s;
+        if (item == null)
+        {
+            return null;
+        }
+        var remark = string.Empty;
+        if (item.Remarks.IsNotEmpty())
+        {
+            remark = "#" + Utils.Utils.UrlEncode(item.Remarks);
+        }
+        var dicQuery = new Dictionary<string, string>();
+        if (!item.ProtoExtra.Flow.IsNullOrWhiteSpace())
+        {
+            dicQuery.Add("flow", item.ProtoExtra.Flow);
+        }
+        ToUriQuery(item, null, ref dicQuery);
+
+        return ToUri(EConfigType.Trojan, item.Address, item.Port, item.Password, dicQuery, remark);
     }
 
     public IServerController GetController()
     {
-        return new TrojanController();
+        return new V2rayController();
     }
 
-    public IEnumerable<Server> ParseUri(string text)
+    public IEnumerable<Server> ParseUri(string str)
     {
-        var data = new TrojanServer();
-        var url = new Uri(text);
-        data.Password = url.UserInfo;
-        data.Hostname = url.Host;
-        data.Port = (ushort)url.Port;
-        data.Remark = HttpUtility.UrlDecode(url.Fragment.TrimStart('#'));
+        TrojanServer item = new();
 
-        if (text.Contains("?"))
+        var url = Utils.Utils.TryUri(str);
+        if (url == null)
         {
-            var parameter = HttpUtility.ParseQueryString(url.Query);
-
-
-            var peer = HttpUtility.UrlDecode(parameter.Get("peer"));
-
-            if (!peer.IsNullOrWhiteSpace())
-            {
-                data.Transport.Host = peer;
-            }
-            var sni = HttpUtility.UrlDecode(parameter.Get("sni"));
-            if (!sni.IsNullOrWhiteSpace())
-            {
-                data.tlsConfig.ServerName = sni;
-                data.tlsConfig.TLSSecureType = TLSGlobe.TLSSecure[1];
-            }
-            var allowInsecure = parameter.Get("allowInsecure");
-            data.tlsConfig.allowInsecure = allowInsecure switch
-            {
-                "0" => false,
-                "1" => true,
-                _ => null
-            };
-
+            return null;
         }
-        return new[] { data };
+
+        item.Address = url.IdnHost;
+        item.Port = url.Port;
+        item.Remarks = url.GetComponents(UriComponents.Fragment, UriFormat.Unescaped);
+        item.Password = Utils.Utils.UrlDecode(url.UserInfo);
+
+        var query = Utils.Utils.ParseQueryString(url.Query);
+        item.ProtoExtra.Flow = GetQueryValue(query, "flow");
+        ResolveUriQuery(query, ref item);
+        if (item.StreamSecurity.IsNullOrEmpty())
+        {
+            item.StreamSecurity = Constants.StreamSecurity;
+        }
+        return new[] { item };
     }
 
     public bool CheckServer(Server s)

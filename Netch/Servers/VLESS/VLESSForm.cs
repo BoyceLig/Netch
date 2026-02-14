@@ -1,5 +1,5 @@
+using Netch.Enums;
 using Netch.Forms;
-using Netch.Models;
 
 namespace Netch.Servers;
 
@@ -11,25 +11,17 @@ internal class VLESSForm : ServerForm
         server ??= new VLESSServer();
         Server = server;
 
-        CreateTextBox("UUID", "UUID", s => true, s => server.UserID = s, server.UserID);
-        CreateComboBox("Flow", "Flow", VLESSGlobal.Flow, s => server.Flow = s, server.Flow);
-        CreateTextBox("EncryptMethod", "Encrypt Method", s => true, s => server.EncryptMethod = !string.IsNullOrWhiteSpace(s) ? s : "none", server.EncryptMethod);
-        CreateComboBox("UseMux", "Use Mux", VMessGlobal.UseMux, s => server.UseMux = s switch
-        {
-            "" => null,
-            "true" => true,
-            "false" => false,
-            _ => null
-        }, server.UseMux?.ToString().ToLower() ?? "");
+        CreateTextBox("UUID", "UUID", s => true, s => server.Password = s, server.Password);
+        CreateComboBox("Flow", "Flow", Constants.Flow, s => server.ProtoExtra.Flow = s, server.ProtoExtra.Flow);
+        CreateComboBox("EncryptMethod", "Encrypt Method", Constants.VmessSecurities, s => server.ProtoExtra.VmessSecurity = s, server.ProtoExtra.VmessSecurity);
+        CreateCheckBox("UseMux", "Use Mux", s => server.MuxEnabled = s, server.MuxEnabled ?? false);
 
         //�ײ㴫�䷽ʽ
-        CreateComboBox("TransferProtocol", "Transfer Protocol", TransportGlobal.TransferProtocols, s => server.Transport.TransferProtocol = s, server.Transport.TransferProtocol);
-        CreateComboBox("PacketEncoding", "Packet Encoding", VMessGlobal.PacketEncodings, s => server.PacketEncoding = s, server.PacketEncoding);
-        CreateComboBox("FakeType", "Fake Type", TransportGlobal.FakeTypes, s => server.Transport.FakeType = s, server.Transport.FakeType);
-        CreateTextBox("XHttpObject", "XHttpObject", s => true, s => server.Transport.XHttpObject = s, server.Transport.XHttpObject);
-        CreateTextBox("Host", "Host", s => true, s => server.Transport.Host = s, server.Transport.Host);
-        CreateTextBox("Path", "Path", s => true, s => server.Transport.Path = s, server.Transport.Path);
+        CreateComboBox("Network", "Network", Constants.Networks, s => server.Network = s, server.Network);
+        CreateComboBox("FakeType", "Fake Type", Constants.AllHeaderTypes, s => server.HeaderType = s, server.HeaderType);
+        CreateTextBox("Host", "Host", s => true, s => server.RequestHost = s, server.RequestHost);
+        CreateTextBox("Path", "Path", s => true, s => server.Path = s, server.Path);        
     }
 
-    protected override string TypeName { get; } = "VLESS";
+    protected override EConfigType TypeName { get; } = EConfigType.VLESS;
 }

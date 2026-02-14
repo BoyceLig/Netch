@@ -27,7 +27,7 @@ namespace Netch.Controllers
 
         public ModeFeature Features => ModeFeature.SupportSocks5Auth;
 
-        public async Task StartAsync(Socks5Server server, Mode mode)
+        public async Task StartAsync(SocksServer server, Mode mode)
         {
             if (mode is not TunMode tunMode)
                 throw new InvalidOperationException();
@@ -39,7 +39,7 @@ namespace Netch.Controllers
 
             _serverRemoteAddress = server.RemoteHostname.ValueOrDefault() != null
                 ? await DnsUtils.LookupAsync(server.RemoteHostname)
-                : await DnsUtils.LookupAsync(server.Hostname);
+                : await DnsUtils.LookupAsync(server.Address);
 
             if (_serverRemoteAddress != null && IPAddress.IsLoopback(_serverRemoteAddress)) _serverRemoteAddress = null;
 

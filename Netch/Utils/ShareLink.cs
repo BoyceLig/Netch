@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Netch.JsonConverter;
 using Netch.Models;
-using Netch.Servers;
 
 namespace Netch.Utils;
 
@@ -10,7 +9,7 @@ public static class ShareLink
 {
     public static string GetShareLink(Server server)
     {
-        return ServerHelper.GetUtilByTypeName(server.Type).GetShareLink(server);
+        return ServerHelper.GetUtilByTypeName(server.ConfigType.ToString()).GetShareLink(server);
     }
 
     public static List<Server> ParseText(string text)
@@ -26,38 +25,17 @@ public static class ShareLink
 
         var list = new List<Server>();
 
-        try
+        foreach (var line in text.GetLines())
         {
-            list.AddRange(JsonSerializer.Deserialize<List<ShadowsocksConfig>>(text)!.Select(server => new ShadowsocksServer
+            try
             {
-                Hostname = server.server,
-                Port = server.server_port,
-                EncryptMethod = server.method,
-                Password = server.password,
-                Remark = server.remarks,
-                Plugin = server.plugin,
-                PluginOption = server.plugin_opts
-            }));
-        }
-        catch (JsonException)
-        {
-            foreach (var line in text.GetLines())
+                list.AddRange(ParseUri(line));
+            }
+            catch (Exception e)
             {
-                try
-                {
-                    list.AddRange(ParseUri(line));
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, "Parse servers from share link error");
-                }
+                Log.Error(e, "Parse servers from share link error");
             }
         }
-        catch (Exception e)
-        {
-            Log.Error(e, "Parse servers from share link error");
-        }
-
         return list;
     }
 
@@ -83,8 +61,8 @@ public static class ShareLink
                 Log.Warning("\"{Scheme}\" scheme share link not supported", scheme);
         }
 
-        foreach (var node in list.Where(node => !node.Remark.IsNullOrWhiteSpace()))
-            node.Remark = RemoveEmoji(node.Remark);
+        foreach (var node in list.Where(node => !node.Remarks.IsNullOrWhiteSpace()))
+            node.Remarks = RemoveEmoji(node.Remarks);
 
         return list;
     }

@@ -8,23 +8,21 @@ namespace Netch.Servers;
 
 public class V2rayController : Guard, IServerController
 {
-    public V2rayController() : base(Global.Settings.V2RayConfig.XrayCone ? "xray.exe" : "v2ray.exe")
+    public V2rayController() : base("xray.exe")
     {
-        //if (!Global.Settings.V2RayConfig.XrayCone)
-        //    Instance.StartInfo.Environment["XRAY_CONE_DISABLED"] = "true";
     }
 
     protected override IEnumerable<string> StartedKeywords => new[] { "started" };
 
     protected override IEnumerable<string> FailedKeywords => new[] { "config file not readable", "failed to" };
 
-    public override string Name => Global.Settings.V2RayConfig.XrayCone ? "Xray" : "V2Ray";
+    public override string Name => "Xray";
 
     public ushort? Socks5LocalPort { get; set; }
 
     public string? LocalAddress { get; set; }
 
-    public virtual async Task<Socks5Server> StartAsync(Server s)
+    public virtual async Task<SocksServer> StartAsync(Server s)
     {
         await using (var fileStream = new FileStream(Constants.TempConfig, FileMode.Create, FileAccess.Write, FileShare.Read))
         {
@@ -32,6 +30,6 @@ public class V2rayController : Guard, IServerController
         }
 
         await StartGuardAsync("run -c ..\\data\\last.json");
-        return new Socks5Server(IPAddress.Loopback.ToString(), this.Socks5LocalPort(), s.Hostname);
+        return new SocksServer(IPAddress.Loopback.ToString(), this.Socks5LocalPort(), s.Address);
     }
 }

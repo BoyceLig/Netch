@@ -34,10 +34,12 @@ namespace Netch.Forms
             components = new Container();
             TabControl = new TabControl();
             GeneralTabPage = new TabPage();
+            OutboundDNSTextBox = new TextBox();
             PortGroupBox = new GroupBox();
             Socks5PortLabel = new Label();
             Socks5PortTextBox = new TextBox();
             AllowDevicesCheckBox = new CheckBox();
+            OutboundDNSLabel = new Label();
             ServerPingTypeLabel = new Label();
             ICMPingRadioBtn = new RadioButton();
             TCPingRadioBtn = new RadioButton();
@@ -77,10 +79,11 @@ namespace Netch.Forms
             ProxyDNSCheckBox = new CheckBox();
             GlobalBypassIPsButton = new Button();
             v2rayTabPage = new TabPage();
-            XrayConeCheckBox = new CheckBox();
+            DefFingerprintComboBox = new ComboBox();
+            DefFingerprintLabel = new Label();
+            EnableFragmentBox = new CheckBox();
             TLSAllowInsecureCheckBox = new CheckBox();
             UseMuxCheckBox = new CheckBox();
-            TCPFastOpenBox = new CheckBox();
             KCPGroupBox = new GroupBox();
             mtuLabel = new Label();
             mtuTextBox = new TextBox();
@@ -95,6 +98,10 @@ namespace Netch.Forms
             writeBufferSizeLabel = new Label();
             writeBufferSizeTextBox = new TextBox();
             congestionCheckBox = new CheckBox();
+            HysteriaTabPage = new TabPage();
+            HysteriaBandwidthGroupBox = new GroupBox();
+            HysteriaDownMbpsTextBox = new TextBox();
+            HysteriaUpMbpsTextBox = new TextBox();
             OtherTabPage = new TabPage();
             ExitWhenClosedCheckBox = new CheckBox();
             StopWhenExitedCheckBox = new CheckBox();
@@ -111,8 +118,8 @@ namespace Netch.Forms
             OtherDNSLabel = new Label();
             OtherDNSTextBox = new TextBox();
             ControlButton = new Button();
-            flowLayoutPanel1 = new FlowLayoutPanel();
             errorProvider = new ErrorProvider(components);
+            tableLayoutPanel1 = new TableLayoutPanel();
             TabControl.SuspendLayout();
             GeneralTabPage.SuspendLayout();
             PortGroupBox.SuspendLayout();
@@ -121,10 +128,12 @@ namespace Netch.Forms
             WinTUNGroupBox.SuspendLayout();
             v2rayTabPage.SuspendLayout();
             KCPGroupBox.SuspendLayout();
+            HysteriaTabPage.SuspendLayout();
+            HysteriaBandwidthGroupBox.SuspendLayout();
             OtherTabPage.SuspendLayout();
             AioDNSTabPage.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
             ((ISupportInitialize)errorProvider).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // TabControl
@@ -134,18 +143,22 @@ namespace Netch.Forms
             TabControl.Controls.Add(NFTabPage);
             TabControl.Controls.Add(WinTUNTabPage);
             TabControl.Controls.Add(v2rayTabPage);
+            TabControl.Controls.Add(HysteriaTabPage);
             TabControl.Controls.Add(OtherTabPage);
             TabControl.Controls.Add(AioDNSTabPage);
+            TabControl.Dock = DockStyle.Top;
             TabControl.Location = new Point(3, 3);
             TabControl.Name = "TabControl";
             TabControl.SelectedIndex = 0;
-            TabControl.Size = new Size(469, 354);
+            TabControl.Size = new Size(503, 323);
             TabControl.TabIndex = 0;
             // 
             // GeneralTabPage
             // 
             GeneralTabPage.BackColor = SystemColors.ButtonFace;
+            GeneralTabPage.Controls.Add(OutboundDNSTextBox);
             GeneralTabPage.Controls.Add(PortGroupBox);
+            GeneralTabPage.Controls.Add(OutboundDNSLabel);
             GeneralTabPage.Controls.Add(ServerPingTypeLabel);
             GeneralTabPage.Controls.Add(ICMPingRadioBtn);
             GeneralTabPage.Controls.Add(TCPingRadioBtn);
@@ -162,9 +175,16 @@ namespace Netch.Forms
             GeneralTabPage.Location = new Point(4, 29);
             GeneralTabPage.Name = "GeneralTabPage";
             GeneralTabPage.Padding = new Padding(3);
-            GeneralTabPage.Size = new Size(461, 321);
+            GeneralTabPage.Size = new Size(495, 290);
             GeneralTabPage.TabIndex = 0;
             GeneralTabPage.Text = "General";
+            // 
+            // OutboundDNSTextBox
+            // 
+            OutboundDNSTextBox.Location = new Point(267, 98);
+            OutboundDNSTextBox.Name = "OutboundDNSTextBox";
+            OutboundDNSTextBox.Size = new Size(164, 23);
+            OutboundDNSTextBox.TabIndex = 15;
             // 
             // PortGroupBox
             // 
@@ -183,9 +203,9 @@ namespace Netch.Forms
             Socks5PortLabel.AutoSize = true;
             Socks5PortLabel.Location = new Point(9, 25);
             Socks5PortLabel.Name = "Socks5PortLabel";
-            Socks5PortLabel.Size = new Size(49, 17);
+            Socks5PortLabel.Size = new Size(44, 17);
             Socks5PortLabel.TabIndex = 0;
-            Socks5PortLabel.Text = "Socks5";
+            Socks5PortLabel.Text = "Mixed";
             // 
             // Socks5PortTextBox
             // 
@@ -205,6 +225,15 @@ namespace Netch.Forms
             AllowDevicesCheckBox.Text = "Allow other Devices to connect";
             AllowDevicesCheckBox.TextAlign = ContentAlignment.MiddleRight;
             AllowDevicesCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // OutboundDNSLabel
+            // 
+            OutboundDNSLabel.AutoSize = true;
+            OutboundDNSLabel.Location = new Point(268, 75);
+            OutboundDNSLabel.Name = "OutboundDNSLabel";
+            OutboundDNSLabel.Size = new Size(97, 17);
+            OutboundDNSLabel.TabIndex = 2;
+            OutboundDNSLabel.Text = "Outbound DNS";
             // 
             // ServerPingTypeLabel
             // 
@@ -340,7 +369,7 @@ namespace Netch.Forms
             NFTabPage.Location = new Point(4, 29);
             NFTabPage.Name = "NFTabPage";
             NFTabPage.Padding = new Padding(3);
-            NFTabPage.Size = new Size(461, 321);
+            NFTabPage.Size = new Size(495, 290);
             NFTabPage.TabIndex = 1;
             NFTabPage.Text = "Process Mode";
             // 
@@ -460,7 +489,7 @@ namespace Netch.Forms
             WinTUNTabPage.Location = new Point(4, 29);
             WinTUNTabPage.Name = "WinTUNTabPage";
             WinTUNTabPage.Padding = new Padding(3);
-            WinTUNTabPage.Size = new Size(461, 321);
+            WinTUNTabPage.Size = new Size(495, 290);
             WinTUNTabPage.TabIndex = 2;
             WinTUNTabPage.Text = "WinTUN";
             // 
@@ -586,32 +615,51 @@ namespace Netch.Forms
             // v2rayTabPage
             // 
             v2rayTabPage.BackColor = SystemColors.ButtonFace;
-            v2rayTabPage.Controls.Add(XrayConeCheckBox);
+            v2rayTabPage.Controls.Add(DefFingerprintComboBox);
+            v2rayTabPage.Controls.Add(DefFingerprintLabel);
+            v2rayTabPage.Controls.Add(EnableFragmentBox);
             v2rayTabPage.Controls.Add(TLSAllowInsecureCheckBox);
             v2rayTabPage.Controls.Add(UseMuxCheckBox);
-            v2rayTabPage.Controls.Add(TCPFastOpenBox);
             v2rayTabPage.Controls.Add(KCPGroupBox);
             v2rayTabPage.Location = new Point(4, 29);
             v2rayTabPage.Name = "v2rayTabPage";
             v2rayTabPage.Padding = new Padding(3);
-            v2rayTabPage.Size = new Size(461, 321);
+            v2rayTabPage.Size = new Size(495, 290);
             v2rayTabPage.TabIndex = 3;
             v2rayTabPage.Text = "V2Ray";
             // 
-            // XrayConeCheckBox
+            // DefFingerprintComboBox
             // 
-            XrayConeCheckBox.AutoSize = true;
-            XrayConeCheckBox.Location = new Point(6, 15);
-            XrayConeCheckBox.Name = "XrayConeCheckBox";
-            XrayConeCheckBox.Size = new Size(340, 21);
-            XrayConeCheckBox.TabIndex = 0;
-            XrayConeCheckBox.Text = "FullCone Support (Required Server Xray-core v1.3.0+)";
-            XrayConeCheckBox.UseVisualStyleBackColor = true;
+            DefFingerprintComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            DefFingerprintComboBox.FormattingEnabled = true;
+            DefFingerprintComboBox.Location = new Point(150, 43);
+            DefFingerprintComboBox.Name = "DefFingerprintComboBox";
+            DefFingerprintComboBox.Size = new Size(140, 25);
+            DefFingerprintComboBox.TabIndex = 15;
+            // 
+            // DefFingerprintLabel
+            // 
+            DefFingerprintLabel.AutoSize = true;
+            DefFingerprintLabel.Location = new Point(15, 46);
+            DefFingerprintLabel.Name = "DefFingerprintLabel";
+            DefFingerprintLabel.Size = new Size(116, 17);
+            DefFingerprintLabel.TabIndex = 0;
+            DefFingerprintLabel.Text = "Default Fingerprint";
+            // 
+            // EnableFragmentBox
+            // 
+            EnableFragmentBox.AutoSize = true;
+            EnableFragmentBox.Location = new Point(17, 16);
+            EnableFragmentBox.Name = "EnableFragmentBox";
+            EnableFragmentBox.Size = new Size(125, 21);
+            EnableFragmentBox.TabIndex = 0;
+            EnableFragmentBox.Text = "Enable Fragment";
+            EnableFragmentBox.UseVisualStyleBackColor = true;
             // 
             // TLSAllowInsecureCheckBox
             // 
             TLSAllowInsecureCheckBox.AutoSize = true;
-            TLSAllowInsecureCheckBox.Location = new Point(6, 42);
+            TLSAllowInsecureCheckBox.Location = new Point(159, 16);
             TLSAllowInsecureCheckBox.Name = "TLSAllowInsecureCheckBox";
             TLSAllowInsecureCheckBox.Size = new Size(131, 21);
             TLSAllowInsecureCheckBox.TabIndex = 1;
@@ -621,22 +669,12 @@ namespace Netch.Forms
             // UseMuxCheckBox
             // 
             UseMuxCheckBox.AutoSize = true;
-            UseMuxCheckBox.Location = new Point(148, 42);
+            UseMuxCheckBox.Location = new Point(311, 16);
             UseMuxCheckBox.Name = "UseMuxCheckBox";
             UseMuxCheckBox.Size = new Size(78, 21);
             UseMuxCheckBox.TabIndex = 2;
             UseMuxCheckBox.Text = "Use Mux";
             UseMuxCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // TCPFastOpenBox
-            // 
-            TCPFastOpenBox.AutoSize = true;
-            TCPFastOpenBox.Location = new Point(300, 42);
-            TCPFastOpenBox.Name = "TCPFastOpenBox";
-            TCPFastOpenBox.Size = new Size(108, 21);
-            TCPFastOpenBox.TabIndex = 3;
-            TCPFastOpenBox.Text = "TCP FastOpen";
-            TCPFastOpenBox.UseVisualStyleBackColor = true;
             // 
             // KCPGroupBox
             // 
@@ -665,9 +703,9 @@ namespace Netch.Forms
             mtuLabel.AutoSize = true;
             mtuLabel.Location = new Point(6, 26);
             mtuLabel.Name = "mtuLabel";
-            mtuLabel.Size = new Size(30, 17);
+            mtuLabel.Size = new Size(36, 17);
             mtuLabel.TabIndex = 0;
-            mtuLabel.Text = "mtu";
+            mtuLabel.Text = "MTU";
             // 
             // mtuTextBox
             // 
@@ -682,9 +720,9 @@ namespace Netch.Forms
             ttiLabel.AutoSize = true;
             ttiLabel.Location = new Point(216, 26);
             ttiLabel.Name = "ttiLabel";
-            ttiLabel.Size = new Size(19, 17);
+            ttiLabel.Size = new Size(26, 17);
             ttiLabel.TabIndex = 2;
-            ttiLabel.Text = "tti";
+            ttiLabel.Text = "TTI";
             // 
             // ttiTextBox
             // 
@@ -699,13 +737,13 @@ namespace Netch.Forms
             uplinkCapacityLabel.AutoSize = true;
             uplinkCapacityLabel.Location = new Point(6, 68);
             uplinkCapacityLabel.Name = "uplinkCapacityLabel";
-            uplinkCapacityLabel.Size = new Size(92, 17);
+            uplinkCapacityLabel.Size = new Size(94, 17);
             uplinkCapacityLabel.TabIndex = 4;
-            uplinkCapacityLabel.Text = "uplinkCapacity";
+            uplinkCapacityLabel.Text = "UplinkCapacity";
             // 
             // uplinkCapacityTextBox
             // 
-            uplinkCapacityTextBox.Location = new Point(103, 59);
+            uplinkCapacityTextBox.Location = new Point(103, 65);
             uplinkCapacityTextBox.Name = "uplinkCapacityTextBox";
             uplinkCapacityTextBox.Size = new Size(90, 23);
             uplinkCapacityTextBox.TabIndex = 5;
@@ -716,9 +754,9 @@ namespace Netch.Forms
             downlinkCapacityLabel.AutoSize = true;
             downlinkCapacityLabel.Location = new Point(216, 68);
             downlinkCapacityLabel.Name = "downlinkCapacityLabel";
-            downlinkCapacityLabel.Size = new Size(109, 17);
+            downlinkCapacityLabel.Size = new Size(110, 17);
             downlinkCapacityLabel.TabIndex = 6;
-            downlinkCapacityLabel.Text = "downlinkCapacity";
+            downlinkCapacityLabel.Text = "DownlinkCapacity";
             // 
             // downlinkCapacityTextBox
             // 
@@ -733,13 +771,13 @@ namespace Netch.Forms
             readBufferSizeLabel.AutoSize = true;
             readBufferSizeLabel.Location = new Point(6, 109);
             readBufferSizeLabel.Name = "readBufferSizeLabel";
-            readBufferSizeLabel.Size = new Size(93, 17);
+            readBufferSizeLabel.Size = new Size(96, 17);
             readBufferSizeLabel.TabIndex = 8;
-            readBufferSizeLabel.Text = "readBufferSize";
+            readBufferSizeLabel.Text = "ReadBufferSize";
             // 
             // readBufferSizeTextBox
             // 
-            readBufferSizeTextBox.Location = new Point(103, 100);
+            readBufferSizeTextBox.Location = new Point(103, 106);
             readBufferSizeTextBox.Name = "readBufferSizeTextBox";
             readBufferSizeTextBox.Size = new Size(90, 23);
             readBufferSizeTextBox.TabIndex = 9;
@@ -750,9 +788,9 @@ namespace Netch.Forms
             writeBufferSizeLabel.AutoSize = true;
             writeBufferSizeLabel.Location = new Point(216, 109);
             writeBufferSizeLabel.Name = "writeBufferSizeLabel";
-            writeBufferSizeLabel.Size = new Size(94, 17);
+            writeBufferSizeLabel.Size = new Size(97, 17);
             writeBufferSizeLabel.TabIndex = 10;
-            writeBufferSizeLabel.Text = "writeBufferSize";
+            writeBufferSizeLabel.Text = "WriteBufferSize";
             // 
             // writeBufferSizeTextBox
             // 
@@ -767,10 +805,46 @@ namespace Netch.Forms
             congestionCheckBox.AutoSize = true;
             congestionCheckBox.Location = new Point(8, 139);
             congestionCheckBox.Name = "congestionCheckBox";
-            congestionCheckBox.Size = new Size(91, 21);
+            congestionCheckBox.Size = new Size(93, 21);
             congestionCheckBox.TabIndex = 12;
-            congestionCheckBox.Text = "congestion";
+            congestionCheckBox.Text = "Congestion";
             congestionCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // HysteriaTabPage
+            // 
+            HysteriaTabPage.Controls.Add(HysteriaBandwidthGroupBox);
+            HysteriaTabPage.Location = new Point(4, 29);
+            HysteriaTabPage.Name = "HysteriaTabPage";
+            HysteriaTabPage.Padding = new Padding(3);
+            HysteriaTabPage.Size = new Size(495, 290);
+            HysteriaTabPage.TabIndex = 6;
+            HysteriaTabPage.Text = "Hysteria";
+            HysteriaTabPage.UseVisualStyleBackColor = true;
+            // 
+            // HysteriaBandwidthGroupBox
+            // 
+            HysteriaBandwidthGroupBox.Controls.Add(HysteriaDownMbpsTextBox);
+            HysteriaBandwidthGroupBox.Controls.Add(HysteriaUpMbpsTextBox);
+            HysteriaBandwidthGroupBox.Location = new Point(6, 6);
+            HysteriaBandwidthGroupBox.Name = "HysteriaBandwidthGroupBox";
+            HysteriaBandwidthGroupBox.Size = new Size(260, 69);
+            HysteriaBandwidthGroupBox.TabIndex = 1;
+            HysteriaBandwidthGroupBox.TabStop = false;
+            HysteriaBandwidthGroupBox.Text = "Bande Passante Maximale (Up/Down)";
+            // 
+            // HysteriaDownMbpsTextBox
+            // 
+            HysteriaDownMbpsTextBox.Location = new Point(118, 22);
+            HysteriaDownMbpsTextBox.Name = "HysteriaDownMbpsTextBox";
+            HysteriaDownMbpsTextBox.Size = new Size(100, 23);
+            HysteriaDownMbpsTextBox.TabIndex = 1;
+            // 
+            // HysteriaUpMbpsTextBox
+            // 
+            HysteriaUpMbpsTextBox.Location = new Point(12, 22);
+            HysteriaUpMbpsTextBox.Name = "HysteriaUpMbpsTextBox";
+            HysteriaUpMbpsTextBox.Size = new Size(100, 23);
+            HysteriaUpMbpsTextBox.TabIndex = 0;
             // 
             // OtherTabPage
             // 
@@ -787,7 +861,7 @@ namespace Netch.Forms
             OtherTabPage.Location = new Point(4, 29);
             OtherTabPage.Name = "OtherTabPage";
             OtherTabPage.Padding = new Padding(3);
-            OtherTabPage.Size = new Size(461, 321);
+            OtherTabPage.Size = new Size(495, 290);
             OtherTabPage.TabIndex = 4;
             OtherTabPage.Text = "Others";
             // 
@@ -896,7 +970,7 @@ namespace Netch.Forms
             AioDNSTabPage.Location = new Point(4, 29);
             AioDNSTabPage.Name = "AioDNSTabPage";
             AioDNSTabPage.Padding = new Padding(3);
-            AioDNSTabPage.Size = new Size(461, 321);
+            AioDNSTabPage.Size = new Size(495, 290);
             AioDNSTabPage.TabIndex = 5;
             AioDNSTabPage.Text = "AioDNS";
             AioDNSTabPage.UseVisualStyleBackColor = true;
@@ -937,8 +1011,8 @@ namespace Netch.Forms
             // 
             // ControlButton
             // 
-            ControlButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            ControlButton.Location = new Point(397, 363);
+            ControlButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            ControlButton.Location = new Point(431, 332);
             ControlButton.Name = "ControlButton";
             ControlButton.Size = new Size(75, 23);
             ControlButton.TabIndex = 1;
@@ -946,32 +1020,34 @@ namespace Netch.Forms
             ControlButton.UseVisualStyleBackColor = true;
             ControlButton.Click += ControlButton_Click;
             // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.AutoSize = true;
-            flowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            flowLayoutPanel1.Controls.Add(TabControl);
-            flowLayoutPanel1.Controls.Add(ControlButton);
-            flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(0, 0);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(480, 400);
-            flowLayoutPanel1.TabIndex = 0;
-            // 
             // errorProvider
             // 
             errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             errorProvider.ContainerControl = this;
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(TabControl);
+            tableLayoutPanel1.Controls.Add(ControlButton);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
+            tableLayoutPanel1.Size = new Size(509, 358);
+            tableLayoutPanel1.TabIndex = 10;
+            tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
+            // 
             // SettingForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(480, 400);
-            Controls.Add(flowLayoutPanel1);
+            ClientSize = new Size(509, 358);
+            Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "SettingForm";
@@ -992,17 +1068,19 @@ namespace Netch.Forms
             v2rayTabPage.PerformLayout();
             KCPGroupBox.ResumeLayout(false);
             KCPGroupBox.PerformLayout();
+            HysteriaTabPage.ResumeLayout(false);
+            HysteriaBandwidthGroupBox.ResumeLayout(false);
+            HysteriaBandwidthGroupBox.PerformLayout();
             OtherTabPage.ResumeLayout(false);
             OtherTabPage.PerformLayout();
             AioDNSTabPage.ResumeLayout(false);
             AioDNSTabPage.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
             ((ISupportInitialize)errorProvider).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
 
         }
-        private System.Windows.Forms.CheckBox XrayConeCheckBox;
+        private System.Windows.Forms.CheckBox EnableFragmentBox;
         private System.Windows.Forms.TextBox StartedPingIntervalTextBox;
 
         #endregion
@@ -1030,7 +1108,6 @@ namespace Netch.Forms
         private System.Windows.Forms.Button GlobalBypassIPsButton;
         private System.Windows.Forms.CheckBox FilterDNSCheckBox;
         private System.Windows.Forms.Button ControlButton;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.TabPage OtherTabPage;
         private System.Windows.Forms.CheckBox UpdateServersWhenOpenedCheckBox;
         private System.Windows.Forms.CheckBox RunAtStartupCheckBox;
@@ -1052,7 +1129,6 @@ namespace Netch.Forms
         private System.Windows.Forms.GroupBox KCPGroupBox;
         private System.Windows.Forms.CheckBox congestionCheckBox;
         private System.Windows.Forms.CheckBox TLSAllowInsecureCheckBox;
-        private System.Windows.Forms.CheckBox TCPFastOpenBox;
         private System.Windows.Forms.Label mtuLabel;
         private System.Windows.Forms.TextBox mtuTextBox;
         private System.Windows.Forms.Label writeBufferSizeLabel;
@@ -1086,5 +1162,14 @@ namespace Netch.Forms
         private System.Windows.Forms.CheckBox FilterUDPCheckBox;
         private System.Windows.Forms.CheckBox DNSProxyCheckBox;
         private ErrorProvider errorProvider;
+        private TextBox OutboundDNSTextBox;
+        private Label OutboundDNSLabel;
+        private Label DefFingerprintLabel;
+        private ComboBox DefFingerprintComboBox;
+        private TabPage HysteriaTabPage;
+        private TableLayoutPanel tableLayoutPanel1;
+        private GroupBox HysteriaBandwidthGroupBox;
+        private TextBox HysteriaDownMbpsTextBox;
+        private TextBox HysteriaUpMbpsTextBox;
     }
 }

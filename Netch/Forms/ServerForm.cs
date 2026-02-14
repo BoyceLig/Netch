@@ -1,7 +1,6 @@
-﻿#nullable disable
+﻿using Netch.Enums;
 using Netch.Models;
 using Netch.Properties;
-using Netch.Servers;
 using Netch.Utils;
 using System.ComponentModel;
 
@@ -38,48 +37,48 @@ public abstract class ServerForm : Form
         InitializeComponent();
 
         _checkActions.Add(RemarkTextBox, s => true);
-        _saveActions.Add(RemarkTextBox, s => Server.Remark = (string)s);
+        _saveActions.Add(RemarkTextBox, s => Server.Remarks = (string)s);
 
         _checkActions.Add(AddressTextBox, s => s != string.Empty);
-        _saveActions.Add(AddressTextBox, s => Server.Hostname = (string)s);
+        _saveActions.Add(AddressTextBox, s => Server.Address = (string)s);
 
         _checkActions.Add(PortTextBox, s => ushort.TryParse(s, out var port) && port != 0);
         _saveActions.Add(PortTextBox, s => Server.Port = ushort.Parse((string)s));
 
         _checkActions.Add(SniTextBox, s => true);
-        _saveActions.Add(SniTextBox, s => Server.tlsConfig.ServerName = (string)s);
+        _saveActions.Add(SniTextBox, s => Server.Sni = (string)s);
 
         _checkActions.Add(PublicKeyTextBox, s => true);
-        _saveActions.Add(PublicKeyTextBox, s => Server.tlsConfig.PublicKey = (string)s);
+        _saveActions.Add(PublicKeyTextBox, s => Server.PublicKey = (string)s);
 
         _checkActions.Add(ShortIdTextBox, s => true);
-        _saveActions.Add(ShortIdTextBox, s => Server.tlsConfig.ShortId = (string)s);
+        _saveActions.Add(ShortIdTextBox, s => Server.ShortId = (string)s);
 
         _checkActions.Add(SpiderXTextBox, s => true);
-        _saveActions.Add(SpiderXTextBox, s => Server.tlsConfig.SpiderX = (string)s);
+        _saveActions.Add(SpiderXTextBox, s => Server.SpiderX = (string)s);
 
         _checkActions.Add(Mldsa65VerifyTextBox, s => true);
-        _saveActions.Add(Mldsa65VerifyTextBox, s => Server.tlsConfig.Mldsa65Verify = (string)s);
+        _saveActions.Add(Mldsa65VerifyTextBox, s => Server.Mldsa65Verify = (string)s);
 
         _checkActions.Add(EchConfigListTextBox, s => true);
-        _saveActions.Add(EchConfigListTextBox, s => Server.tlsConfig.EchConfigList = (string)s);
+        _saveActions.Add(EchConfigListTextBox, s => Server.EchConfigList = (string)s);
 
-        _saveActions.Add(TLSSecureComboBox, s => Server.tlsConfig.TLSSecureType = (string)s);
-        _saveActions.Add(FingerprintComboBox, s => Server.tlsConfig.Fingerprint = (string)s);
-        _saveActions.Add(AlpnComboBox, s => Server.tlsConfig.Alpn = (string)s);
-        _saveActions.Add(allowInsecureComboBox, s => Server.tlsConfig.allowInsecure = (string)s switch
+        _saveActions.Add(TLSSecureComboBox, s => Server.StreamSecurity = (string)s);
+        _saveActions.Add(FingerprintComboBox, s => Server.Fingerprint = (string)s);
+        _saveActions.Add(AlpnComboBox, s => Server.Alpn = (string)s);
+        _saveActions.Add(allowInsecureComboBox, s => Server.AllowInsecure = (string)s switch
         {
             "" => null,
             "true" => true,
             "false" => false,
             _ => null
         });
-        _saveActions.Add(EchForceQueryComboBox, s => Server.tlsConfig.EchConfigList = (string)s);
+        _saveActions.Add(EchForceQueryComboBox, s => Server.EchConfigList = (string)s);
 
 
     }
 
-    protected abstract string TypeName { get; }
+    protected abstract EConfigType TypeName { get; }
 
     protected Server Server { get; set; }
 
@@ -97,27 +96,27 @@ public abstract class ServerForm : Form
 
     private void AfterFactor()
     {
-        Text = TypeName ?? string.Empty;
+        Text = TypeName.ToString() ?? string.Empty;
 
-        RemarkTextBox.Text = Server.Remark;
-        AddressTextBox.Text = Server.Hostname;
+        RemarkTextBox.Text = Server.Remarks;
+        AddressTextBox.Text = Server.Address;
         PortTextBox.Text = Server.Port.ToString();
-        TLSSecureComboBox.SelectedIndex = TLSGlobe.TLSSecure.IndexOf(Server.tlsConfig.TLSSecureType);
-        SniTextBox.Text = Server.tlsConfig.ServerName;
-        FingerprintComboBox.SelectedIndex = TLSGlobe.Fingerprint.IndexOf(Server.tlsConfig.Fingerprint);
-        PublicKeyTextBox.Text = Server.tlsConfig.PublicKey;
-        ShortIdTextBox.Text = Server.tlsConfig.ShortId;
-        SpiderXTextBox.Text = Server.tlsConfig.SpiderX;
-        Mldsa65VerifyTextBox.Text = Server.tlsConfig.Mldsa65Verify;
-        AlpnComboBox.SelectedIndex = TLSGlobe.Alpn.IndexOf(Server.tlsConfig.Alpn);
-        allowInsecureComboBox.SelectedIndex = Server.tlsConfig.allowInsecure switch
+        TLSSecureComboBox.SelectedIndex = Constants.TLSSecure.IndexOf(Server.StreamSecurity);
+        SniTextBox.Text = Server.Sni;
+        FingerprintComboBox.SelectedIndex = Constants.Fingerprints.IndexOf(Server.Fingerprint);
+        PublicKeyTextBox.Text = Server.PublicKey;
+        ShortIdTextBox.Text = Server.ShortId;
+        SpiderXTextBox.Text = Server.SpiderX;
+        Mldsa65VerifyTextBox.Text = Server.Mldsa65Verify;
+        AlpnComboBox.SelectedIndex = Constants.Alpn.IndexOf(Server.Alpn);
+        allowInsecureComboBox.SelectedIndex = Server.AllowInsecure switch
         {
             null => 0,
             true => 1,
             false => 2
         };
-        EchConfigListTextBox.Text = Server.tlsConfig.EchConfigList;
-        EchForceQueryComboBox.SelectedIndex = TLSGlobe.EchForceQuery.IndexOf(Server.tlsConfig.EchForceQuery);
+        EchConfigListTextBox.Text = Server.EchConfigList;
+        EchForceQueryComboBox.SelectedIndex = Constants.EchForceQuerys.IndexOf(Server.EchForceQuery);
 
         AddSaveButton();
         i18N.TranslateForm(this);
@@ -439,7 +438,7 @@ public abstract class ServerForm : Form
         TLSSecureComboBox.DrawMode = DrawMode.OwnerDrawFixed;
         TLSSecureComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         TLSSecureComboBox.FormattingEnabled = true;
-        TLSSecureComboBox.Items.AddRange(TLSGlobe.TLSSecure.ToArray());
+        TLSSecureComboBox.Items.AddRange(Constants.TLSSecure.ToArray());
         TLSSecureComboBox.DrawItem += Utils.Utils.DrawCenterComboBox;
         //
         //SniLable
@@ -473,7 +472,7 @@ public abstract class ServerForm : Form
         FingerprintComboBox.DrawMode = DrawMode.OwnerDrawFixed;
         FingerprintComboBox.DropDownStyle = ComboBoxStyle.DropDown;
         FingerprintComboBox.FormattingEnabled = true;
-        FingerprintComboBox.Items.AddRange(TLSGlobe.Fingerprint.ToArray());
+        FingerprintComboBox.Items.AddRange(Constants.Fingerprints.ToArray());
         FingerprintComboBox.DrawItem += Utils.Utils.DrawCenterComboBox;
         //
         //PublicKeyLable
@@ -552,7 +551,7 @@ public abstract class ServerForm : Form
         AlpnComboBox.DrawMode = DrawMode.OwnerDrawFixed;
         AlpnComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         AlpnComboBox.FormattingEnabled = true;
-        AlpnComboBox.Items.AddRange(TLSGlobe.Alpn.ToArray());
+        AlpnComboBox.Items.AddRange(Constants.Alpn.ToArray());
         AlpnComboBox.DrawItem += Utils.Utils.DrawCenterComboBox;
         //
         //allowInsecureLable
@@ -571,7 +570,7 @@ public abstract class ServerForm : Form
         allowInsecureComboBox.DrawMode = DrawMode.OwnerDrawFixed;
         allowInsecureComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         allowInsecureComboBox.FormattingEnabled = true;
-        allowInsecureComboBox.Items.AddRange(VMessGlobal.UseMux.ToArray());
+        allowInsecureComboBox.Items.AddRange(Constants.AllowInsecure.ToArray());
         allowInsecureComboBox.DrawItem += Utils.Utils.DrawCenterComboBox;
         //
         //EchConfigListLable
@@ -605,7 +604,7 @@ public abstract class ServerForm : Form
         EchForceQueryComboBox.DrawMode = DrawMode.OwnerDrawFixed;
         EchForceQueryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         EchForceQueryComboBox.FormattingEnabled = true;
-        EchForceQueryComboBox.Items.AddRange(TLSGlobe.EchForceQuery.ToArray());
+        EchForceQueryComboBox.Items.AddRange(Constants.EchForceQuerys.ToArray());
         EchForceQueryComboBox.DrawItem += Utils.Utils.DrawCenterComboBox;
     }
 }

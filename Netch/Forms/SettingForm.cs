@@ -25,6 +25,8 @@ public partial class SettingForm : BindingForm
 
         BindRadioBox(TCPingRadioBtn, c => Global.Settings.ServerTCPing = c, Global.Settings.ServerTCPing);
 
+        BindTextBox(OutboundDNSTextBox, s => true, s => Global.Settings.OutboundDNS = s, Global.Settings.OutboundDNS);
+
         BindTextBox<int>(ProfileCountTextBox, i => i > -1, i => Global.Settings.ProfileCount = i, Global.Settings.ProfileCount);
         BindTextBox<int>(DetectionTickTextBox,
             i => DelayTestHelper.Range.InRange(i),
@@ -120,36 +122,42 @@ public partial class SettingForm : BindingForm
         #endregion
 
         #region V2Ray
-        BindCheckBox(XrayConeCheckBox, b => Global.Settings.V2RayConfig.XrayCone = b, Global.Settings.V2RayConfig.XrayCone);
 
-        BindCheckBox(TLSAllowInsecureCheckBox, b => Global.Settings.V2RayConfig.AllowInsecure = b, Global.Settings.V2RayConfig.AllowInsecure);
-        BindCheckBox(UseMuxCheckBox, b => Global.Settings.V2RayConfig.UseMux = b, Global.Settings.V2RayConfig.UseMux);
-        BindCheckBox(TCPFastOpenBox, b => Global.Settings.V2RayConfig.TCPFastOpen = b, Global.Settings.V2RayConfig.TCPFastOpen);
+        BindCheckBox(EnableFragmentBox, b => Global.Settings.V2RayConfig.CoreBasicItem.EnableFragment = b, Global.Settings.V2RayConfig.CoreBasicItem.EnableFragment);
+        BindCheckBox(TLSAllowInsecureCheckBox, b => Global.Settings.V2RayConfig.CoreBasicItem.DefAllowInsecure = b, Global.Settings.V2RayConfig.CoreBasicItem.DefAllowInsecure);
+        BindCheckBox(UseMuxCheckBox, b => Global.Settings.V2RayConfig.CoreBasicItem.MuxEnabled = b, Global.Settings.V2RayConfig.CoreBasicItem.MuxEnabled);
 
-        BindTextBox<int>(mtuTextBox, i => true, i => Global.Settings.V2RayConfig.KcpConfig.mtu = i, Global.Settings.V2RayConfig.KcpConfig.mtu);
-        BindTextBox<int>(ttiTextBox, i => true, i => Global.Settings.V2RayConfig.KcpConfig.tti = i, Global.Settings.V2RayConfig.KcpConfig.tti);
+        BindListComboBox(DefFingerprintComboBox, o => Global.Settings.V2RayConfig.CoreBasicItem.DefFingerprint = o.ToString(), Constants.Fingerprints, Global.Settings.V2RayConfig.CoreBasicItem.DefFingerprint);
+
+        BindTextBox<int>(mtuTextBox, i => true, i => Global.Settings.V2RayConfig.KcpItem.Mtu = i, Global.Settings.V2RayConfig.KcpItem.Mtu);
+        BindTextBox<int>(ttiTextBox, i => true, i => Global.Settings.V2RayConfig.KcpItem.Tti = i, Global.Settings.V2RayConfig.KcpItem.Tti);
         BindTextBox<int>(uplinkCapacityTextBox,
             i => true,
-            i => Global.Settings.V2RayConfig.KcpConfig.uplinkCapacity = i,
-            Global.Settings.V2RayConfig.KcpConfig.uplinkCapacity);
+            i => Global.Settings.V2RayConfig.KcpItem.UplinkCapacity = i,
+            Global.Settings.V2RayConfig.KcpItem.UplinkCapacity);
 
         BindTextBox<int>(downlinkCapacityTextBox,
             i => true,
-            i => Global.Settings.V2RayConfig.KcpConfig.downlinkCapacity = i,
-            Global.Settings.V2RayConfig.KcpConfig.downlinkCapacity);
+            i => Global.Settings.V2RayConfig.KcpItem.DownlinkCapacity = i,
+            Global.Settings.V2RayConfig.KcpItem.DownlinkCapacity);
 
         BindTextBox<int>(readBufferSizeTextBox,
             i => true,
-            i => Global.Settings.V2RayConfig.KcpConfig.readBufferSize = i,
-            Global.Settings.V2RayConfig.KcpConfig.readBufferSize);
+            i => Global.Settings.V2RayConfig.KcpItem.ReadBufferSize = i,
+            Global.Settings.V2RayConfig.KcpItem.ReadBufferSize);
 
         BindTextBox<int>(writeBufferSizeTextBox,
             i => true,
-            i => Global.Settings.V2RayConfig.KcpConfig.writeBufferSize = i,
-            Global.Settings.V2RayConfig.KcpConfig.writeBufferSize);
+            i => Global.Settings.V2RayConfig.KcpItem.WriteBufferSize = i,
+            Global.Settings.V2RayConfig.KcpItem.WriteBufferSize);
 
-        BindCheckBox(congestionCheckBox, b => Global.Settings.V2RayConfig.KcpConfig.congestion = b, Global.Settings.V2RayConfig.KcpConfig.congestion);
+        BindCheckBox(congestionCheckBox, b => Global.Settings.V2RayConfig.KcpItem.Congestion = b, Global.Settings.V2RayConfig.KcpItem.Congestion);
 
+        #endregion
+
+        #region Hysteria
+        BindTextBox<int>(HysteriaUpMbpsTextBox, i => true, i => Global.Settings.V2RayConfig.HysteriaItem.UpMbps = i, Global.Settings.V2RayConfig.HysteriaItem.UpMbps);
+        BindTextBox<int>(HysteriaDownMbpsTextBox, i => true, i => Global.Settings.V2RayConfig.HysteriaItem.DownMbps = i, Global.Settings.V2RayConfig.HysteriaItem.DownMbps);
         #endregion
 
         #region Others
@@ -277,5 +285,10 @@ public partial class SettingForm : BindingForm
         await Configuration.SaveAsync();
         MessageBoxX.Show(i18N.Translate("Saved"));
         Close();
+    }
+
+    private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+    {
+
     }
 }

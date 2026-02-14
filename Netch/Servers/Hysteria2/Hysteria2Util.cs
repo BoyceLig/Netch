@@ -1,14 +1,12 @@
+using Netch.Enums;
 using Netch.Interfaces;
 using Netch.Models;
+using Netch.Services;
 using Netch.Utils;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using System.Web;
 
 namespace Netch.Servers;
 //https://v2.hysteria.network/zh/docs/developers/URI-Scheme/
-public class Hysteria2Util : IServerUtil
+public class Hysteria2Util : ServerUtilBase, IServerUtil
 {
     public ushort Priority { get; } = 3;
 
@@ -37,28 +35,45 @@ public class Hysteria2Util : IServerUtil
     public string GetShareLink(Server s)
     {
 
-        var server = (Hysteria2Server)s;
-        var parameter = new Dictionary<string, string>();
-        var portHoppingRange = server.PortHoppingRange;
+        var item = (Hysteria2Server)s;
 
-        parameter.Add("insecure", server.tlsConfig.allowInsecure.GetValueOrDefault() ? "1" : "0");
-        parameter.Add("obfs", server.Obfs);
-        if (!string.IsNullOrEmpty(server.ObfsPassword))
+        if (item == null)
         {
-            parameter.Add("obfs-password", server.ObfsPassword);
-        }
-        if (!string.IsNullOrEmpty(server.tlsConfig.PinSHA256))
-        {
-            parameter.Add("pinSHA256", server.tlsConfig.PinSHA256);
-        }
-        if (!string.IsNullOrEmpty(server.tlsConfig.ServerName))
-        {
-            parameter.Add("sni", server.tlsConfig.ServerName);
+            return null;
         }
 
-        return $"hysteria2://{server.Auth}@{server.Hostname}:{server.Port}{(string.IsNullOrEmpty(server.PortHoppingRange) ? string.Empty : "," + server.PortHoppingRange)}/?" +
-            $"{string.Join("&", parameter.Select(s => $"{s.Key}={s.Value}"))}" +
-            $"{(!server.Remark.IsNullOrWhiteSpace() ? $"#{Uri.EscapeDataString(server.Remark)}" : string.Empty)}";
+        var url = string.Empty;
+
+        var remark = string.Empty;
+        if (item.Remarks.IsNotEmpty())
+        {
+            remark = "#" + Utils.Utils.UrlEncode(item.Remarks);
+        }
+        var dicQuery = new Dictionary<string, string>();
+        ToUriQueryLite(item, ref dicQuery);
+        var protocolExtraItem = item.ProtoExtra;
+
+        if (!protocolExtraItem.SalamanderPass.IsNullOrEmpty())
+        {
+            dicQuery.Add("obfs", "salamander");
+            dicQuery.Add("obfs-password", Utils.Utils.UrlEncode(protocolExtraItem.SalamanderPass));
+        }
+        if (!protocolExtraItem.Ports.IsNullOrEmpty())
+        {
+            dicQuery.Add("mport", Utils.Utils.UrlEncode(protocolExtraItem.Ports.Replace(':', '-')));
+        }
+        if (!item.CertSha.IsNullOrEmpty())
+        {
+            var sha = item.CertSha;
+            var idx = sha.IndexOf('~');
+            if (idx > 0)
+            {
+                sha = sha[..idx];
+            }
+            dicQuery.Add("pinSHA256", Utils.Utils.UrlEncode(sha));
+        }
+
+        return ToUri(EConfigType.Hysteria2, item.Address, item.Port, item.Password, dicQuery, remark);
     }
 
     public IServerController GetController()
@@ -70,36 +85,31 @@ public class Hysteria2Util : IServerUtil
     {
         var server = new Hysteria2Server();
 
-        if (text.Contains("#"))
+        var url = Utils.Utils.TryUri(text);
+        if (url == null)
         {
-            server.Remark = Uri.UnescapeDataString(text.Split('#')[1]);
-            text = text.Split('#')[0];
+            return null;
         }
 
-        if (text.Contains("?"))
+        server.Address = url.IdnHost;
+        server.Port = url.Port;
+        server.Remarks = url.GetComponents(UriComponents.Fragment, UriFormat.Unescaped);
+        server.Password = Utils.Utils.UrlDecode(url.UserInfo);
+
+        var query = Utils.Utils.ParseQueryString(url.Query);
+        ResolveUriQuery(query, ref server);
+        if (server.CertSha.IsNullOrEmpty())
         {
-            var parameter = HttpUtility.ParseQueryString(text.Split('?')[1]);
-            text = text.Substring(0, text.IndexOf("?", StringComparison.Ordinal));
-            server.tlsConfig.TLSSecureType = TLSGlobe.TLSSecure[1];
-            server.tlsConfig.allowInsecure = parameter.Get("insecure") == "1" ? true : false;
-            server.Obfs = parameter.Get("obfs") ?? Hysteria2Globe.Obfs[0];
-            server.ObfsPassword = parameter.Get("obfs-password") ?? string.Empty;
-            server.tlsConfig.PinSHA256 = parameter.Get("pinSHA256");
-            server.tlsConfig.ServerName = parameter.Get("sni");
-            server.PortHoppingRange = parameter.Get("mport") ?? string.Empty;
+            server.CertSha = GetQueryDecoded(query, "pinSHA256");
         }
-
-        var finder = new Regex(@$"^hysteria2://(?<guid>.+?)@(?<server>.+):(?<port>\d+)");
-        var match = finder.Match(text.Split('?')[0]);
-        if (!match.Success)
-            throw new FormatException();
-
-        server.Auth = match.Groups["guid"].Value;
-        server.Hostname = match.Groups["server"].Value;
-        server.Port = ushort.Parse(match.Groups["port"].Value);
+        if (server.StreamSecurity.IsNullOrWhiteSpace())
+        {
+            server.StreamSecurity = Constants.StreamSecurity;
+        }
+        server.ProtoExtra.Ports = GetQueryDecoded(query, "mport");
+        server.ProtoExtra.SalamanderPass = GetQueryDecoded(query, "obfs-password");
 
         return new[] { server };
-
     }
 
     public bool CheckServer(Server s)

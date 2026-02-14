@@ -706,7 +706,7 @@ public partial class MainForm : Form
         }
 
         Hide();
-        ServerHelper.GetUtilByTypeName(server.Type).Edit(server);
+        ServerHelper.GetUtilByTypeName(server.ConfigType.ToString()).Edit(server);
         LoadServers();
         await Configuration.SaveAsync();
         Show();
@@ -1000,7 +1000,7 @@ public partial class MainForm : Form
         {
             ProfileNameText.Text = profile.ProfileName;
 
-            var server = ServerComboBox.Items.Cast<Server>().FirstOrDefault(s => s.Remark.Equals(profile.ServerRemark));
+            var server = ServerComboBox.Items.Cast<Server>().FirstOrDefault(s => s.Remarks.Equals(profile.ServerRemark));
             var mode = ModeComboBox.Items.Cast<Mode>().FirstOrDefault(m => m.Remark.Any(s => s.Value.Equals(profile.ModeRemark)));
 
             if (server == null)
