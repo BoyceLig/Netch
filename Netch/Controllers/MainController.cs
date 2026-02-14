@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.Threading;
+using Microsoft.VisualStudio.Threading;
 using Netch.Interfaces;
 using Netch.Models;
 using Netch.Models.Modes;
