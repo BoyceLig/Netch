@@ -147,7 +147,8 @@ public class Setting
     public bool UpdateServersWhenOpened { get; set; } = false;
 
     public V2rayConfig V2RayConfig { get; set; } = new();
-
+    public SingboxConfig SingboxConfig { get; set; } = new();
+    public HysteriaItem HysteriaItem { get; set; } = new();
     public bool NoSupportDialog { get; set; } = false;
 
     #region Migration
@@ -174,4 +175,12 @@ public class Setting
         foreach (var p in typeof(Setting).GetProperties())
             p.SetValue(this, p.GetValue(value));
     }
+}
+
+[Serializable]
+public class HysteriaItem
+{
+    public int UpMbps { get; set; } = 0;
+    public int DownMbps { get; set; } = 0;
+    public int HopInterval { get; set; } = 30;
 }

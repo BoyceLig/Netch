@@ -10,13 +10,13 @@ public class VMessUtil : ServerUtilBase, IServerUtil
 {
     public ushort Priority { get; } = 3;
 
-    public string TypeName { get; } = "VMess";
+    public string TypeName { get; } = EConfigType.VMess.ToString();
 
-    public string FullName { get; } = "VMess";
+    public string FullName { get; } = EConfigType.VMess.ToString();
 
     public string ShortName { get; } = "V2";
 
-    public string[] UriScheme { get; } = { "vmess" };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.VMess] };
 
     public Type ServerType { get; } = typeof(VMessServer);
 

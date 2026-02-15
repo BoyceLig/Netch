@@ -85,6 +85,7 @@ namespace Netch.Forms
             TLSAllowInsecureCheckBox = new CheckBox();
             UseMuxCheckBox = new CheckBox();
             KCPGroupBox = new GroupBox();
+            tableLayoutPanel = new TableLayoutPanel();
             mtuLabel = new Label();
             mtuTextBox = new TextBox();
             ttiLabel = new Label();
@@ -102,6 +103,9 @@ namespace Netch.Forms
             HysteriaBandwidthGroupBox = new GroupBox();
             HysteriaDownMbpsTextBox = new TextBox();
             HysteriaUpMbpsTextBox = new TextBox();
+            SingboxTabPage = new TabPage();
+            SingboxMuxProtocolLabel = new Label();
+            SingboxMuxProtocolComboBox = new ComboBox();
             OtherTabPage = new TabPage();
             ExitWhenClosedCheckBox = new CheckBox();
             StopWhenExitedCheckBox = new CheckBox();
@@ -120,6 +124,8 @@ namespace Netch.Forms
             ControlButton = new Button();
             errorProvider = new ErrorProvider(components);
             tableLayoutPanel1 = new TableLayoutPanel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            tableLayoutPanel3 = new TableLayoutPanel();
             TabControl.SuspendLayout();
             GeneralTabPage.SuspendLayout();
             PortGroupBox.SuspendLayout();
@@ -128,12 +134,16 @@ namespace Netch.Forms
             WinTUNGroupBox.SuspendLayout();
             v2rayTabPage.SuspendLayout();
             KCPGroupBox.SuspendLayout();
+            tableLayoutPanel.SuspendLayout();
             HysteriaTabPage.SuspendLayout();
             HysteriaBandwidthGroupBox.SuspendLayout();
+            SingboxTabPage.SuspendLayout();
             OtherTabPage.SuspendLayout();
             AioDNSTabPage.SuspendLayout();
             ((ISupportInitialize)errorProvider).BeginInit();
             tableLayoutPanel1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
             // TabControl
@@ -144,13 +154,14 @@ namespace Netch.Forms
             TabControl.Controls.Add(WinTUNTabPage);
             TabControl.Controls.Add(v2rayTabPage);
             TabControl.Controls.Add(HysteriaTabPage);
+            TabControl.Controls.Add(SingboxTabPage);
             TabControl.Controls.Add(OtherTabPage);
             TabControl.Controls.Add(AioDNSTabPage);
             TabControl.Dock = DockStyle.Top;
             TabControl.Location = new Point(3, 3);
             TabControl.Name = "TabControl";
             TabControl.SelectedIndex = 0;
-            TabControl.Size = new Size(503, 323);
+            TabControl.Size = new Size(570, 323);
             TabControl.TabIndex = 0;
             // 
             // GeneralTabPage
@@ -175,7 +186,7 @@ namespace Netch.Forms
             GeneralTabPage.Location = new Point(4, 29);
             GeneralTabPage.Name = "GeneralTabPage";
             GeneralTabPage.Padding = new Padding(3);
-            GeneralTabPage.Size = new Size(495, 290);
+            GeneralTabPage.Size = new Size(562, 290);
             GeneralTabPage.TabIndex = 0;
             GeneralTabPage.Text = "General";
             // 
@@ -247,6 +258,7 @@ namespace Netch.Forms
             // ICMPingRadioBtn
             // 
             ICMPingRadioBtn.AutoSize = true;
+            ICMPingRadioBtn.Checked = true;
             ICMPingRadioBtn.Location = new Point(268, 34);
             ICMPingRadioBtn.Name = "ICMPingRadioBtn";
             ICMPingRadioBtn.Size = new Size(75, 21);
@@ -262,7 +274,6 @@ namespace Netch.Forms
             TCPingRadioBtn.Name = "TCPingRadioBtn";
             TCPingRadioBtn.Size = new Size(66, 21);
             TCPingRadioBtn.TabIndex = 4;
-            TCPingRadioBtn.TabStop = true;
             TCPingRadioBtn.Text = "TCPing";
             TCPingRadioBtn.UseVisualStyleBackColor = true;
             // 
@@ -369,7 +380,7 @@ namespace Netch.Forms
             NFTabPage.Location = new Point(4, 29);
             NFTabPage.Name = "NFTabPage";
             NFTabPage.Padding = new Padding(3);
-            NFTabPage.Size = new Size(495, 290);
+            NFTabPage.Size = new Size(562, 290);
             NFTabPage.TabIndex = 1;
             NFTabPage.Text = "Process Mode";
             // 
@@ -489,7 +500,7 @@ namespace Netch.Forms
             WinTUNTabPage.Location = new Point(4, 29);
             WinTUNTabPage.Name = "WinTUNTabPage";
             WinTUNTabPage.Padding = new Padding(3);
-            WinTUNTabPage.Size = new Size(495, 290);
+            WinTUNTabPage.Size = new Size(562, 290);
             WinTUNTabPage.TabIndex = 2;
             WinTUNTabPage.Text = "WinTUN";
             // 
@@ -624,7 +635,7 @@ namespace Netch.Forms
             v2rayTabPage.Location = new Point(4, 29);
             v2rayTabPage.Name = "v2rayTabPage";
             v2rayTabPage.Padding = new Padding(3);
-            v2rayTabPage.Size = new Size(495, 290);
+            v2rayTabPage.Size = new Size(562, 290);
             v2rayTabPage.TabIndex = 3;
             v2rayTabPage.Text = "V2Ray";
             // 
@@ -678,38 +689,79 @@ namespace Netch.Forms
             // 
             // KCPGroupBox
             // 
-            KCPGroupBox.Controls.Add(mtuLabel);
-            KCPGroupBox.Controls.Add(mtuTextBox);
-            KCPGroupBox.Controls.Add(ttiLabel);
-            KCPGroupBox.Controls.Add(ttiTextBox);
-            KCPGroupBox.Controls.Add(uplinkCapacityLabel);
-            KCPGroupBox.Controls.Add(uplinkCapacityTextBox);
-            KCPGroupBox.Controls.Add(downlinkCapacityLabel);
-            KCPGroupBox.Controls.Add(downlinkCapacityTextBox);
-            KCPGroupBox.Controls.Add(readBufferSizeLabel);
-            KCPGroupBox.Controls.Add(readBufferSizeTextBox);
-            KCPGroupBox.Controls.Add(writeBufferSizeLabel);
-            KCPGroupBox.Controls.Add(writeBufferSizeTextBox);
-            KCPGroupBox.Controls.Add(congestionCheckBox);
+            KCPGroupBox.Controls.Add(tableLayoutPanel);
             KCPGroupBox.Location = new Point(9, 75);
             KCPGroupBox.Name = "KCPGroupBox";
-            KCPGroupBox.Size = new Size(447, 204);
+            KCPGroupBox.Size = new Size(547, 204);
             KCPGroupBox.TabIndex = 3;
             KCPGroupBox.TabStop = false;
             KCPGroupBox.Text = "KCP";
             // 
+            // tableLayoutPanel
+            // 
+            tableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel.ColumnCount = 4;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel.Controls.Add(mtuLabel);
+            tableLayoutPanel.Controls.Add(mtuTextBox);
+            tableLayoutPanel.Controls.Add(ttiLabel);
+            tableLayoutPanel.Controls.Add(ttiTextBox);
+            tableLayoutPanel.Controls.Add(uplinkCapacityLabel);
+            tableLayoutPanel.Controls.Add(uplinkCapacityTextBox);
+            tableLayoutPanel.Controls.Add(downlinkCapacityLabel);
+            tableLayoutPanel.Controls.Add(downlinkCapacityTextBox);
+            tableLayoutPanel.Controls.Add(readBufferSizeLabel);
+            tableLayoutPanel.Controls.Add(readBufferSizeTextBox);
+            tableLayoutPanel.Controls.Add(writeBufferSizeLabel);
+            tableLayoutPanel.Controls.Add(writeBufferSizeTextBox);
+            tableLayoutPanel.Controls.Add(congestionCheckBox);
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.Location = new Point(3, 19);
+            tableLayoutPanel.Name = "tableLayoutPanel";
+            tableLayoutPanel.RowCount = 7;
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.Size = new Size(541, 182);
+            tableLayoutPanel.TabIndex = 13;
+            // 
             // mtuLabel
             // 
             mtuLabel.AutoSize = true;
-            mtuLabel.Location = new Point(6, 26);
+            mtuLabel.Dock = DockStyle.Fill;
+            mtuLabel.Location = new Point(3, 3);
+            mtuLabel.Margin = new Padding(3);
             mtuLabel.Name = "mtuLabel";
-            mtuLabel.Size = new Size(36, 17);
+            mtuLabel.Size = new Size(96, 23);
             mtuLabel.TabIndex = 0;
             mtuLabel.Text = "MTU";
+            mtuLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // mtuTextBox
             // 
-            mtuTextBox.Location = new Point(103, 17);
+            mtuTextBox.Location = new Point(105, 3);
             mtuTextBox.Name = "mtuTextBox";
             mtuTextBox.Size = new Size(90, 23);
             mtuTextBox.TabIndex = 1;
@@ -718,15 +770,18 @@ namespace Netch.Forms
             // ttiLabel
             // 
             ttiLabel.AutoSize = true;
-            ttiLabel.Location = new Point(216, 26);
+            ttiLabel.Dock = DockStyle.Fill;
+            ttiLabel.Location = new Point(201, 3);
+            ttiLabel.Margin = new Padding(3);
             ttiLabel.Name = "ttiLabel";
-            ttiLabel.Size = new Size(26, 17);
+            ttiLabel.Size = new Size(110, 23);
             ttiLabel.TabIndex = 2;
             ttiLabel.Text = "TTI";
+            ttiLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // ttiTextBox
             // 
-            ttiTextBox.Location = new Point(331, 17);
+            ttiTextBox.Location = new Point(317, 3);
             ttiTextBox.Name = "ttiTextBox";
             ttiTextBox.Size = new Size(90, 23);
             ttiTextBox.TabIndex = 3;
@@ -735,15 +790,18 @@ namespace Netch.Forms
             // uplinkCapacityLabel
             // 
             uplinkCapacityLabel.AutoSize = true;
-            uplinkCapacityLabel.Location = new Point(6, 68);
+            uplinkCapacityLabel.Dock = DockStyle.Fill;
+            uplinkCapacityLabel.Location = new Point(3, 32);
+            uplinkCapacityLabel.Margin = new Padding(3);
             uplinkCapacityLabel.Name = "uplinkCapacityLabel";
-            uplinkCapacityLabel.Size = new Size(94, 17);
+            uplinkCapacityLabel.Size = new Size(96, 23);
             uplinkCapacityLabel.TabIndex = 4;
             uplinkCapacityLabel.Text = "UplinkCapacity";
+            uplinkCapacityLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // uplinkCapacityTextBox
             // 
-            uplinkCapacityTextBox.Location = new Point(103, 65);
+            uplinkCapacityTextBox.Location = new Point(105, 32);
             uplinkCapacityTextBox.Name = "uplinkCapacityTextBox";
             uplinkCapacityTextBox.Size = new Size(90, 23);
             uplinkCapacityTextBox.TabIndex = 5;
@@ -751,16 +809,18 @@ namespace Netch.Forms
             // 
             // downlinkCapacityLabel
             // 
-            downlinkCapacityLabel.AutoSize = true;
-            downlinkCapacityLabel.Location = new Point(216, 68);
+            downlinkCapacityLabel.Dock = DockStyle.Fill;
+            downlinkCapacityLabel.Location = new Point(201, 32);
+            downlinkCapacityLabel.Margin = new Padding(3);
             downlinkCapacityLabel.Name = "downlinkCapacityLabel";
-            downlinkCapacityLabel.Size = new Size(110, 17);
+            downlinkCapacityLabel.Size = new Size(110, 23);
             downlinkCapacityLabel.TabIndex = 6;
             downlinkCapacityLabel.Text = "DownlinkCapacity";
+            downlinkCapacityLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // downlinkCapacityTextBox
             // 
-            downlinkCapacityTextBox.Location = new Point(331, 65);
+            downlinkCapacityTextBox.Location = new Point(317, 32);
             downlinkCapacityTextBox.Name = "downlinkCapacityTextBox";
             downlinkCapacityTextBox.Size = new Size(90, 23);
             downlinkCapacityTextBox.TabIndex = 7;
@@ -769,15 +829,18 @@ namespace Netch.Forms
             // readBufferSizeLabel
             // 
             readBufferSizeLabel.AutoSize = true;
-            readBufferSizeLabel.Location = new Point(6, 109);
+            readBufferSizeLabel.Dock = DockStyle.Fill;
+            readBufferSizeLabel.Location = new Point(3, 61);
+            readBufferSizeLabel.Margin = new Padding(3);
             readBufferSizeLabel.Name = "readBufferSizeLabel";
-            readBufferSizeLabel.Size = new Size(96, 17);
+            readBufferSizeLabel.Size = new Size(96, 23);
             readBufferSizeLabel.TabIndex = 8;
             readBufferSizeLabel.Text = "ReadBufferSize";
+            readBufferSizeLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // readBufferSizeTextBox
             // 
-            readBufferSizeTextBox.Location = new Point(103, 106);
+            readBufferSizeTextBox.Location = new Point(105, 61);
             readBufferSizeTextBox.Name = "readBufferSizeTextBox";
             readBufferSizeTextBox.Size = new Size(90, 23);
             readBufferSizeTextBox.TabIndex = 9;
@@ -786,15 +849,18 @@ namespace Netch.Forms
             // writeBufferSizeLabel
             // 
             writeBufferSizeLabel.AutoSize = true;
-            writeBufferSizeLabel.Location = new Point(216, 109);
+            writeBufferSizeLabel.Dock = DockStyle.Fill;
+            writeBufferSizeLabel.Location = new Point(201, 61);
+            writeBufferSizeLabel.Margin = new Padding(3);
             writeBufferSizeLabel.Name = "writeBufferSizeLabel";
-            writeBufferSizeLabel.Size = new Size(97, 17);
+            writeBufferSizeLabel.Size = new Size(110, 23);
             writeBufferSizeLabel.TabIndex = 10;
             writeBufferSizeLabel.Text = "WriteBufferSize";
+            writeBufferSizeLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // writeBufferSizeTextBox
             // 
-            writeBufferSizeTextBox.Location = new Point(331, 106);
+            writeBufferSizeTextBox.Location = new Point(317, 61);
             writeBufferSizeTextBox.Name = "writeBufferSizeTextBox";
             writeBufferSizeTextBox.Size = new Size(90, 23);
             writeBufferSizeTextBox.TabIndex = 11;
@@ -803,11 +869,13 @@ namespace Netch.Forms
             // congestionCheckBox
             // 
             congestionCheckBox.AutoSize = true;
-            congestionCheckBox.Location = new Point(8, 139);
+            congestionCheckBox.Dock = DockStyle.Fill;
+            congestionCheckBox.Location = new Point(3, 90);
             congestionCheckBox.Name = "congestionCheckBox";
-            congestionCheckBox.Size = new Size(93, 21);
+            congestionCheckBox.Size = new Size(96, 21);
             congestionCheckBox.TabIndex = 12;
             congestionCheckBox.Text = "Congestion";
+            congestionCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             congestionCheckBox.UseVisualStyleBackColor = true;
             // 
             // HysteriaTabPage
@@ -816,7 +884,7 @@ namespace Netch.Forms
             HysteriaTabPage.Location = new Point(4, 29);
             HysteriaTabPage.Name = "HysteriaTabPage";
             HysteriaTabPage.Padding = new Padding(3);
-            HysteriaTabPage.Size = new Size(495, 290);
+            HysteriaTabPage.Size = new Size(562, 290);
             HysteriaTabPage.TabIndex = 6;
             HysteriaTabPage.Text = "Hysteria";
             HysteriaTabPage.UseVisualStyleBackColor = true;
@@ -846,119 +914,157 @@ namespace Netch.Forms
             HysteriaUpMbpsTextBox.Size = new Size(100, 23);
             HysteriaUpMbpsTextBox.TabIndex = 0;
             // 
+            // SingboxTabPage
+            // 
+            SingboxTabPage.Controls.Add(tableLayoutPanel2);
+            SingboxTabPage.Location = new Point(4, 29);
+            SingboxTabPage.Name = "SingboxTabPage";
+            SingboxTabPage.Padding = new Padding(3);
+            SingboxTabPage.Size = new Size(562, 290);
+            SingboxTabPage.TabIndex = 7;
+            SingboxTabPage.Text = "Singbox";
+            SingboxTabPage.UseVisualStyleBackColor = true;
+            // 
+            // SingboxMuxProtocolLabel
+            // 
+            SingboxMuxProtocolLabel.AutoSize = true;
+            SingboxMuxProtocolLabel.Dock = DockStyle.Fill;
+            SingboxMuxProtocolLabel.Location = new Point(3, 3);
+            SingboxMuxProtocolLabel.Margin = new Padding(3);
+            SingboxMuxProtocolLabel.Name = "SingboxMuxProtocolLabel";
+            SingboxMuxProtocolLabel.Size = new Size(86, 25);
+            SingboxMuxProtocolLabel.TabIndex = 1;
+            SingboxMuxProtocolLabel.Text = "Mux Protocol";
+            SingboxMuxProtocolLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // SingboxMuxProtocolComboBox
+            // 
+            SingboxMuxProtocolComboBox.Dock = DockStyle.Fill;
+            SingboxMuxProtocolComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            SingboxMuxProtocolComboBox.FormattingEnabled = true;
+            SingboxMuxProtocolComboBox.Location = new Point(95, 3);
+            SingboxMuxProtocolComboBox.Name = "SingboxMuxProtocolComboBox";
+            SingboxMuxProtocolComboBox.Size = new Size(131, 25);
+            SingboxMuxProtocolComboBox.TabIndex = 0;
+            // 
             // OtherTabPage
             // 
             OtherTabPage.BackColor = SystemColors.ButtonFace;
-            OtherTabPage.Controls.Add(ExitWhenClosedCheckBox);
-            OtherTabPage.Controls.Add(StopWhenExitedCheckBox);
-            OtherTabPage.Controls.Add(StartWhenOpenedCheckBox);
-            OtherTabPage.Controls.Add(MinimizeWhenStartedCheckBox);
-            OtherTabPage.Controls.Add(RunAtStartupCheckBox);
-            OtherTabPage.Controls.Add(CheckUpdateWhenOpenedCheckBox);
-            OtherTabPage.Controls.Add(NoSupportDialogCheckBox);
-            OtherTabPage.Controls.Add(CheckBetaUpdateCheckBox);
-            OtherTabPage.Controls.Add(UpdateServersWhenOpenedCheckBox);
+            OtherTabPage.Controls.Add(tableLayoutPanel3);
             OtherTabPage.Location = new Point(4, 29);
             OtherTabPage.Name = "OtherTabPage";
             OtherTabPage.Padding = new Padding(3);
-            OtherTabPage.Size = new Size(495, 290);
+            OtherTabPage.Size = new Size(562, 290);
             OtherTabPage.TabIndex = 4;
             OtherTabPage.Text = "Others";
             // 
             // ExitWhenClosedCheckBox
             // 
             ExitWhenClosedCheckBox.AutoSize = true;
-            ExitWhenClosedCheckBox.Location = new Point(16, 16);
+            ExitWhenClosedCheckBox.Location = new Point(3, 3);
             ExitWhenClosedCheckBox.Name = "ExitWhenClosedCheckBox";
-            ExitWhenClosedCheckBox.Size = new Size(123, 21);
+            ExitWhenClosedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            ExitWhenClosedCheckBox.Size = new Size(140, 21);
             ExitWhenClosedCheckBox.TabIndex = 0;
             ExitWhenClosedCheckBox.Text = "Exit when closed";
-            ExitWhenClosedCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            ExitWhenClosedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             ExitWhenClosedCheckBox.UseVisualStyleBackColor = true;
             // 
             // StopWhenExitedCheckBox
             // 
             StopWhenExitedCheckBox.AutoSize = true;
-            StopWhenExitedCheckBox.Location = new Point(224, 18);
+            StopWhenExitedCheckBox.Location = new Point(281, 3);
             StopWhenExitedCheckBox.Name = "StopWhenExitedCheckBox";
-            StopWhenExitedCheckBox.Size = new Size(127, 21);
+            StopWhenExitedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            StopWhenExitedCheckBox.Size = new Size(144, 21);
             StopWhenExitedCheckBox.TabIndex = 1;
             StopWhenExitedCheckBox.Text = "Stop when exited";
-            StopWhenExitedCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            StopWhenExitedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             StopWhenExitedCheckBox.UseVisualStyleBackColor = true;
             // 
             // StartWhenOpenedCheckBox
             // 
             StartWhenOpenedCheckBox.AutoSize = true;
-            StartWhenOpenedCheckBox.Location = new Point(16, 48);
+            StartWhenOpenedCheckBox.Location = new Point(3, 30);
             StartWhenOpenedCheckBox.Name = "StartWhenOpenedCheckBox";
-            StartWhenOpenedCheckBox.Size = new Size(137, 21);
+            StartWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            StartWhenOpenedCheckBox.Size = new Size(154, 21);
             StartWhenOpenedCheckBox.TabIndex = 2;
             StartWhenOpenedCheckBox.Text = "Start when opened";
-            StartWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            StartWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             StartWhenOpenedCheckBox.UseVisualStyleBackColor = true;
             // 
             // MinimizeWhenStartedCheckBox
             // 
             MinimizeWhenStartedCheckBox.AutoSize = true;
-            MinimizeWhenStartedCheckBox.Location = new Point(224, 48);
+            MinimizeWhenStartedCheckBox.Location = new Point(281, 30);
             MinimizeWhenStartedCheckBox.Name = "MinimizeWhenStartedCheckBox";
-            MinimizeWhenStartedCheckBox.Size = new Size(158, 21);
+            MinimizeWhenStartedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            MinimizeWhenStartedCheckBox.Size = new Size(175, 21);
             MinimizeWhenStartedCheckBox.TabIndex = 3;
             MinimizeWhenStartedCheckBox.Text = "Minimize when started";
+            MinimizeWhenStartedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             MinimizeWhenStartedCheckBox.UseVisualStyleBackColor = true;
             // 
             // RunAtStartupCheckBox
             // 
             RunAtStartupCheckBox.AutoSize = true;
-            RunAtStartupCheckBox.Location = new Point(16, 80);
+            RunAtStartupCheckBox.Location = new Point(3, 57);
             RunAtStartupCheckBox.Name = "RunAtStartupCheckBox";
-            RunAtStartupCheckBox.Size = new Size(109, 21);
+            RunAtStartupCheckBox.Padding = new Padding(17, 0, 0, 0);
+            RunAtStartupCheckBox.Size = new Size(126, 21);
             RunAtStartupCheckBox.TabIndex = 4;
             RunAtStartupCheckBox.Text = "Run at startup";
+            RunAtStartupCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             RunAtStartupCheckBox.UseVisualStyleBackColor = true;
             // 
             // CheckUpdateWhenOpenedCheckBox
             // 
             CheckUpdateWhenOpenedCheckBox.AutoSize = true;
-            CheckUpdateWhenOpenedCheckBox.Location = new Point(224, 80);
+            CheckUpdateWhenOpenedCheckBox.Location = new Point(281, 57);
             CheckUpdateWhenOpenedCheckBox.Name = "CheckUpdateWhenOpenedCheckBox";
-            CheckUpdateWhenOpenedCheckBox.Size = new Size(190, 21);
+            CheckUpdateWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            CheckUpdateWhenOpenedCheckBox.Size = new Size(207, 21);
             CheckUpdateWhenOpenedCheckBox.TabIndex = 5;
             CheckUpdateWhenOpenedCheckBox.Text = "Check update when opened";
-            CheckUpdateWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            CheckUpdateWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             CheckUpdateWhenOpenedCheckBox.UseVisualStyleBackColor = true;
+            CheckUpdateWhenOpenedCheckBox.CheckedChanged += CheckUpdateWhenOpenedCheckBox_CheckedChanged;
             // 
             // NoSupportDialogCheckBox
             // 
             NoSupportDialogCheckBox.AutoSize = true;
-            NoSupportDialogCheckBox.Location = new Point(16, 112);
+            NoSupportDialogCheckBox.Location = new Point(3, 84);
             NoSupportDialogCheckBox.Name = "NoSupportDialogCheckBox";
-            NoSupportDialogCheckBox.Size = new Size(174, 21);
+            NoSupportDialogCheckBox.Padding = new Padding(17, 0, 0, 0);
+            NoSupportDialogCheckBox.Size = new Size(191, 21);
             NoSupportDialogCheckBox.TabIndex = 6;
             NoSupportDialogCheckBox.Text = "Disable Support Warning";
+            NoSupportDialogCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             NoSupportDialogCheckBox.UseVisualStyleBackColor = true;
             // 
             // CheckBetaUpdateCheckBox
             // 
             CheckBetaUpdateCheckBox.AutoSize = true;
-            CheckBetaUpdateCheckBox.Location = new Point(224, 112);
+            CheckBetaUpdateCheckBox.Location = new Point(281, 84);
             CheckBetaUpdateCheckBox.Name = "CheckBetaUpdateCheckBox";
-            CheckBetaUpdateCheckBox.Size = new Size(137, 21);
+            CheckBetaUpdateCheckBox.Padding = new Padding(17, 0, 0, 0);
+            CheckBetaUpdateCheckBox.Size = new Size(154, 21);
             CheckBetaUpdateCheckBox.TabIndex = 7;
             CheckBetaUpdateCheckBox.Text = "Check Beta update";
-            CheckBetaUpdateCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            CheckBetaUpdateCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             CheckBetaUpdateCheckBox.UseVisualStyleBackColor = true;
             // 
             // UpdateServersWhenOpenedCheckBox
             // 
             UpdateServersWhenOpenedCheckBox.AutoSize = true;
-            UpdateServersWhenOpenedCheckBox.Location = new Point(224, 144);
+            UpdateServersWhenOpenedCheckBox.Location = new Point(3, 111);
             UpdateServersWhenOpenedCheckBox.Name = "UpdateServersWhenOpenedCheckBox";
-            UpdateServersWhenOpenedCheckBox.Size = new Size(200, 21);
+            UpdateServersWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            UpdateServersWhenOpenedCheckBox.Size = new Size(217, 21);
             UpdateServersWhenOpenedCheckBox.TabIndex = 8;
             UpdateServersWhenOpenedCheckBox.Text = "Update Servers when opened";
-            UpdateServersWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            UpdateServersWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             UpdateServersWhenOpenedCheckBox.UseVisualStyleBackColor = true;
             // 
             // AioDNSTabPage
@@ -970,7 +1076,7 @@ namespace Netch.Forms
             AioDNSTabPage.Location = new Point(4, 29);
             AioDNSTabPage.Name = "AioDNSTabPage";
             AioDNSTabPage.Padding = new Padding(3);
-            AioDNSTabPage.Size = new Size(495, 290);
+            AioDNSTabPage.Size = new Size(562, 290);
             AioDNSTabPage.TabIndex = 5;
             AioDNSTabPage.Text = "AioDNS";
             AioDNSTabPage.UseVisualStyleBackColor = true;
@@ -1012,7 +1118,7 @@ namespace Netch.Forms
             // ControlButton
             // 
             ControlButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            ControlButton.Location = new Point(431, 332);
+            ControlButton.Location = new Point(498, 332);
             ControlButton.Name = "ControlButton";
             ControlButton.Size = new Size(75, 23);
             ControlButton.TabIndex = 1;
@@ -1037,16 +1143,61 @@ namespace Netch.Forms
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
-            tableLayoutPanel1.Size = new Size(509, 358);
+            tableLayoutPanel1.Size = new Size(576, 358);
             tableLayoutPanel1.TabIndex = 10;
-            tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel2.ColumnCount = 4;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.Controls.Add(SingboxMuxProtocolComboBox, 1, 0);
+            tableLayoutPanel2.Controls.Add(SingboxMuxProtocolLabel, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(3, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.Size = new Size(556, 284);
+            tableLayoutPanel2.TabIndex = 2;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Controls.Add(UpdateServersWhenOpenedCheckBox, 0, 4);
+            tableLayoutPanel3.Controls.Add(CheckBetaUpdateCheckBox, 1, 3);
+            tableLayoutPanel3.Controls.Add(NoSupportDialogCheckBox, 0, 3);
+            tableLayoutPanel3.Controls.Add(CheckUpdateWhenOpenedCheckBox, 1, 2);
+            tableLayoutPanel3.Controls.Add(RunAtStartupCheckBox, 0, 2);
+            tableLayoutPanel3.Controls.Add(MinimizeWhenStartedCheckBox, 1, 1);
+            tableLayoutPanel3.Controls.Add(StartWhenOpenedCheckBox, 0, 1);
+            tableLayoutPanel3.Controls.Add(StopWhenExitedCheckBox, 1, 0);
+            tableLayoutPanel3.Controls.Add(ExitWhenClosedCheckBox, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(3, 3);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 5;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.Size = new Size(556, 284);
+            tableLayoutPanel3.TabIndex = 9;
             // 
             // SettingForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(509, 358);
+            ClientSize = new Size(576, 358);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -1067,16 +1218,21 @@ namespace Netch.Forms
             v2rayTabPage.ResumeLayout(false);
             v2rayTabPage.PerformLayout();
             KCPGroupBox.ResumeLayout(false);
-            KCPGroupBox.PerformLayout();
+            tableLayoutPanel.ResumeLayout(false);
+            tableLayoutPanel.PerformLayout();
             HysteriaTabPage.ResumeLayout(false);
             HysteriaBandwidthGroupBox.ResumeLayout(false);
             HysteriaBandwidthGroupBox.PerformLayout();
+            SingboxTabPage.ResumeLayout(false);
             OtherTabPage.ResumeLayout(false);
-            OtherTabPage.PerformLayout();
             AioDNSTabPage.ResumeLayout(false);
             AioDNSTabPage.PerformLayout();
             ((ISupportInitialize)errorProvider).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
             ResumeLayout(false);
 
         }
@@ -1171,5 +1327,11 @@ namespace Netch.Forms
         private GroupBox HysteriaBandwidthGroupBox;
         private TextBox HysteriaDownMbpsTextBox;
         private TextBox HysteriaUpMbpsTextBox;
+        private TabPage SingboxTabPage;
+        private Label SingboxMuxProtocolLabel;
+        private ComboBox SingboxMuxProtocolComboBox;
+        private TableLayoutPanel tableLayoutPanel;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tableLayoutPanel3;
     }
 }

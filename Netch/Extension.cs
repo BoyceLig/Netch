@@ -23,5 +23,9 @@ public static class Extension
     {
         return int.TryParse(value, out var result) ? result : defaultValue;
     }
+    public static string? NullIfEmpty(this string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value;
+    }
 }
 

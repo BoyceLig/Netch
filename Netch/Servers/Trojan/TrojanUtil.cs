@@ -8,15 +8,15 @@ namespace Netch.Servers;
 
 public class TrojanUtil : ServerUtilBase, IServerUtil
 {
-    public ushort Priority { get; } = 3;
+    public ushort Priority { get; } = 4;
 
-    public string TypeName { get; } = "Trojan";
+    public string TypeName { get; } = EConfigType.Trojan.ToString();
 
-    public string FullName { get; } = "Trojan";
+    public string FullName { get; } = EConfigType.Trojan.ToString();
 
     public string ShortName { get; } = "TR";
 
-    public string[] UriScheme { get; } = { "trojan" };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.Trojan] };
 
     public Type ServerType { get; } = typeof(TrojanServer);
 

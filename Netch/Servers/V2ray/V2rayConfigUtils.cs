@@ -450,14 +450,14 @@ public static class V2rayConfigUtils
                     var ports = protocolExtra?.Ports;
                     int? upMbps = protocolExtra?.UpMbps is { } su and >= 0
                         ? su
-                        : Global.Settings.V2RayConfig.HysteriaItem.UpMbps;
+                        : Global.Settings.HysteriaItem.UpMbps;
                     int? downMbps = protocolExtra?.DownMbps is { } sd and >= 0
                         ? sd
-                        : Global.Settings.V2RayConfig.HysteriaItem.UpMbps;
+                        : Global.Settings.HysteriaItem.UpMbps;
                     var hopInterval = !protocolExtra.HopInterval.IsNullOrEmpty()
                         ? protocolExtra.HopInterval
-                        : (Global.Settings.V2RayConfig.HysteriaItem.HopInterval >= 5
-                            ? Global.Settings.V2RayConfig.HysteriaItem.HopInterval
+                        : (Global.Settings.HysteriaItem.HopInterval >= 5
+                            ? Global.Settings.HysteriaItem.HopInterval
                             : Constants.Hysteria2DefaultHopInt).ToString();
                     HysteriaUdpHop4Ray? udpHop = null;
                     if (!ports.IsNullOrEmpty() &&

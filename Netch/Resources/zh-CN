@@ -220,6 +220,7 @@
   "Idle Timeout": "空闲超时时间",
   "Health Check Timeoutt": "健康检测超时时间",
   "Permit Without Stream": "无数据流保持连接",
+  "Mux Protocol": "Mux 多路复用协议",
   "Initial Windows Size": "初始窗口大小",
   "Disable Support Warning": "停用支持警告",
   "China DNS": "中国 DNS",

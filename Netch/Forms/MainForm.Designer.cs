@@ -94,6 +94,7 @@
             ProfileTable = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             ButtomControlContainerControl = new ContainerControl();
+            SingboxWebsiteToolStripMenuItem = new ToolStripMenuItem();
             MenuStrip.SuspendLayout();
             ConfigurationGroupBox.SuspendLayout();
             configLayoutPanel.SuspendLayout();
@@ -246,7 +247,7 @@
             // 
             // HelpToolStripMenuItem
             // 
-            HelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { CheckForUpdateToolStripMenuItem, V2RayCoreToolStripMenuItem, XRayCireWebsiteToolStripMenuItem, TUN2SocksWebsiteToolStripMenuItem, WinTUNWebSiteToolStripMenuItem, pcap2socksWebsiteToolStripMenuItem, FAQToolStripMenuItem });
+            HelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { CheckForUpdateToolStripMenuItem, V2RayCoreToolStripMenuItem, XRayCireWebsiteToolStripMenuItem, SingboxWebsiteToolStripMenuItem, TUN2SocksWebsiteToolStripMenuItem, WinTUNWebSiteToolStripMenuItem, pcap2socksWebsiteToolStripMenuItem, FAQToolStripMenuItem });
             HelpToolStripMenuItem.Margin = new Padding(0, 0, 0, 1);
             HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
             HelpToolStripMenuItem.Size = new Size(47, 21);
@@ -728,6 +729,13 @@
             ButtomControlContainerControl.TabStop = false;
             ButtomControlContainerControl.Text = "groupBox1";
             // 
+            // SingboxWebsiteToolStripMenuItem
+            // 
+            SingboxWebsiteToolStripMenuItem.Name = "SingboxWebsiteToolStripMenuItem";
+            SingboxWebsiteToolStripMenuItem.Size = new Size(196, 22);
+            SingboxWebsiteToolStripMenuItem.Text = "Singbox Website";
+            SingboxWebsiteToolStripMenuItem.Click += SingboxWebsiteToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -843,5 +851,6 @@
         private ToolStripMenuItem TUN2SocksWebsiteToolStripMenuItem;
         private ToolStripMenuItem WinTUNWebSiteToolStripMenuItem;
         private ToolStripMenuItem pcap2socksWebsiteToolStripMenuItem;
+        private ToolStripMenuItem SingboxWebsiteToolStripMenuItem;
     }
 }

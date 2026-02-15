@@ -5,7 +5,6 @@ public class V2rayConfig
     public CoreBasicItem CoreBasicItem { get; set; } = new();
     public KcpItem KcpItem { get; set; } = new();
     public Mux4RayItem Mux4RayItem { get; set; } = new();
-    public HysteriaItem HysteriaItem { get; set; } = new();
     public GrpcItem GrpcItem { get; set; } = new();
 }
 
@@ -46,14 +45,6 @@ public class Mux4RayItem
     public int? Concurrency { get; set; } = 8;
     public int? XudpConcurrency { get; set; } = 16;
     public string? XudpProxyUDP443 { get; set; } = "reject";
-}
-
-[Serializable]
-public class HysteriaItem
-{
-    public int UpMbps { get; set; } = 0;
-    public int DownMbps { get; set; } = 0;
-    public int HopInterval { get; set; } = 30;
 }
 
 [Serializable]

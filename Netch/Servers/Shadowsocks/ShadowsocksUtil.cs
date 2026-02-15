@@ -10,15 +10,15 @@ namespace Netch.Servers;
 
 public class ShadowsocksUtil : ServerUtilBase, IServerUtil
 {
-    public ushort Priority { get; } = 1;
+    public ushort Priority { get; } = 5;
 
-    public string TypeName { get; } = "Shadowsocks";
+    public string TypeName { get; } = EConfigType.Shadowsocks.ToString();
 
-    public string FullName { get; } = "Shadowsocks";
+    public string FullName { get; } = EConfigType.Shadowsocks.ToString();
 
     public string ShortName { get; } = "SS";
 
-    public string[] UriScheme { get; } = { "ss", "ssd" };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.Shadowsocks] };
 
     public Type ServerType { get; } = typeof(ShadowsocksServer);
 

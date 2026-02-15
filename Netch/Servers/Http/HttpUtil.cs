@@ -1,19 +1,20 @@
-﻿using Netch.Interfaces;
+﻿using Netch.Enums;
+using Netch.Interfaces;
 using Netch.Models;
 
 namespace Netch.Servers;
 
 public class HttpUtil : IServerUtil
 {
-    public ushort Priority { get; } = 0;
+    public ushort Priority { get; } = 1;
 
-    public string TypeName { get; } = "HTTP";
+    public string TypeName { get; } = EConfigType.HTTP.ToString();
 
-    public string FullName { get; } = "HTTP";
+    public string FullName { get; } = EConfigType.HTTP.ToString();
 
-    public string ShortName { get; } = "HTTP";
+    public string ShortName { get; } = "HT";
 
-    public string[] UriScheme { get; } = { };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.HTTP] };
 
     public Type ServerType { get; } = typeof(HttpServer);
 

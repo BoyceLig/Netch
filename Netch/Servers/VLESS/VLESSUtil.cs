@@ -10,13 +10,13 @@ public class VLESSUtil : ServerUtilBase, IServerUtil
 {
     public ushort Priority { get; } = 2;
 
-    public string TypeName { get; } = "VLESS";
+    public string TypeName { get; } = EConfigType.VLESS.ToString();
 
-    public string FullName { get; } = "VLESS";
+    public string FullName { get; } = EConfigType.VLESS.ToString();
 
     public string ShortName { get; } = "VL";
 
-    public string[] UriScheme { get; } = { "vless" };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.VLESS] };
 
     public Type ServerType { get; } = typeof(VLESSServer);
 

@@ -8,15 +8,15 @@ namespace Netch.Servers;
 
 public class WireGuardUtil : ServerUtilBase, IServerUtil
 {
-    public ushort Priority { get; } = 4;
+    public ushort Priority { get; } = 9;
 
-    public string TypeName { get; } = "WireGuard";
+    public string TypeName { get; } = EConfigType.WireGuard.ToString();
 
-    public string FullName { get; } = "WireGuard";
+    public string FullName { get; } = EConfigType.WireGuard.ToString();
 
     public string ShortName { get; } = "WG";
 
-    public string[] UriScheme { get; } = { "wireguard" };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.WireGuard] };
 
     public Type ServerType { get; } = typeof(WireGuardServer);
 

@@ -8,15 +8,15 @@ namespace Netch.Servers;
 //https://v2.hysteria.network/zh/docs/developers/URI-Scheme/
 public class Hysteria2Util : ServerUtilBase, IServerUtil
 {
-    public ushort Priority { get; } = 3;
+    public ushort Priority { get; } = 6;
 
-    public string TypeName { get; } = "Hysteria2";
+    public string TypeName { get; } = EConfigType.Hysteria2.ToString();
 
-    public string FullName { get; } = "Hysteria2";
+    public string FullName { get; } = EConfigType.Hysteria2.ToString();
 
     public string ShortName { get; } = "HY2";
 
-    public string[] UriScheme { get; } = { "hysteria2" };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.Hysteria2] };
 
     public Type ServerType { get; } = typeof(Hysteria2Server);
 

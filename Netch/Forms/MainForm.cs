@@ -401,6 +401,11 @@ public partial class MainForm : Form
         Utils.Utils.Open($"https://github.com/zhxie/pcap2socks");
     }
 
+    private void SingboxWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Utils.Utils.Open("https://github.com/SagerNet/sing-box");
+    }
+
     private void OpenDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Utils.Utils.Open(".\\");

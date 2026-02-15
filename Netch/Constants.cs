@@ -178,6 +178,28 @@ public static class Constants
         "2022-blake3-chacha20-poly1305"
     ];
 
+    public static readonly List<string> SsSecuritiesInSingbox =
+    [
+        "aes-256-gcm",
+        "aes-192-gcm",
+        "aes-128-gcm",
+        "chacha20-ietf-poly1305",
+        "xchacha20-ietf-poly1305",
+        "none",
+        "2022-blake3-aes-128-gcm",
+        "2022-blake3-aes-256-gcm",
+        "2022-blake3-chacha20-poly1305",
+        "aes-128-ctr",
+        "aes-192-ctr",
+        "aes-256-ctr",
+        "aes-128-cfb",
+        "aes-192-cfb",
+        "aes-256-cfb",
+        "rc4-md5",
+        "chacha20-ietf",
+        "xchacha20"
+    ];
+
     /// <summary>
     ///     V2Ray 伪装类型
     /// </summary>
@@ -267,6 +289,37 @@ public static class Constants
         { EConfigType.VLESS, "vless://" },
         { EConfigType.Trojan, "trojan://" },
         { EConfigType.Hysteria2, "hysteria2://" },
+        { EConfigType.TUIC, "tuic://" },
         { EConfigType.WireGuard, "wireguard://" },
+        { EConfigType.Anytls, "anytls://" },
     };
+
+    public static readonly Dictionary<EConfigType, string> ProtocolTypes = new()
+    {
+        { EConfigType.VMess, "vmess" },
+        { EConfigType.Shadowsocks, "shadowsocks" },
+        { EConfigType.SOCKS, "socks" },
+        { EConfigType.HTTP, "http" },
+        { EConfigType.VLESS, "vless" },
+        { EConfigType.Trojan, "trojan" },
+        { EConfigType.Hysteria2, "hysteria2" },
+        { EConfigType.TUIC, "tuic" },
+        { EConfigType.WireGuard, "wireguard" },
+        { EConfigType.Anytls, "anytls" }
+    };
+
+    public static readonly List<string> TuicCongestionControls =
+    [
+        "cubic",
+        "new_reno",
+        "bbr"
+    ];
+
+    public static readonly List<string> SingboxMuxs =
+    [
+        "h2mux",
+        "smux",
+        "yamux",
+        ""
+    ];
 }

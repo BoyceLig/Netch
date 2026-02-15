@@ -156,8 +156,13 @@ public partial class SettingForm : BindingForm
         #endregion
 
         #region Hysteria
-        BindTextBox<int>(HysteriaUpMbpsTextBox, i => true, i => Global.Settings.V2RayConfig.HysteriaItem.UpMbps = i, Global.Settings.V2RayConfig.HysteriaItem.UpMbps);
-        BindTextBox<int>(HysteriaDownMbpsTextBox, i => true, i => Global.Settings.V2RayConfig.HysteriaItem.DownMbps = i, Global.Settings.V2RayConfig.HysteriaItem.DownMbps);
+        BindTextBox<int>(HysteriaUpMbpsTextBox, i => true, i => Global.Settings.HysteriaItem.UpMbps = i, Global.Settings.HysteriaItem.UpMbps);
+        BindTextBox<int>(HysteriaDownMbpsTextBox, i => true, i => Global.Settings.HysteriaItem.DownMbps = i, Global.Settings.HysteriaItem.DownMbps);
+        #endregion
+
+        #region Singbox
+        BindListComboBox(SingboxMuxProtocolComboBox, o => Global.Settings.SingboxConfig.Mux4SboxItem.Protocol = o.ToString(), Constants.SingboxMuxs, Global.Settings.SingboxConfig.Mux4SboxItem.Protocol);
+
         #endregion
 
         #region Others
@@ -287,7 +292,7 @@ public partial class SettingForm : BindingForm
         Close();
     }
 
-    private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+    private void CheckUpdateWhenOpenedCheckBox_CheckedChanged(object sender, EventArgs e)
     {
 
     }

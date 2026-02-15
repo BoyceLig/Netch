@@ -9,13 +9,13 @@ public class SocksUtil : ServerUtilBase, IServerUtil
 {
     public ushort Priority { get; } = 0;
 
-    public string TypeName { get; } = "SOCKS";
+    public string TypeName { get; } = EConfigType.SOCKS.ToString();
 
-    public string FullName { get; } = "SOCKS";
+    public string FullName { get; } = EConfigType.SOCKS.ToString();
 
     public string ShortName { get; } = "SOCKS";
 
-    public string[] UriScheme { get; } = { };
+    public string[] UriScheme { get; } = { Constants.ProtocolTypes[EConfigType.SOCKS] };
 
     public Type ServerType { get; } = typeof(SocksServer);
 
