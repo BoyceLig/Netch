@@ -25,7 +25,14 @@ public partial class SettingForm : BindingForm
 
         BindRadioBox(TCPingRadioBtn, c => Global.Settings.ServerTCPing = c, Global.Settings.ServerTCPing);
 
-        BindTextBox(OutboundDNSTextBox, s => true, s => Global.Settings.OutboundDNS = s, Global.Settings.OutboundDNS);
+        BindComboBox(OutboundDNSComboBox, s => true, s =>
+        {
+            if (!s.IsNullOrWhiteSpace() && !Global.Settings.OutboundDNSs.Contains(s))
+            {
+                Global.Settings.OutboundDNSs.Add(s);
+            }
+            Global.Settings.OutboundDNS = s;
+        }, Global.Settings.OutboundDNS, Global.Settings.OutboundDNSs.ToArray());
 
         BindTextBox<int>(ProfileCountTextBox, i => i > -1, i => Global.Settings.ProfileCount = i, Global.Settings.ProfileCount);
         BindTextBox<int>(DetectionTickTextBox,
@@ -292,8 +299,33 @@ public partial class SettingForm : BindingForm
         Close();
     }
 
-    private void CheckUpdateWhenOpenedCheckBox_CheckedChanged(object sender, EventArgs e)
+    private void OutboundDNSDeleteCurrentPictureBox_Click(object sender, EventArgs e)
     {
+        if (Global.Settings.OutboundDNSs.Count > 0 && Global.Settings.OutboundDNSs.Contains(OutboundDNSComboBox.Text))
+        {
 
+            var index = Global.Settings.OutboundDNSs.IndexOf(Global.Settings.OutboundDNS);
+            if (index == Global.Settings.OutboundDNSs.Count - 1)
+            {
+                index -= 1;
+            }
+            Global.Settings.OutboundDNSs.Remove(Global.Settings.OutboundDNS);
+            Global.Settings.OutboundDNS = Global.Settings.OutboundDNSs[index] ?? "";
+            OutboundDNSComboBox.Items.Clear();
+            OutboundDNSComboBox.Items.AddRange(Global.Settings.OutboundDNSs.ToArray());
+            OutboundDNSComboBox.Text = Global.Settings.OutboundDNS;
+
+        }
+    }
+
+    private void OutboundDNSAddCurrentPictureBox_Click(object sender, EventArgs e)
+    {
+        if (!OutboundDNSComboBox.Text.IsNullOrWhiteSpace() && !Global.Settings.OutboundDNSs.Contains(OutboundDNSComboBox.Text.TrimEx()))
+        {
+            Global.Settings.OutboundDNS = OutboundDNSComboBox.Text;
+            Global.Settings.OutboundDNSs.Add(Global.Settings.OutboundDNS);
+            OutboundDNSComboBox.Items.Clear();
+            OutboundDNSComboBox.Items.AddRange(Global.Settings.OutboundDNSs.ToArray());
+        }
     }
 }

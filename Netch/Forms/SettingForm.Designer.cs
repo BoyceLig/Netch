@@ -34,7 +34,8 @@ namespace Netch.Forms
             components = new Container();
             TabControl = new TabControl();
             GeneralTabPage = new TabPage();
-            OutboundDNSTextBox = new TextBox();
+            OutboundDNSDeleteCurrentPictureBox = new PictureBox();
+            OutboundDNSComboBox = new ComboBox();
             PortGroupBox = new GroupBox();
             Socks5PortLabel = new Label();
             Socks5PortTextBox = new TextBox();
@@ -104,18 +105,20 @@ namespace Netch.Forms
             HysteriaDownMbpsTextBox = new TextBox();
             HysteriaUpMbpsTextBox = new TextBox();
             SingboxTabPage = new TabPage();
-            SingboxMuxProtocolLabel = new Label();
+            tableLayoutPanel2 = new TableLayoutPanel();
             SingboxMuxProtocolComboBox = new ComboBox();
+            SingboxMuxProtocolLabel = new Label();
             OtherTabPage = new TabPage();
-            ExitWhenClosedCheckBox = new CheckBox();
-            StopWhenExitedCheckBox = new CheckBox();
-            StartWhenOpenedCheckBox = new CheckBox();
-            MinimizeWhenStartedCheckBox = new CheckBox();
-            RunAtStartupCheckBox = new CheckBox();
-            CheckUpdateWhenOpenedCheckBox = new CheckBox();
-            NoSupportDialogCheckBox = new CheckBox();
-            CheckBetaUpdateCheckBox = new CheckBox();
+            tableLayoutPanel3 = new TableLayoutPanel();
             UpdateServersWhenOpenedCheckBox = new CheckBox();
+            CheckBetaUpdateCheckBox = new CheckBox();
+            NoSupportDialogCheckBox = new CheckBox();
+            CheckUpdateWhenOpenedCheckBox = new CheckBox();
+            RunAtStartupCheckBox = new CheckBox();
+            MinimizeWhenStartedCheckBox = new CheckBox();
+            StartWhenOpenedCheckBox = new CheckBox();
+            StopWhenExitedCheckBox = new CheckBox();
+            ExitWhenClosedCheckBox = new CheckBox();
             AioDNSTabPage = new TabPage();
             ChinaDNSLabel = new Label();
             ChinaDNSTextBox = new TextBox();
@@ -124,10 +127,10 @@ namespace Netch.Forms
             ControlButton = new Button();
             errorProvider = new ErrorProvider(components);
             tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            tableLayoutPanel3 = new TableLayoutPanel();
+            OutboundDNSAddCurrentPictureBox = new PictureBox();
             TabControl.SuspendLayout();
             GeneralTabPage.SuspendLayout();
+            ((ISupportInitialize)OutboundDNSDeleteCurrentPictureBox).BeginInit();
             PortGroupBox.SuspendLayout();
             NFTabPage.SuspendLayout();
             WinTUNTabPage.SuspendLayout();
@@ -138,12 +141,13 @@ namespace Netch.Forms
             HysteriaTabPage.SuspendLayout();
             HysteriaBandwidthGroupBox.SuspendLayout();
             SingboxTabPage.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             OtherTabPage.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             AioDNSTabPage.SuspendLayout();
             ((ISupportInitialize)errorProvider).BeginInit();
             tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            ((ISupportInitialize)OutboundDNSAddCurrentPictureBox).BeginInit();
             SuspendLayout();
             // 
             // TabControl
@@ -167,7 +171,9 @@ namespace Netch.Forms
             // GeneralTabPage
             // 
             GeneralTabPage.BackColor = SystemColors.ButtonFace;
-            GeneralTabPage.Controls.Add(OutboundDNSTextBox);
+            GeneralTabPage.Controls.Add(OutboundDNSAddCurrentPictureBox);
+            GeneralTabPage.Controls.Add(OutboundDNSDeleteCurrentPictureBox);
+            GeneralTabPage.Controls.Add(OutboundDNSComboBox);
             GeneralTabPage.Controls.Add(PortGroupBox);
             GeneralTabPage.Controls.Add(OutboundDNSLabel);
             GeneralTabPage.Controls.Add(ServerPingTypeLabel);
@@ -190,12 +196,25 @@ namespace Netch.Forms
             GeneralTabPage.TabIndex = 0;
             GeneralTabPage.Text = "General";
             // 
-            // OutboundDNSTextBox
+            // OutboundDNSDeleteCurrentPictureBox
             // 
-            OutboundDNSTextBox.Location = new Point(267, 98);
-            OutboundDNSTextBox.Name = "OutboundDNSTextBox";
-            OutboundDNSTextBox.Size = new Size(164, 23);
-            OutboundDNSTextBox.TabIndex = 15;
+            OutboundDNSDeleteCurrentPictureBox.Cursor = Cursors.Hand;
+            OutboundDNSDeleteCurrentPictureBox.Image = Properties.Resources.delete;
+            OutboundDNSDeleteCurrentPictureBox.Location = new Point(467, 98);
+            OutboundDNSDeleteCurrentPictureBox.Name = "OutboundDNSDeleteCurrentPictureBox";
+            OutboundDNSDeleteCurrentPictureBox.Size = new Size(23, 23);
+            OutboundDNSDeleteCurrentPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            OutboundDNSDeleteCurrentPictureBox.TabIndex = 18;
+            OutboundDNSDeleteCurrentPictureBox.TabStop = false;
+            OutboundDNSDeleteCurrentPictureBox.Click += OutboundDNSDeleteCurrentPictureBox_Click;
+            // 
+            // OutboundDNSComboBox
+            // 
+            OutboundDNSComboBox.FormattingEnabled = true;
+            OutboundDNSComboBox.Location = new Point(267, 98);
+            OutboundDNSComboBox.Name = "OutboundDNSComboBox";
+            OutboundDNSComboBox.Size = new Size(165, 25);
+            OutboundDNSComboBox.TabIndex = 16;
             // 
             // PortGroupBox
             // 
@@ -925,6 +944,35 @@ namespace Netch.Forms
             SingboxTabPage.Text = "Singbox";
             SingboxTabPage.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel2.ColumnCount = 4;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel2.Controls.Add(SingboxMuxProtocolComboBox, 1, 0);
+            tableLayoutPanel2.Controls.Add(SingboxMuxProtocolLabel, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(3, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.Size = new Size(556, 284);
+            tableLayoutPanel2.TabIndex = 2;
+            // 
+            // SingboxMuxProtocolComboBox
+            // 
+            SingboxMuxProtocolComboBox.Dock = DockStyle.Fill;
+            SingboxMuxProtocolComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            SingboxMuxProtocolComboBox.FormattingEnabled = true;
+            SingboxMuxProtocolComboBox.Location = new Point(95, 3);
+            SingboxMuxProtocolComboBox.Name = "SingboxMuxProtocolComboBox";
+            SingboxMuxProtocolComboBox.Size = new Size(131, 25);
+            SingboxMuxProtocolComboBox.TabIndex = 0;
+            // 
             // SingboxMuxProtocolLabel
             // 
             SingboxMuxProtocolLabel.AutoSize = true;
@@ -937,16 +985,6 @@ namespace Netch.Forms
             SingboxMuxProtocolLabel.Text = "Mux Protocol";
             SingboxMuxProtocolLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // SingboxMuxProtocolComboBox
-            // 
-            SingboxMuxProtocolComboBox.Dock = DockStyle.Fill;
-            SingboxMuxProtocolComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            SingboxMuxProtocolComboBox.FormattingEnabled = true;
-            SingboxMuxProtocolComboBox.Location = new Point(95, 3);
-            SingboxMuxProtocolComboBox.Name = "SingboxMuxProtocolComboBox";
-            SingboxMuxProtocolComboBox.Size = new Size(131, 25);
-            SingboxMuxProtocolComboBox.TabIndex = 0;
-            // 
             // OtherTabPage
             // 
             OtherTabPage.BackColor = SystemColors.ButtonFace;
@@ -958,90 +996,44 @@ namespace Netch.Forms
             OtherTabPage.TabIndex = 4;
             OtherTabPage.Text = "Others";
             // 
-            // ExitWhenClosedCheckBox
+            // tableLayoutPanel3
             // 
-            ExitWhenClosedCheckBox.AutoSize = true;
-            ExitWhenClosedCheckBox.Location = new Point(3, 3);
-            ExitWhenClosedCheckBox.Name = "ExitWhenClosedCheckBox";
-            ExitWhenClosedCheckBox.Padding = new Padding(17, 0, 0, 0);
-            ExitWhenClosedCheckBox.Size = new Size(140, 21);
-            ExitWhenClosedCheckBox.TabIndex = 0;
-            ExitWhenClosedCheckBox.Text = "Exit when closed";
-            ExitWhenClosedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            ExitWhenClosedCheckBox.UseVisualStyleBackColor = true;
+            tableLayoutPanel3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Controls.Add(UpdateServersWhenOpenedCheckBox, 0, 4);
+            tableLayoutPanel3.Controls.Add(CheckBetaUpdateCheckBox, 1, 3);
+            tableLayoutPanel3.Controls.Add(NoSupportDialogCheckBox, 0, 3);
+            tableLayoutPanel3.Controls.Add(CheckUpdateWhenOpenedCheckBox, 1, 2);
+            tableLayoutPanel3.Controls.Add(RunAtStartupCheckBox, 0, 2);
+            tableLayoutPanel3.Controls.Add(MinimizeWhenStartedCheckBox, 1, 1);
+            tableLayoutPanel3.Controls.Add(StartWhenOpenedCheckBox, 0, 1);
+            tableLayoutPanel3.Controls.Add(StopWhenExitedCheckBox, 1, 0);
+            tableLayoutPanel3.Controls.Add(ExitWhenClosedCheckBox, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(3, 3);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 5;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.RowStyles.Add(new RowStyle());
+            tableLayoutPanel3.Size = new Size(556, 284);
+            tableLayoutPanel3.TabIndex = 9;
             // 
-            // StopWhenExitedCheckBox
+            // UpdateServersWhenOpenedCheckBox
             // 
-            StopWhenExitedCheckBox.AutoSize = true;
-            StopWhenExitedCheckBox.Location = new Point(281, 3);
-            StopWhenExitedCheckBox.Name = "StopWhenExitedCheckBox";
-            StopWhenExitedCheckBox.Padding = new Padding(17, 0, 0, 0);
-            StopWhenExitedCheckBox.Size = new Size(144, 21);
-            StopWhenExitedCheckBox.TabIndex = 1;
-            StopWhenExitedCheckBox.Text = "Stop when exited";
-            StopWhenExitedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            StopWhenExitedCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // StartWhenOpenedCheckBox
-            // 
-            StartWhenOpenedCheckBox.AutoSize = true;
-            StartWhenOpenedCheckBox.Location = new Point(3, 30);
-            StartWhenOpenedCheckBox.Name = "StartWhenOpenedCheckBox";
-            StartWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
-            StartWhenOpenedCheckBox.Size = new Size(154, 21);
-            StartWhenOpenedCheckBox.TabIndex = 2;
-            StartWhenOpenedCheckBox.Text = "Start when opened";
-            StartWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            StartWhenOpenedCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // MinimizeWhenStartedCheckBox
-            // 
-            MinimizeWhenStartedCheckBox.AutoSize = true;
-            MinimizeWhenStartedCheckBox.Location = new Point(281, 30);
-            MinimizeWhenStartedCheckBox.Name = "MinimizeWhenStartedCheckBox";
-            MinimizeWhenStartedCheckBox.Padding = new Padding(17, 0, 0, 0);
-            MinimizeWhenStartedCheckBox.Size = new Size(175, 21);
-            MinimizeWhenStartedCheckBox.TabIndex = 3;
-            MinimizeWhenStartedCheckBox.Text = "Minimize when started";
-            MinimizeWhenStartedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            MinimizeWhenStartedCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // RunAtStartupCheckBox
-            // 
-            RunAtStartupCheckBox.AutoSize = true;
-            RunAtStartupCheckBox.Location = new Point(3, 57);
-            RunAtStartupCheckBox.Name = "RunAtStartupCheckBox";
-            RunAtStartupCheckBox.Padding = new Padding(17, 0, 0, 0);
-            RunAtStartupCheckBox.Size = new Size(126, 21);
-            RunAtStartupCheckBox.TabIndex = 4;
-            RunAtStartupCheckBox.Text = "Run at startup";
-            RunAtStartupCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            RunAtStartupCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // CheckUpdateWhenOpenedCheckBox
-            // 
-            CheckUpdateWhenOpenedCheckBox.AutoSize = true;
-            CheckUpdateWhenOpenedCheckBox.Location = new Point(281, 57);
-            CheckUpdateWhenOpenedCheckBox.Name = "CheckUpdateWhenOpenedCheckBox";
-            CheckUpdateWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
-            CheckUpdateWhenOpenedCheckBox.Size = new Size(207, 21);
-            CheckUpdateWhenOpenedCheckBox.TabIndex = 5;
-            CheckUpdateWhenOpenedCheckBox.Text = "Check update when opened";
-            CheckUpdateWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            CheckUpdateWhenOpenedCheckBox.UseVisualStyleBackColor = true;
-            CheckUpdateWhenOpenedCheckBox.CheckedChanged += CheckUpdateWhenOpenedCheckBox_CheckedChanged;
-            // 
-            // NoSupportDialogCheckBox
-            // 
-            NoSupportDialogCheckBox.AutoSize = true;
-            NoSupportDialogCheckBox.Location = new Point(3, 84);
-            NoSupportDialogCheckBox.Name = "NoSupportDialogCheckBox";
-            NoSupportDialogCheckBox.Padding = new Padding(17, 0, 0, 0);
-            NoSupportDialogCheckBox.Size = new Size(191, 21);
-            NoSupportDialogCheckBox.TabIndex = 6;
-            NoSupportDialogCheckBox.Text = "Disable Support Warning";
-            NoSupportDialogCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            NoSupportDialogCheckBox.UseVisualStyleBackColor = true;
+            UpdateServersWhenOpenedCheckBox.AutoSize = true;
+            UpdateServersWhenOpenedCheckBox.Location = new Point(3, 111);
+            UpdateServersWhenOpenedCheckBox.Name = "UpdateServersWhenOpenedCheckBox";
+            UpdateServersWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            UpdateServersWhenOpenedCheckBox.Size = new Size(217, 21);
+            UpdateServersWhenOpenedCheckBox.TabIndex = 8;
+            UpdateServersWhenOpenedCheckBox.Text = "Update Servers when opened";
+            UpdateServersWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            UpdateServersWhenOpenedCheckBox.UseVisualStyleBackColor = true;
             // 
             // CheckBetaUpdateCheckBox
             // 
@@ -1055,17 +1047,89 @@ namespace Netch.Forms
             CheckBetaUpdateCheckBox.TextAlign = ContentAlignment.MiddleCenter;
             CheckBetaUpdateCheckBox.UseVisualStyleBackColor = true;
             // 
-            // UpdateServersWhenOpenedCheckBox
+            // NoSupportDialogCheckBox
             // 
-            UpdateServersWhenOpenedCheckBox.AutoSize = true;
-            UpdateServersWhenOpenedCheckBox.Location = new Point(3, 111);
-            UpdateServersWhenOpenedCheckBox.Name = "UpdateServersWhenOpenedCheckBox";
-            UpdateServersWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
-            UpdateServersWhenOpenedCheckBox.Size = new Size(217, 21);
-            UpdateServersWhenOpenedCheckBox.TabIndex = 8;
-            UpdateServersWhenOpenedCheckBox.Text = "Update Servers when opened";
-            UpdateServersWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
-            UpdateServersWhenOpenedCheckBox.UseVisualStyleBackColor = true;
+            NoSupportDialogCheckBox.AutoSize = true;
+            NoSupportDialogCheckBox.Location = new Point(3, 84);
+            NoSupportDialogCheckBox.Name = "NoSupportDialogCheckBox";
+            NoSupportDialogCheckBox.Padding = new Padding(17, 0, 0, 0);
+            NoSupportDialogCheckBox.Size = new Size(191, 21);
+            NoSupportDialogCheckBox.TabIndex = 6;
+            NoSupportDialogCheckBox.Text = "Disable Support Warning";
+            NoSupportDialogCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            NoSupportDialogCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // CheckUpdateWhenOpenedCheckBox
+            // 
+            CheckUpdateWhenOpenedCheckBox.AutoSize = true;
+            CheckUpdateWhenOpenedCheckBox.Location = new Point(281, 57);
+            CheckUpdateWhenOpenedCheckBox.Name = "CheckUpdateWhenOpenedCheckBox";
+            CheckUpdateWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            CheckUpdateWhenOpenedCheckBox.Size = new Size(207, 21);
+            CheckUpdateWhenOpenedCheckBox.TabIndex = 5;
+            CheckUpdateWhenOpenedCheckBox.Text = "Check update when opened";
+            CheckUpdateWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            CheckUpdateWhenOpenedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // RunAtStartupCheckBox
+            // 
+            RunAtStartupCheckBox.AutoSize = true;
+            RunAtStartupCheckBox.Location = new Point(3, 57);
+            RunAtStartupCheckBox.Name = "RunAtStartupCheckBox";
+            RunAtStartupCheckBox.Padding = new Padding(17, 0, 0, 0);
+            RunAtStartupCheckBox.Size = new Size(126, 21);
+            RunAtStartupCheckBox.TabIndex = 4;
+            RunAtStartupCheckBox.Text = "Run at startup";
+            RunAtStartupCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            RunAtStartupCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // MinimizeWhenStartedCheckBox
+            // 
+            MinimizeWhenStartedCheckBox.AutoSize = true;
+            MinimizeWhenStartedCheckBox.Location = new Point(281, 30);
+            MinimizeWhenStartedCheckBox.Name = "MinimizeWhenStartedCheckBox";
+            MinimizeWhenStartedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            MinimizeWhenStartedCheckBox.Size = new Size(175, 21);
+            MinimizeWhenStartedCheckBox.TabIndex = 3;
+            MinimizeWhenStartedCheckBox.Text = "Minimize when started";
+            MinimizeWhenStartedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            MinimizeWhenStartedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // StartWhenOpenedCheckBox
+            // 
+            StartWhenOpenedCheckBox.AutoSize = true;
+            StartWhenOpenedCheckBox.Location = new Point(3, 30);
+            StartWhenOpenedCheckBox.Name = "StartWhenOpenedCheckBox";
+            StartWhenOpenedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            StartWhenOpenedCheckBox.Size = new Size(154, 21);
+            StartWhenOpenedCheckBox.TabIndex = 2;
+            StartWhenOpenedCheckBox.Text = "Start when opened";
+            StartWhenOpenedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            StartWhenOpenedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // StopWhenExitedCheckBox
+            // 
+            StopWhenExitedCheckBox.AutoSize = true;
+            StopWhenExitedCheckBox.Location = new Point(281, 3);
+            StopWhenExitedCheckBox.Name = "StopWhenExitedCheckBox";
+            StopWhenExitedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            StopWhenExitedCheckBox.Size = new Size(144, 21);
+            StopWhenExitedCheckBox.TabIndex = 1;
+            StopWhenExitedCheckBox.Text = "Stop when exited";
+            StopWhenExitedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            StopWhenExitedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ExitWhenClosedCheckBox
+            // 
+            ExitWhenClosedCheckBox.AutoSize = true;
+            ExitWhenClosedCheckBox.Location = new Point(3, 3);
+            ExitWhenClosedCheckBox.Name = "ExitWhenClosedCheckBox";
+            ExitWhenClosedCheckBox.Padding = new Padding(17, 0, 0, 0);
+            ExitWhenClosedCheckBox.Size = new Size(140, 21);
+            ExitWhenClosedCheckBox.TabIndex = 0;
+            ExitWhenClosedCheckBox.Text = "Exit when closed";
+            ExitWhenClosedCheckBox.TextAlign = ContentAlignment.MiddleCenter;
+            ExitWhenClosedCheckBox.UseVisualStyleBackColor = true;
             // 
             // AioDNSTabPage
             // 
@@ -1146,51 +1210,17 @@ namespace Netch.Forms
             tableLayoutPanel1.Size = new Size(576, 358);
             tableLayoutPanel1.TabIndex = 10;
             // 
-            // tableLayoutPanel2
+            // OutboundDNSAddCurrentPictureBox
             // 
-            tableLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel2.ColumnCount = 4;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.Controls.Add(SingboxMuxProtocolComboBox, 1, 0);
-            tableLayoutPanel2.Controls.Add(SingboxMuxProtocolLabel, 0, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 3);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 2;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new RowStyle());
-            tableLayoutPanel2.Size = new Size(556, 284);
-            tableLayoutPanel2.TabIndex = 2;
-            // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel3.ColumnCount = 2;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Controls.Add(UpdateServersWhenOpenedCheckBox, 0, 4);
-            tableLayoutPanel3.Controls.Add(CheckBetaUpdateCheckBox, 1, 3);
-            tableLayoutPanel3.Controls.Add(NoSupportDialogCheckBox, 0, 3);
-            tableLayoutPanel3.Controls.Add(CheckUpdateWhenOpenedCheckBox, 1, 2);
-            tableLayoutPanel3.Controls.Add(RunAtStartupCheckBox, 0, 2);
-            tableLayoutPanel3.Controls.Add(MinimizeWhenStartedCheckBox, 1, 1);
-            tableLayoutPanel3.Controls.Add(StartWhenOpenedCheckBox, 0, 1);
-            tableLayoutPanel3.Controls.Add(StopWhenExitedCheckBox, 1, 0);
-            tableLayoutPanel3.Controls.Add(ExitWhenClosedCheckBox, 0, 0);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(3, 3);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 5;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(556, 284);
-            tableLayoutPanel3.TabIndex = 9;
+            OutboundDNSAddCurrentPictureBox.Cursor = Cursors.Hand;
+            OutboundDNSAddCurrentPictureBox.Image = Properties.Resources.Add;
+            OutboundDNSAddCurrentPictureBox.Location = new Point(438, 98);
+            OutboundDNSAddCurrentPictureBox.Name = "OutboundDNSAddCurrentPictureBox";
+            OutboundDNSAddCurrentPictureBox.Size = new Size(23, 23);
+            OutboundDNSAddCurrentPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            OutboundDNSAddCurrentPictureBox.TabIndex = 18;
+            OutboundDNSAddCurrentPictureBox.TabStop = false;
+            OutboundDNSAddCurrentPictureBox.Click += OutboundDNSAddCurrentPictureBox_Click;
             // 
             // SettingForm
             // 
@@ -1208,6 +1238,7 @@ namespace Netch.Forms
             TabControl.ResumeLayout(false);
             GeneralTabPage.ResumeLayout(false);
             GeneralTabPage.PerformLayout();
+            ((ISupportInitialize)OutboundDNSDeleteCurrentPictureBox).EndInit();
             PortGroupBox.ResumeLayout(false);
             PortGroupBox.PerformLayout();
             NFTabPage.ResumeLayout(false);
@@ -1224,15 +1255,16 @@ namespace Netch.Forms
             HysteriaBandwidthGroupBox.ResumeLayout(false);
             HysteriaBandwidthGroupBox.PerformLayout();
             SingboxTabPage.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             OtherTabPage.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
             AioDNSTabPage.ResumeLayout(false);
             AioDNSTabPage.PerformLayout();
             ((ISupportInitialize)errorProvider).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
+            ((ISupportInitialize)OutboundDNSAddCurrentPictureBox).EndInit();
             ResumeLayout(false);
 
         }
@@ -1318,7 +1350,6 @@ namespace Netch.Forms
         private System.Windows.Forms.CheckBox FilterUDPCheckBox;
         private System.Windows.Forms.CheckBox DNSProxyCheckBox;
         private ErrorProvider errorProvider;
-        private TextBox OutboundDNSTextBox;
         private Label OutboundDNSLabel;
         private Label DefFingerprintLabel;
         private ComboBox DefFingerprintComboBox;
@@ -1333,5 +1364,8 @@ namespace Netch.Forms
         private TableLayoutPanel tableLayoutPanel;
         private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel3;
+        private ComboBox OutboundDNSComboBox;
+        private PictureBox OutboundDNSDeleteCurrentPictureBox;
+        private PictureBox OutboundDNSAddCurrentPictureBox;
     }
 }
