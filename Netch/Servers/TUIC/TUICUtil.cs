@@ -2,6 +2,7 @@ using Netch.Enums;
 using Netch.Interfaces;
 using Netch.Models;
 using Netch.Services;
+using Netch.Utils;
 
 namespace Netch.Servers;
 
@@ -83,6 +84,20 @@ public class TUICUtil : ServerUtilBase, IServerUtil
         var query = Utils.Utils.ParseQueryString(url.Query);
         ResolveUriQuery(query, ref item);
         item.HeaderType = GetQueryValue(query, "congestion_control");
+
+        if (!Constants.TuicCongestionControls.Contains(item.HeaderType))
+        {
+            item.HeaderType = Constants.TuicCongestionControls.FirstOrDefault()!;
+        }
+
+        if (item.StreamSecurity.IsNullOrEmpty())
+        {
+            item.StreamSecurity = Constants.StreamSecurity;
+        }
+        if (item.Alpn.IsNullOrEmpty())
+        {
+            item.Alpn = "h3";
+        }
 
         return [item];
     }
