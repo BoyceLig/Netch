@@ -51,6 +51,7 @@
             CheckForUpdateToolStripMenuItem = new ToolStripMenuItem();
             V2RayCoreToolStripMenuItem = new ToolStripMenuItem();
             XRayCireWebsiteToolStripMenuItem = new ToolStripMenuItem();
+            SingboxWebsiteToolStripMenuItem = new ToolStripMenuItem();
             TUN2SocksWebsiteToolStripMenuItem = new ToolStripMenuItem();
             WinTUNWebSiteToolStripMenuItem = new ToolStripMenuItem();
             pcap2socksWebsiteToolStripMenuItem = new ToolStripMenuItem();
@@ -94,7 +95,6 @@
             ProfileTable = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             ButtomControlContainerControl = new ContainerControl();
-            SingboxWebsiteToolStripMenuItem = new ToolStripMenuItem();
             MenuStrip.SuspendLayout();
             ConfigurationGroupBox.SuspendLayout();
             configLayoutPanel.SuspendLayout();
@@ -273,6 +273,13 @@
             XRayCireWebsiteToolStripMenuItem.Size = new Size(196, 22);
             XRayCireWebsiteToolStripMenuItem.Text = "XRay Core Website";
             XRayCireWebsiteToolStripMenuItem.Click += XRayCireWebsiteToolStripMenuItem_Click;
+            // 
+            // SingboxWebsiteToolStripMenuItem
+            // 
+            SingboxWebsiteToolStripMenuItem.Name = "SingboxWebsiteToolStripMenuItem";
+            SingboxWebsiteToolStripMenuItem.Size = new Size(196, 22);
+            SingboxWebsiteToolStripMenuItem.Text = "Singbox Website";
+            SingboxWebsiteToolStripMenuItem.Click += SingboxWebsiteToolStripMenuItem_Click;
             // 
             // TUN2SocksWebsiteToolStripMenuItem
             // 
@@ -728,13 +735,6 @@
             ButtomControlContainerControl.TabIndex = 14;
             ButtomControlContainerControl.TabStop = false;
             ButtomControlContainerControl.Text = "groupBox1";
-            // 
-            // SingboxWebsiteToolStripMenuItem
-            // 
-            SingboxWebsiteToolStripMenuItem.Name = "SingboxWebsiteToolStripMenuItem";
-            SingboxWebsiteToolStripMenuItem.Size = new Size(196, 22);
-            SingboxWebsiteToolStripMenuItem.Text = "Singbox Website";
-            SingboxWebsiteToolStripMenuItem.Click += SingboxWebsiteToolStripMenuItem_Click;
             // 
             // MainForm
             // 
