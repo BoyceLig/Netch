@@ -1,9 +1,9 @@
-﻿using System.Net;
+﻿using Netch.Models.GitHubRelease;
+using Netch.Utils;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Netch.Models.GitHubRelease;
-using Netch.Utils;
 
 namespace Netch.Controllers;
 
@@ -15,7 +15,7 @@ public static class UpdateChecker
     public const string Name = @"Netch";
     public const string Copyright = @"Copyright © 2019 - 2026";
 
-    public const string AssemblyVersion = @"1.9.91";
+    public const string AssemblyVersion = @"1.9.10";
     private const string Suffix = @"";
 
     public static readonly string Version = $"{AssemblyVersion}{(string.IsNullOrEmpty(Suffix) ? "" : $"-{Suffix}")}";
