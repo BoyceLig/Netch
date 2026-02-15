@@ -1,0 +1,6 @@
+# Replay, 0
+ffmpeg.exe
+ffprobe.exe
+elevate.exe
+Replay.exe
+Uninstall Replay.exe
