@@ -1,10 +1,13 @@
-﻿namespace Netch.Servers;
+﻿using System.Text.Json.Serialization;
+
+namespace Netch.Servers;
 
 public class VmessQRCode
 {
     /// <summary>
     ///     链接版本
     /// </summary>
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public int v { get; set; } = 2;
 
     /// <summary>
@@ -20,6 +23,7 @@ public class VmessQRCode
     /// <summary>
     ///     端口
     /// </summary>
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)] 
     public ushort port { get; set; }
 
     /// <summary>
@@ -30,6 +34,7 @@ public class VmessQRCode
     /// <summary>
     ///     额外 ID
     /// </summary>
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)] 
     public int aid { get; set; }
 
     /// <summary>

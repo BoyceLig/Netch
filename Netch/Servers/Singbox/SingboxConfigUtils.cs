@@ -18,9 +18,15 @@ public static class SingboxConfigUtils
         {
             level = Constants.LogLevels[2]
         };
-        singboxConfig.dns = new Dns4Sbox()
+
+        if (!Utils.Utils.IsIp(server.Address) &&
+            Global.Settings.OutboundDNS_Enabled &&
+            Global.Settings.OutboundDNS_UseDomainName &&
+            !Global.Settings.OutboundDNS.ToLowerInvariant().StartsWith("tls://"))
         {
-            servers = [
+            singboxConfig.dns = new Dns4Sbox()
+            {
+                servers = [
                 new Server4Sbox
                 {
                     address = Global.Settings.OutboundDNS,
@@ -28,7 +34,7 @@ public static class SingboxConfigUtils
                     tag = "OutboundServer"
                 }
             ],
-            rules = [
+                rules = [
                 new Rule4Sbox
                 {
                     server = "OutboundServer",
@@ -36,10 +42,12 @@ public static class SingboxConfigUtils
                 }
             ]
 
-        };
+            };
+        }
+
         singboxConfig.inbounds = [GenerateInbound()];
 
-        singboxConfig.outbounds = [GenerateOutbound(server)];
+        singboxConfig.outbounds = [await GenerateOutbound(server)];
 
 
         return singboxConfig;
@@ -55,12 +63,22 @@ public static class SingboxConfigUtils
         return inbound;
     }
 
-    private static Outbound4Sbox GenerateOutbound(Server node)
+    private static async Task<Outbound4Sbox> GenerateOutbound(Server node)
     {
         var protocolExtra = node.ProtoExtra;
+
+        var ipAddress = node.Address;
+
+        if (Global.Settings.OutboundDNS_Enabled)
+        {
+            if (!Global.Settings.OutboundDNS_UseDomainName ||
+                (Global.Settings.OutboundDNS_UseDomainName && Global.Settings.OutboundDNS.ToLowerInvariant().StartsWith("tls://")))
+                ipAddress = (await DnsUtils.LookupAsync(node.Address)).ToString();
+        }
+
         var outbound = new Outbound4Sbox
         {
-            server = node.Address,
+            server = ipAddress,
             server_port = node.Port,
             type = Constants.ProtocolTypes[node.ConfigType],
         };

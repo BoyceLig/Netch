@@ -54,25 +54,25 @@ public static class MainController
 
             //如果是 Socks5 服务器且没有密码
             //或者如果是 Socks5 服务器，且模式控制器支持 Socks5 则直接使用该服务器
-            if (Server is SocksServer socks5 && (ModeController == null ? socks5.Auth() : (!socks5.Auth() || ModeController.Features.HasFlag(ModeFeature.SupportSocks5Auth))))
-            {
+            //if (Server is SocksServer socks5 && (ModeController == null ? socks5.Auth() : (!socks5.Auth() || ModeController.Features.HasFlag(ModeFeature.SupportSocks5Auth))))
+            //{
 
-                Socks5Server = socks5;
-            }
-            else
-            {
-                // Start Server Controller to get a local socks5 server
-                Log.Debug("Server Information: {Data}", $"{server.ConfigType} {server.MaskedData()}");
+            //    Socks5Server = socks5;
+            //}
+            //else
+            //{
+            // Start Server Controller to get a local socks5 server
+            Log.Debug("Server Information: {Data}", $"{server.ConfigType} {server.MaskedData()}");
 
-                ServerController = new V2rayController();
-                Global.MainForm.StatusText(i18N.TranslateFormat("Starting {0}", ServerController.Name));
+            ServerController = new V2rayController();
+            Global.MainForm.StatusText(i18N.TranslateFormat("Starting {0}", ServerController.Name));
 
-                TryReleaseTcpPort(ServerController.Socks5LocalPort(), "Socks5");
-                Socks5Server = await ServerController.StartAsync(server);
+            TryReleaseTcpPort(ServerController.Socks5LocalPort(), "Socks5");
+            Socks5Server = await ServerController.StartAsync(server);
 
-                StatusPortInfoText.Socks5Port = (ushort)Socks5Server.Port;
-                StatusPortInfoText.UpdateShareLan();
-            }
+            StatusPortInfoText.Socks5Port = (ushort)Socks5Server.Port;
+            StatusPortInfoText.UpdateShareLan();
+            //}
 
             // Start Mode Controller
             if (mode != null)
@@ -173,9 +173,66 @@ public static class MainController
             {
                 throw new MessageException(i18N.TranslateFormat("The {0} port is used by {1}.", $"{portName} ({port})", $"({p.Id}){fileName}"));
             }
+
+            //var pids = GetPidByUdpPort(port);
+            //foreach (var pid in pids)
+            //{
+            //    try
+            //    {
+            //        var process = Process.GetProcessById(pid);
+
+            //        Log.Verbose($"Killing PID {pid} ({process.ProcessName})");
+
+            //        process.Kill();
+            //        process.WaitForExit();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Log.Verbose($"Failed to kill PID {pid}: {ex.Message}");
+            //    }
+            //}
+
         }
 
         PortCheck(port, portName, PortType.TCP);
+    }
+
+    public static List<int> GetPidByUdpPort(int port)
+    {
+        var pids = new List<int>();
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = "cmd.exe",
+            Arguments = $"/c netstat -ano -p udp | findstr :{port}",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using var process = Process.Start(startInfo);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        if (string.IsNullOrWhiteSpace(output))
+            return pids;
+
+        var lines = output.Split('\n');
+
+        foreach (var line in lines)
+        {
+            var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length < 4)
+                continue;
+
+            if (int.TryParse(parts[^1], out int pid))
+            {
+                pids.Add(pid);
+            }
+        }
+
+        return pids;
     }
 
     public static Task<NatTypeTestResult> DiscoveryNatTypeAsync(CancellationToken ctx = default)

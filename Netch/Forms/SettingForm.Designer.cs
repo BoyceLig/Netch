@@ -34,16 +34,23 @@ namespace Netch.Forms
             components = new Container();
             TabControl = new TabControl();
             GeneralTabPage = new TabPage();
-            OutboundDNSDeleteCurrentPictureBox = new PictureBox();
+            OutboundDNSFlowLayoutPanel = new FlowLayoutPanel();
+            OutboundDNSLabel = new Label();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             OutboundDNSComboBox = new ComboBox();
+            OutboundDNSAddCurrentPictureBox = new PictureBox();
+            OutboundDNSDeleteCurrentPictureBox = new PictureBox();
+            UseOutboundDNSCheckBox = new CheckBox();
+            UseDomainNameRadioButton = new RadioButton();
+            UseResolvedIPRadioButton = new RadioButton();
+            ServerPingTypeGroupBox = new GroupBox();
+            ServerPingTableLayoutPanel = new TableLayoutPanel();
+            TCPingRadioBtn = new RadioButton();
+            ICMPingRadioBtn = new RadioButton();
             PortGroupBox = new GroupBox();
             Socks5PortLabel = new Label();
             Socks5PortTextBox = new TextBox();
             AllowDevicesCheckBox = new CheckBox();
-            OutboundDNSLabel = new Label();
-            ServerPingTypeLabel = new Label();
-            ICMPingRadioBtn = new RadioButton();
-            TCPingRadioBtn = new RadioButton();
             ProfileCountLabel = new Label();
             ProfileCountTextBox = new TextBox();
             DetectionTickLabel = new Label();
@@ -127,10 +134,14 @@ namespace Netch.Forms
             ControlButton = new Button();
             errorProvider = new ErrorProvider(components);
             tableLayoutPanel1 = new TableLayoutPanel();
-            OutboundDNSAddCurrentPictureBox = new PictureBox();
             TabControl.SuspendLayout();
             GeneralTabPage.SuspendLayout();
+            OutboundDNSFlowLayoutPanel.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            ((ISupportInitialize)OutboundDNSAddCurrentPictureBox).BeginInit();
             ((ISupportInitialize)OutboundDNSDeleteCurrentPictureBox).BeginInit();
+            ServerPingTypeGroupBox.SuspendLayout();
+            ServerPingTableLayoutPanel.SuspendLayout();
             PortGroupBox.SuspendLayout();
             NFTabPage.SuspendLayout();
             WinTUNTabPage.SuspendLayout();
@@ -147,7 +158,6 @@ namespace Netch.Forms
             AioDNSTabPage.SuspendLayout();
             ((ISupportInitialize)errorProvider).BeginInit();
             tableLayoutPanel1.SuspendLayout();
-            ((ISupportInitialize)OutboundDNSAddCurrentPictureBox).BeginInit();
             SuspendLayout();
             // 
             // TabControl
@@ -171,14 +181,9 @@ namespace Netch.Forms
             // GeneralTabPage
             // 
             GeneralTabPage.BackColor = SystemColors.ButtonFace;
-            GeneralTabPage.Controls.Add(OutboundDNSAddCurrentPictureBox);
-            GeneralTabPage.Controls.Add(OutboundDNSDeleteCurrentPictureBox);
-            GeneralTabPage.Controls.Add(OutboundDNSComboBox);
+            GeneralTabPage.Controls.Add(OutboundDNSFlowLayoutPanel);
+            GeneralTabPage.Controls.Add(ServerPingTypeGroupBox);
             GeneralTabPage.Controls.Add(PortGroupBox);
-            GeneralTabPage.Controls.Add(OutboundDNSLabel);
-            GeneralTabPage.Controls.Add(ServerPingTypeLabel);
-            GeneralTabPage.Controls.Add(ICMPingRadioBtn);
-            GeneralTabPage.Controls.Add(TCPingRadioBtn);
             GeneralTabPage.Controls.Add(ProfileCountLabel);
             GeneralTabPage.Controls.Add(ProfileCountTextBox);
             GeneralTabPage.Controls.Add(DetectionTickLabel);
@@ -196,11 +201,66 @@ namespace Netch.Forms
             GeneralTabPage.TabIndex = 0;
             GeneralTabPage.Text = "General";
             // 
+            // OutboundDNSFlowLayoutPanel
+            // 
+            OutboundDNSFlowLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            OutboundDNSFlowLayoutPanel.Controls.Add(OutboundDNSLabel);
+            OutboundDNSFlowLayoutPanel.Controls.Add(flowLayoutPanel1);
+            OutboundDNSFlowLayoutPanel.Controls.Add(UseOutboundDNSCheckBox);
+            OutboundDNSFlowLayoutPanel.Controls.Add(UseDomainNameRadioButton);
+            OutboundDNSFlowLayoutPanel.Controls.Add(UseResolvedIPRadioButton);
+            OutboundDNSFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+            OutboundDNSFlowLayoutPanel.Location = new Point(268, 68);
+            OutboundDNSFlowLayoutPanel.Name = "OutboundDNSFlowLayoutPanel";
+            OutboundDNSFlowLayoutPanel.Size = new Size(285, 149);
+            OutboundDNSFlowLayoutPanel.TabIndex = 22;
+            // 
+            // OutboundDNSLabel
+            // 
+            OutboundDNSLabel.AutoSize = true;
+            OutboundDNSLabel.Location = new Point(3, 3);
+            OutboundDNSLabel.Margin = new Padding(3);
+            OutboundDNSLabel.Name = "OutboundDNSLabel";
+            OutboundDNSLabel.Size = new Size(97, 17);
+            OutboundDNSLabel.TabIndex = 2;
+            OutboundDNSLabel.Text = "Outbound DNS";
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoSize = true;
+            flowLayoutPanel1.Controls.Add(OutboundDNSComboBox);
+            flowLayoutPanel1.Controls.Add(OutboundDNSAddCurrentPictureBox);
+            flowLayoutPanel1.Controls.Add(OutboundDNSDeleteCurrentPictureBox);
+            flowLayoutPanel1.Location = new Point(3, 26);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(229, 31);
+            flowLayoutPanel1.TabIndex = 3;
+            // 
+            // OutboundDNSComboBox
+            // 
+            OutboundDNSComboBox.FormattingEnabled = true;
+            OutboundDNSComboBox.Location = new Point(3, 3);
+            OutboundDNSComboBox.Name = "OutboundDNSComboBox";
+            OutboundDNSComboBox.Size = new Size(165, 25);
+            OutboundDNSComboBox.TabIndex = 16;
+            // 
+            // OutboundDNSAddCurrentPictureBox
+            // 
+            OutboundDNSAddCurrentPictureBox.Cursor = Cursors.Hand;
+            OutboundDNSAddCurrentPictureBox.Image = Properties.Resources.Add;
+            OutboundDNSAddCurrentPictureBox.Location = new Point(174, 3);
+            OutboundDNSAddCurrentPictureBox.Name = "OutboundDNSAddCurrentPictureBox";
+            OutboundDNSAddCurrentPictureBox.Size = new Size(23, 23);
+            OutboundDNSAddCurrentPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            OutboundDNSAddCurrentPictureBox.TabIndex = 18;
+            OutboundDNSAddCurrentPictureBox.TabStop = false;
+            OutboundDNSAddCurrentPictureBox.Click += OutboundDNSAddCurrentPictureBox_Click;
+            // 
             // OutboundDNSDeleteCurrentPictureBox
             // 
             OutboundDNSDeleteCurrentPictureBox.Cursor = Cursors.Hand;
             OutboundDNSDeleteCurrentPictureBox.Image = Properties.Resources.delete;
-            OutboundDNSDeleteCurrentPictureBox.Location = new Point(467, 98);
+            OutboundDNSDeleteCurrentPictureBox.Location = new Point(203, 3);
             OutboundDNSDeleteCurrentPictureBox.Name = "OutboundDNSDeleteCurrentPictureBox";
             OutboundDNSDeleteCurrentPictureBox.Size = new Size(23, 23);
             OutboundDNSDeleteCurrentPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -208,13 +268,86 @@ namespace Netch.Forms
             OutboundDNSDeleteCurrentPictureBox.TabStop = false;
             OutboundDNSDeleteCurrentPictureBox.Click += OutboundDNSDeleteCurrentPictureBox_Click;
             // 
-            // OutboundDNSComboBox
+            // UseOutboundDNSCheckBox
             // 
-            OutboundDNSComboBox.FormattingEnabled = true;
-            OutboundDNSComboBox.Location = new Point(267, 98);
-            OutboundDNSComboBox.Name = "OutboundDNSComboBox";
-            OutboundDNSComboBox.Size = new Size(165, 25);
-            OutboundDNSComboBox.TabIndex = 16;
+            UseOutboundDNSCheckBox.AutoSize = true;
+            UseOutboundDNSCheckBox.Location = new Point(3, 63);
+            UseOutboundDNSCheckBox.Name = "UseOutboundDNSCheckBox";
+            UseOutboundDNSCheckBox.Size = new Size(142, 21);
+            UseOutboundDNSCheckBox.TabIndex = 4;
+            UseOutboundDNSCheckBox.Text = "Use Outbound DNS";
+            UseOutboundDNSCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            UseOutboundDNSCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ResolveItOnXrayRadioButton
+            // 
+            UseDomainNameRadioButton.AutoSize = true;
+            UseDomainNameRadioButton.Checked = true;
+            UseDomainNameRadioButton.Location = new Point(3, 90);
+            UseDomainNameRadioButton.Name = "ResolveItOnXrayRadioButton";
+            UseDomainNameRadioButton.Size = new Size(120, 21);
+            UseDomainNameRadioButton.TabIndex = 4;
+            UseDomainNameRadioButton.TabStop = true;
+            UseDomainNameRadioButton.Text = "Use Resolved IP";
+            UseDomainNameRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // UseTheResolvedIpDirectlyRadioButton
+            // 
+            UseResolvedIPRadioButton.AutoSize = true;
+            UseResolvedIPRadioButton.Location = new Point(3, 117);
+            UseResolvedIPRadioButton.Name = "UseTheResolvedIpDirectlyRadioButton";
+            UseResolvedIPRadioButton.Size = new Size(136, 21);
+            UseResolvedIPRadioButton.TabIndex = 3;
+            UseResolvedIPRadioButton.Text = "Use Domain Name";
+            UseResolvedIPRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // ServerPingTypeGroupBox
+            // 
+            ServerPingTypeGroupBox.Controls.Add(ServerPingTableLayoutPanel);
+            ServerPingTypeGroupBox.Location = new Point(268, 11);
+            ServerPingTypeGroupBox.Name = "ServerPingTypeGroupBox";
+            ServerPingTypeGroupBox.Size = new Size(288, 51);
+            ServerPingTypeGroupBox.TabIndex = 20;
+            ServerPingTypeGroupBox.TabStop = false;
+            ServerPingTypeGroupBox.Text = "Ping Protocol";
+            // 
+            // ServerPingTableLayoutPanel
+            // 
+            ServerPingTableLayoutPanel.ColumnCount = 2;
+            ServerPingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            ServerPingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            ServerPingTableLayoutPanel.Controls.Add(TCPingRadioBtn, 1, 0);
+            ServerPingTableLayoutPanel.Controls.Add(ICMPingRadioBtn, 0, 0);
+            ServerPingTableLayoutPanel.Dock = DockStyle.Fill;
+            ServerPingTableLayoutPanel.Location = new Point(3, 19);
+            ServerPingTableLayoutPanel.Name = "ServerPingTableLayoutPanel";
+            ServerPingTableLayoutPanel.RowCount = 1;
+            ServerPingTableLayoutPanel.RowStyles.Add(new RowStyle());
+            ServerPingTableLayoutPanel.Size = new Size(282, 29);
+            ServerPingTableLayoutPanel.TabIndex = 19;
+            // 
+            // TCPingRadioBtn
+            // 
+            TCPingRadioBtn.AutoSize = true;
+            TCPingRadioBtn.Location = new Point(84, 3);
+            TCPingRadioBtn.Name = "TCPingRadioBtn";
+            TCPingRadioBtn.Size = new Size(66, 21);
+            TCPingRadioBtn.TabIndex = 4;
+            TCPingRadioBtn.TabStop = true;
+            TCPingRadioBtn.Text = "TCPing";
+            TCPingRadioBtn.UseVisualStyleBackColor = true;
+            // 
+            // ICMPingRadioBtn
+            // 
+            ICMPingRadioBtn.AutoSize = true;
+            ICMPingRadioBtn.Checked = true;
+            ICMPingRadioBtn.Location = new Point(3, 3);
+            ICMPingRadioBtn.Name = "ICMPingRadioBtn";
+            ICMPingRadioBtn.Size = new Size(75, 21);
+            ICMPingRadioBtn.TabIndex = 3;
+            ICMPingRadioBtn.TabStop = true;
+            ICMPingRadioBtn.Text = "ICMPing";
+            ICMPingRadioBtn.UseVisualStyleBackColor = true;
             // 
             // PortGroupBox
             // 
@@ -255,46 +388,6 @@ namespace Netch.Forms
             AllowDevicesCheckBox.Text = "Allow other Devices to connect";
             AllowDevicesCheckBox.TextAlign = ContentAlignment.MiddleRight;
             AllowDevicesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // OutboundDNSLabel
-            // 
-            OutboundDNSLabel.AutoSize = true;
-            OutboundDNSLabel.Location = new Point(268, 75);
-            OutboundDNSLabel.Name = "OutboundDNSLabel";
-            OutboundDNSLabel.Size = new Size(97, 17);
-            OutboundDNSLabel.TabIndex = 2;
-            OutboundDNSLabel.Text = "Outbound DNS";
-            // 
-            // ServerPingTypeLabel
-            // 
-            ServerPingTypeLabel.AutoSize = true;
-            ServerPingTypeLabel.Location = new Point(267, 15);
-            ServerPingTypeLabel.Name = "ServerPingTypeLabel";
-            ServerPingTypeLabel.Size = new Size(86, 17);
-            ServerPingTypeLabel.TabIndex = 2;
-            ServerPingTypeLabel.Text = "Ping Protocol";
-            // 
-            // ICMPingRadioBtn
-            // 
-            ICMPingRadioBtn.AutoSize = true;
-            ICMPingRadioBtn.Checked = true;
-            ICMPingRadioBtn.Location = new Point(268, 34);
-            ICMPingRadioBtn.Name = "ICMPingRadioBtn";
-            ICMPingRadioBtn.Size = new Size(75, 21);
-            ICMPingRadioBtn.TabIndex = 3;
-            ICMPingRadioBtn.TabStop = true;
-            ICMPingRadioBtn.Text = "ICMPing";
-            ICMPingRadioBtn.UseVisualStyleBackColor = true;
-            // 
-            // TCPingRadioBtn
-            // 
-            TCPingRadioBtn.AutoSize = true;
-            TCPingRadioBtn.Location = new Point(366, 35);
-            TCPingRadioBtn.Name = "TCPingRadioBtn";
-            TCPingRadioBtn.Size = new Size(66, 21);
-            TCPingRadioBtn.TabIndex = 4;
-            TCPingRadioBtn.Text = "TCPing";
-            TCPingRadioBtn.UseVisualStyleBackColor = true;
             // 
             // ProfileCountLabel
             // 
@@ -1210,18 +1303,6 @@ namespace Netch.Forms
             tableLayoutPanel1.Size = new Size(576, 358);
             tableLayoutPanel1.TabIndex = 10;
             // 
-            // OutboundDNSAddCurrentPictureBox
-            // 
-            OutboundDNSAddCurrentPictureBox.Cursor = Cursors.Hand;
-            OutboundDNSAddCurrentPictureBox.Image = Properties.Resources.Add;
-            OutboundDNSAddCurrentPictureBox.Location = new Point(438, 98);
-            OutboundDNSAddCurrentPictureBox.Name = "OutboundDNSAddCurrentPictureBox";
-            OutboundDNSAddCurrentPictureBox.Size = new Size(23, 23);
-            OutboundDNSAddCurrentPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            OutboundDNSAddCurrentPictureBox.TabIndex = 18;
-            OutboundDNSAddCurrentPictureBox.TabStop = false;
-            OutboundDNSAddCurrentPictureBox.Click += OutboundDNSAddCurrentPictureBox_Click;
-            // 
             // SettingForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -1238,7 +1319,14 @@ namespace Netch.Forms
             TabControl.ResumeLayout(false);
             GeneralTabPage.ResumeLayout(false);
             GeneralTabPage.PerformLayout();
+            OutboundDNSFlowLayoutPanel.ResumeLayout(false);
+            OutboundDNSFlowLayoutPanel.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            ((ISupportInitialize)OutboundDNSAddCurrentPictureBox).EndInit();
             ((ISupportInitialize)OutboundDNSDeleteCurrentPictureBox).EndInit();
+            ServerPingTypeGroupBox.ResumeLayout(false);
+            ServerPingTableLayoutPanel.ResumeLayout(false);
+            ServerPingTableLayoutPanel.PerformLayout();
             PortGroupBox.ResumeLayout(false);
             PortGroupBox.PerformLayout();
             NFTabPage.ResumeLayout(false);
@@ -1264,7 +1352,6 @@ namespace Netch.Forms
             AioDNSTabPage.PerformLayout();
             ((ISupportInitialize)errorProvider).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
-            ((ISupportInitialize)OutboundDNSAddCurrentPictureBox).EndInit();
             ResumeLayout(false);
 
         }
@@ -1336,7 +1423,6 @@ namespace Netch.Forms
         private System.Windows.Forms.TextBox OtherDNSTextBox;
         private System.Windows.Forms.TextBox ChinaDNSTextBox;
         private System.Windows.Forms.TextBox DNSHijackHostTextBox;
-        private System.Windows.Forms.Label ServerPingTypeLabel;
         private System.Windows.Forms.RadioButton TCPingRadioBtn;
         private System.Windows.Forms.RadioButton ICMPingRadioBtn;
         private System.Windows.Forms.CheckBox FilterICMPCheckBox;
@@ -1367,5 +1453,12 @@ namespace Netch.Forms
         private ComboBox OutboundDNSComboBox;
         private PictureBox OutboundDNSDeleteCurrentPictureBox;
         private PictureBox OutboundDNSAddCurrentPictureBox;
+        private CheckBox UseOutboundDNSCheckBox;
+        private RadioButton UseResolvedIPRadioButton;
+        private RadioButton UseDomainNameRadioButton;
+        private TableLayoutPanel ServerPingTableLayoutPanel;
+        private GroupBox ServerPingTypeGroupBox;
+        private FlowLayoutPanel OutboundDNSFlowLayoutPanel;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }

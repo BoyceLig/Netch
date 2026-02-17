@@ -297,7 +297,7 @@ public static class Constants
     public static readonly Dictionary<EConfigType, string> ProtocolTypes = new()
     {
         { EConfigType.VMess, "vmess" },
-        { EConfigType.Shadowsocks, "shadowsocks" },
+        { EConfigType.Shadowsocks, "ss" },
         { EConfigType.SOCKS, "socks" },
         { EConfigType.HTTP, "http" },
         { EConfigType.VLESS, "vless" },

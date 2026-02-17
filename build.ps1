@@ -36,7 +36,6 @@ cp -Recurse -Force '..\Storage\mode' '.'  | Out-Null
 cp -Recurse -Force '..\Storage\stun.txt' 'bin'  | Out-Null
 cp -Recurse -Force '..\Storage\nfdriver.sys' 'bin'  | Out-Null
 cp -Recurse -Force '..\Storage\aiodns.conf' 'bin'  | Out-Null
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb' -OutFile 'bin\GeoLite2-Country.mmdb'
 #cp -Recurse -Force '..\Storage\GeoLite2-Country.mmdb' 'bin'  | Out-Null
 cp -Recurse -Force '..\Storage\tun2socks-windows-amd64-v3.exe' 'bin'  | Out-Null
 cp -Recurse -Force '..\Storage\README.md' 'bin'  | Out-Null
@@ -51,6 +50,7 @@ if ( -Not ( Test-Path '.\Other\release' ) ) {
 cp -Force '.\Other\release\*.bin' "$OutputPath\bin"
 cp -Force '.\Other\release\*.dll' "$OutputPath\bin"
 cp -Force '.\Other\release\*.exe' "$OutputPath\bin"
+cp -Force '.\Other\release\GeoLite2-Country.mmdb' "$OutputPath\bin"
 
 if ( -Not ( Test-Path ".\Netch\bin\$Configuration" ) ) {
 	Write-Host

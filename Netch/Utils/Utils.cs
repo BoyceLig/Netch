@@ -1,4 +1,3 @@
-using DnsClient;
 using MaxMind.GeoIP2;
 using Microsoft.Win32.TaskScheduler;
 using System.Collections.Specialized;
@@ -325,6 +324,21 @@ public static class Utils
             return address.AddressFamily switch
             {
                 AddressFamily.InterNetwork => false,
+                AddressFamily.InterNetworkV6 => true,
+                _ => false,
+            };
+        }
+
+        return false;
+    }
+
+    public static bool IsIp(string ip)
+    {
+        if (IPAddress.TryParse(ip, out var address))
+        {
+            return address.AddressFamily switch
+            {
+                AddressFamily.InterNetwork => true,
                 AddressFamily.InterNetworkV6 => true,
                 _ => false,
             };

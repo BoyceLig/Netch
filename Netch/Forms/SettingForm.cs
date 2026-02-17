@@ -7,9 +7,11 @@ namespace Netch.Forms;
 [Fody.ConfigureAwait(true)]
 public partial class SettingForm : BindingForm
 {
-    public SettingForm()
+    MainForm _mainForm;
+    public SettingForm(MainForm mainForm)
     {
         InitializeComponent();
+        _mainForm = mainForm;
         Icon = Resources.icon;
         i18N.TranslateForm(this);
 
@@ -32,7 +34,17 @@ public partial class SettingForm : BindingForm
                 Global.Settings.OutboundDNSs.Add(s);
             }
             Global.Settings.OutboundDNS = s;
+            DnsUtils.ClearCache();
         }, Global.Settings.OutboundDNS, Global.Settings.OutboundDNSs.ToArray());
+
+        BindCheckBox(UseOutboundDNSCheckBox, c =>
+        {
+            Global.Settings.OutboundDNS_Enabled = c;
+            DnsUtils.ClearCache();
+            _mainForm.SpeedPictureBox_Click(null, null);
+        }, Global.Settings.OutboundDNS_Enabled);
+        BindRadioBox(UseDomainNameRadioButton, c => Global.Settings.OutboundDNS_UseDomainName = c, Global.Settings.OutboundDNS_UseDomainName);
+        BindRadioBox(UseResolvedIPRadioButton, _ => { }, !Global.Settings.OutboundDNS_UseDomainName);
 
         BindTextBox<int>(ProfileCountTextBox, i => i > -1, i => Global.Settings.ProfileCount = i, Global.Settings.ProfileCount);
         BindTextBox<int>(DetectionTickTextBox,

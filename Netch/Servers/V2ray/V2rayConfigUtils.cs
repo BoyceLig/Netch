@@ -16,33 +16,52 @@ public static class V2rayConfigUtils
         {
             loglevel = Constants.LogLevels[2]
         };
-        v2rayConfig.dns = new Dns4Ray()
-        {
-            servers = [
-                new DnsServer4Ray
-                {
-                    address = Global.Settings.OutboundDNS,
-                    domains = [$"domain:{server.Address}"],
-                    skipFallback = true
-                }
-            ]
 
-        };
+        if (!Utils.Utils.IsIp(server.Address) && 
+            Global.Settings.OutboundDNS_Enabled && 
+            Global.Settings.OutboundDNS_UseDomainName && 
+            !Global.Settings.OutboundDNS.ToLowerInvariant().StartsWith("tls://"))
+        {
+
+            v2rayConfig.dns = new Dns4Ray()
+            {
+                servers = [
+                    new DnsServer4Ray
+                    {
+                        address = Global.Settings.OutboundDNS,
+                        domains = [$"domain:{server.Address}"],
+                        skipFallback = true
+                    }
+                ]
+
+            };
+
+
+        }
+
         v2rayConfig.inbounds = [GenerateInbound()];
 
-        v2rayConfig.outbounds = [GenerateOutbound(server)];
+        v2rayConfig.outbounds = [await GenerateOutbound(server)];
 
 
         return v2rayConfig;
     }
 
-    private static Outbounds4Ray GenerateOutbound(Server server)
+    private static async Task<Outbounds4Ray> GenerateOutbound(Server server)
     {
         var outbound = new Outbounds4Ray
         {
             settings = new Outboundsettings4Ray(),
         };
 
+        var ipAddress = server.Address;
+
+        if (Global.Settings.OutboundDNS_Enabled)
+        {
+            if (!Global.Settings.OutboundDNS_UseDomainName ||
+                (Global.Settings.OutboundDNS_UseDomainName && Global.Settings.OutboundDNS.ToLowerInvariant().StartsWith("tls://")))
+                ipAddress = (await DnsUtils.LookupAsync(server.Address)).ToString();
+        }
         var muxEnabled = server.MuxEnabled ?? Global.Settings.V2RayConfig.CoreBasicItem.MuxEnabled;
         GenOutboundMux(outbound);
         switch (server)
@@ -55,7 +74,7 @@ public static class V2rayConfigUtils
                     outbound.settings.servers = [
                         new ServersItem4Ray
                         {
-                            address = server.Address,
+                            address = ipAddress,
                             port = server.Port,
                             users = authServer.Auth() ? [
                             new SocksUsersItem4Ray
@@ -77,7 +96,7 @@ public static class V2rayConfigUtils
 
                         new VnextItem4Ray
                         {
-                            address = server.Address,
+                            address = ipAddress,
                             port = server.Port,
                             users =[
                                 new UsersItem4Ray
@@ -107,7 +126,7 @@ public static class V2rayConfigUtils
                     outbound.settings.vnext = [
                         new VnextItem4Ray
                         {
-                            address = server.Address,
+                            address = ipAddress,
                             port = server.Port,
                             users = [
                                 new UsersItem4Ray()
@@ -129,7 +148,7 @@ public static class V2rayConfigUtils
                 [
                     new ServersItem4Ray
                     {
-                        address = server.Address,
+                        address = ipAddress,
                         port = server.Port,
                         password = ss.Password,
                         method = Constants.SsSecuritiesInXray.Contains( ss.ProtoExtra.SsMethod)?ss.ProtoExtra.SsMethod:"none",
@@ -146,7 +165,7 @@ public static class V2rayConfigUtils
 
                     new ServersItem4Ray() // I'm not serious
                     {
-                        address = server.Address,
+                        address = ipAddress,
                         port = server.Port,
                         password = trojan.Password,
                         ota = false,
@@ -183,7 +202,7 @@ public static class V2rayConfigUtils
                 break;
             case Hysteria2Server hysteria2Server:
                 outbound.protocol = "hysteria";
-                outbound.settings.address = server.Address;
+                outbound.settings.address = ipAddress;
                 outbound.settings.port = server.Port;
                 outbound.settings.version = 2;
                 break;

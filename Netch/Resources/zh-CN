@@ -226,6 +226,9 @@
   "China DNS": "中国 DNS",
   "Other DNS": "其他 DNS",
   "Outbound DNS": "Outbound 域名解析 DNS",
+  "Use Outbound DNS": "使用 Outbound 域名解析 DNS",
+  "Use Domain Name": "使用域名",
+  "Use Resolved IP": "使用解析后的 IP 地址",
 
   "Profile": "配置名",
   "Profiles": "配置",

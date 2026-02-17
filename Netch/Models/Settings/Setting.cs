@@ -12,6 +12,8 @@ public class Setting
     /// </summary>
     public string OutboundDNS { get; set; } = "223.5.5.5";
     public List<string> OutboundDNSs { get; set; } = ["223.5.5.5"];
+    public bool OutboundDNS_Enabled { get; set; } = false;
+    public bool OutboundDNS_UseDomainName { get; set; } = true;
 
     public RedirectorConfig Redirector { get; set; } = new();
 

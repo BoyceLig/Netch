@@ -295,7 +295,9 @@ public partial class MainForm : Form
 
     private async void UpdateServersFromSubscriptionLinksToolStripMenuItem_NoProxy_Click(object sender, EventArgs e)
     {
+        Enabled = false;
         await UpdateServersFromSubscriptionAsync();
+        Enabled = true;
     }
 
     [SupportedOSPlatform("windows8.1")]
@@ -306,10 +308,12 @@ public partial class MainForm : Form
             MessageBoxX.Show(i18N.Translate("Please select a server first"));
             return;
         }
+        Enabled = false;
         await MainController.StartAsync(server);
         await UpdateServersFromSubscriptionAsync($"127.0.0.1:{Global.Settings.Socks5LocalPort}");
         //await UpdateServersFromSubscriptionAsync($"127.0.0.1:10808");
         await StopCoreAsync();
+        Enabled = true;
     }
 
     private async Task UpdateServersFromSubscriptionAsync(string? serverProxy = null)
@@ -654,7 +658,7 @@ public partial class MainForm : Form
         var oldSettings = Global.Settings.ShallowCopy();
 
         Hide();
-        new SettingForm().ShowDialog();
+        new SettingForm(this).ShowDialog();
 
         if (oldSettings.Language != Global.Settings.Language)
         {
@@ -717,16 +721,16 @@ public partial class MainForm : Form
         Show();
     }
 
-    private async void SpeedPictureBox_Click(object sender, EventArgs e)
+    public async void SpeedPictureBox_Click(object sender, EventArgs e)
     {
         void Enable()
         {
             ServerComboBox.Refresh();
-            Enabled = true;
+            //Enabled = true;
             StatusText();
         }
 
-        Enabled = false;
+        //Enabled = false;
         StatusText(i18N.Translate("Testing"));
 
         if (!IsWaiting() || ModifierKeys == Keys.Control)
